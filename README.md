@@ -35,8 +35,8 @@
 
 **CatNote** 结合了现代前后端技术，为用户提供了一个功能丰富的笔记平台。项目的主要技术栈如下：
 
-- **前端**: Vue 3 + Vite + Element Plus
-- **后端**: Java + Spring Boot
+- **前端**: Node.JS V20.12.0 + Vue 3 + Vite + Element Plus
+- **后端**: Java17 + Spring Boot
 - **数据库**: MySQL + Redis
 - **富文本编辑器**: TipTap
 - **数据展示**: Echarts
