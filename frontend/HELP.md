@@ -2,6 +2,18 @@
 
 该目录包含 **CatNote** 前端应用。
 
+# 项目标准
+
+应在文件开头注释信息,模板为(编辑模式查看):
+
+/**
+*CreateTime: ${YEAR}-${MONTH}-${DAY}
+*Description: Todo
+*Version: 1.0
+*/
+
+当添加新的包的时候应在help.md中标注
+
 # 技术栈
 
 - **Vite**: 一款极速的前端构建工具，提供快速的开发服务器和高效的生产构建。
@@ -28,13 +40,3 @@
 ## 构建生产环境
 
 `npm run build`
-
-# 贡献指南
-
-如果你想为此项目做出贡献，请 fork 该项目，并提交 pull request。
-
-1. Fork 本仓库
-2. 创建功能分支 (git checkout -b feature/AmazingFeature)
-3. 提交更改 (git commit -m 'Add some AmazingFeature')
-4. 推送到分支 (git push origin feature/AmazingFeature)
-5. 打开一个 pull request
