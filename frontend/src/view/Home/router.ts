@@ -8,5 +8,9 @@ export default [
         name: 'HomeView',
         component: HomeView
     },
-
+    {
+        path: '/:pathMatch(.*)*',
+        name: '404',
+        component: () => import('./404.vue'),
+    },
 ];
