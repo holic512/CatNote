@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  12312
+  初始页面
 </template>
 
 <style scoped>
