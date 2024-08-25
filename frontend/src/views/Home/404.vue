@@ -1,3 +1,7 @@
+<!--
+* Description: 404页面
+* Version: 1.0
+-->
 <script setup lang="ts">
 
 </script>
