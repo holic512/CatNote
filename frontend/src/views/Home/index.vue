@@ -79,60 +79,65 @@ const items = [
         </el-row>
       </el-header>
       <!--主要内容-->
-      <el-main style="margin-top: 12px; margin-bottom: 12px; height: calc(100vh - 100px);">
-        <el-scrollbar height="100%">
+      <el-main style="margin-top: 12px;  height: calc(100vh - 100px);">
 
-          <el-row justify="center">
-            <!-- 左半部分：展示图片 -->
-            <el-col :span="6" class="image-container">
-              <img src="./assets/images/image1.png" alt="CatNote Logo">
-            </el-col>
 
-            <!-- 右半部分：标题和介绍 -->
-            <el-col :span="8">
-              <div class="title-container">
-                <!-- 项目名称和标语 -->
-                <el-text class="project-name">CatNote</el-text>
-                <el-tag
-                    round
-                    type="info"
-                    class="tagline"
-                >
-                  简洁 快速 高效
-                </el-tag>
-              </div>
-              <div class="intro-container">
-                <!-- 项目简介 -->
-                <h1 class="main-title">基于Vue和SpringBoot的云笔记平台</h1>
-                <h2 class="sub-title">让你的笔记管理更加轻松高效！</h2>
-              </div>
-              <div class="description-container">
-                <!-- 项目描述 -->
-                <p class="description-text">
-                  CatNote 是一个专为高效笔记管理打造的云笔记平台，支持 Markdown 格式的笔记存储，提供便捷的图片处理与版本控制功能。
-                  无论你是学生、职场人士还是自由职业者，CatNote 都能帮助你随时随地记录想法，保持工作条理性。
-                </p>
-              </div>
-              <div class="button-container">
-                <!-- 操作按钮 -->
-                <el-button round plain>开始使用</el-button>
-                <el-button round plain>GitHub</el-button>
-              </div>
-            </el-col>
-          </el-row>
+          <el-scrollbar>
+            <div style="width: 99%">
+            <el-row justify="center">
+              <!-- 左半部分：展示图片 -->
+              <el-col :span="8" class="image-container">
+                <img src="./assets/images/image1.png" alt="CatNote Logo">
+              </el-col>
 
-          <div class="items">
-            <div class="grid item" v-for="(item, index) in items" :key="index">
-              <div class="Link no-icon Feature">
-                <article class="box">
-                  <h2 class="title">{{ item.title }}</h2>
-                  <p class="details">{{ item.details }}</p>
-                </article>
+              <!-- 右半部分：标题和介绍 -->
+              <el-col :span="8">
+                <div class="title-container">
+                  <!-- 项目名称和标语 -->
+                  <el-text class="project-name">CatNote</el-text>
+                  <el-tag
+                      round
+                      type="info"
+                      class="tagline"
+                  >
+                    简洁 快速 高效
+                  </el-tag>
+                </div>
+                <div class="intro-container">
+                  <!-- 项目简介 -->
+                  <h1 class="main-title">基于Vue和SpringBoot的云笔记平台</h1>
+                  <h2 class="sub-title">让你的笔记管理更加轻松高效！</h2>
+                </div>
+                <div class="description-container">
+                  <!-- 项目描述 -->
+                  <p class="description-text">
+                    CatNote 是一个专为高效笔记管理打造的云笔记平台，支持 Markdown 格式的笔记存储，提供便捷的图片处理与版本控制功能。
+                    无论你是学生、职场人士还是自由职业者，CatNote 都能帮助你随时随地记录想法，保持工作条理性。
+                  </p>
+                </div>
+                <div class="button-container">
+                  <!-- 操作按钮 -->
+                  <el-button round plain>开始使用</el-button>
+                  <el-button round plain>GitHub</el-button>
+                </div>
+              </el-col>
+            </el-row>
+
+            <div class="items">
+              <div class="grid item" v-for="(item, index) in items" :key="index">
+                <div class="Link no-icon Feature">
+                  <article class="box">
+                    <h2 class="title">{{ item.title }}</h2>
+                    <p class="details">{{ item.details }}</p>
+                  </article>
+                </div>
               </div>
             </div>
-          </div>
+            </div>
+          </el-scrollbar>
 
-        </el-scrollbar>
+
+
       </el-main>
     </el-container>
 
@@ -211,7 +216,7 @@ const items = [
   gap: 50px; /* 水平和垂直间距 */
   justify-content: space-between; /* 控制子项在容器中的对齐方式 */
   margin: 0 auto; /* 使容器在宽度范围内居中对齐 */
-  max-width: 1200px; /* 设置容器的最大宽度 */
+  max-width: 80%; /* 设置容器的最大宽度 */
   padding: 20px; /* 容器的内边距 */
   box-sizing: border-box;
 }
