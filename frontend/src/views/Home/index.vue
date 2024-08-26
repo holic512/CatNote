@@ -254,7 +254,6 @@ const items = [
 .title-container {
   display: flex;
   align-items: center;
-  margin-bottom: 6px;
 }
 
 /* 项目名称样式 */
@@ -275,7 +274,7 @@ const items = [
 .main-title {
   font-size: 28px;
   color: #222;
-  margin-bottom: 4px;
+
 }
 
 /* 副标题样式 */
