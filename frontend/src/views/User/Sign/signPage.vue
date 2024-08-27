@@ -55,7 +55,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { login, register } from './authService';
+import { login, register } from './authService.ts';
 
 const isRegister = ref(false);
 const useEmail = ref(true);
@@ -76,7 +76,7 @@ function handleLogin() {
   if (useEmail.value) {
     login(loginEmail.value, verificationCode.value, 'email');
   } else if (useAccount.value) {
-    login(loginUsername.value, loginPassword.value, 'account');
+    login(loginEmail.value, verificationCode.value, "email");
   }
 }
 
