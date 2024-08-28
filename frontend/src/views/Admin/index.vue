@@ -71,14 +71,16 @@ onMounted(() => {
   </el-header>
   <el-container class="container">
     <div class="login">
-      <br>
+      <p class="Manager">管理员登录</p>
       <div class="phone-wrapper">
         <div class="inner-container">
           <!--用户名输入框-->
+          <p class="userName">用户名</p>
           <input class="PhoneNumber" value="请输入用户名" @click="CancelBorder">
         </div>
       </div>
       <br>
+      <p class="password">密码</p>
       <div class="input-group">
           <!--密码输入框-->
         <input class="InputPasswd" value="请输入密码" />
@@ -139,7 +141,6 @@ onMounted(() => {
 
 }
 
-
 .container {
   display: flex; /*使用 Flexbox 布局模型来水平和垂直居中对齐*/
   justify-content: center;
@@ -147,11 +148,16 @@ onMounted(() => {
   height: 80vh;  /*设置其高度为视口高度的 80%。*/
 }
 
+.Manager{
+    font-size: 25px;
+    text-align: center;
+}
+
 .login {
   font-size: 23px;
   display: flex;
   flex-direction: column;
-  align-items: center;  /*垂直排列子元素，并居中对齐。*/
+  //align-items: center;  /*垂直排列子元素，并居中对齐。*/
 }
 
 .phone-wrapper {
@@ -163,6 +169,16 @@ onMounted(() => {
   position: relative;
 }
 
+.userName{
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+.password{
+    font-size: 20px;
+    margin-bottom: 5px;
+    margin-top: 0;
+}
 
 .PhoneNumber {
   padding-left: 30px;

@@ -1,4 +1,4 @@
-
+// AdminRouter
 
 import AdminRegister from './index.vue'
 
