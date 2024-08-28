@@ -5,7 +5,7 @@ import axios from 'axios';
 
 // 创建一个 Axios 实例
 const instance = axios.create({
-    baseURL: 'https://localhost:8080/', // 这里是你的基础 URL
+    baseURL: 'http://localhost:8080/', // 这里是你的基础 URL
     timeout: 1000, // 可选的超时时间
     // headers: {'Content-Type': 'application/json'}
 });
