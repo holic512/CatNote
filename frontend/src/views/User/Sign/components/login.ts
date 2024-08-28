@@ -1,34 +1,3 @@
-# 前端帮助
-
-## axios 同 pinia 使用模板
-
-```ts
-// * Description: 存放用户token
-// * Version: 1.0
-import {defineStore} from "pinia";
-
-export const tokenStore = defineStore('toke', {
-    // 定义变量 存储状态数据
-    state() {
-        return {
-            token: undefined as string | undefined
-        }
-    },
-    // 定义 行为方法
-    actions: {
-        getToken(): string | undefined {
-            return this.token;
-        },
-        setToken(token: string | undefined) {
-            this.token = token;
-        },
-    },
-    persist: true,
-})
-
-```
-
-```ts
 import axios from "../../../../axios/index.ts";
 import {tokenStore} from "../../../../pinia/token";
 
@@ -61,11 +30,5 @@ async function pwLogin(username: string, password: string): Promise<number> {
         }
     }
 }
-```
 
-# 后端帮助
-
-## 数据库环境配置
-
-按照backend/.env.example的模板 在同目录下创建名为.env文件,填写公告中数据库配置
-
+export default pwLogin;

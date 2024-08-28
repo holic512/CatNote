@@ -1,7 +1,6 @@
-// authService.ts
-// homeRoutes.js
+// signRouter.ts
 
-import signPage from './Sign/signPage.vue'
+import signPage from './Sign/index.vue'
 
 export default [
 

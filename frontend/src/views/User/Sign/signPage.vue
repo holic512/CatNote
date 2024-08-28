@@ -53,63 +53,63 @@
 
 
 
-<script setup lang="ts">
-import { ref } from 'vue';
-import { login, register } from './authService.ts';
+<!--<script setup lang="ts">-->
+<!--import { ref } from 'vue';-->
+<!--import { login, register } from './authService.ts';-->
 
-const isRegister = ref(false);
-const useEmail = ref(true);
-const useAccount = ref(false);
+<!--const isRegister = ref(false);-->
+<!--const useEmail = ref(true);-->
+<!--const useAccount = ref(false);-->
 
-// 登录
-const loginEmail = ref('');
-const loginUsername = ref('');
-const loginPassword = ref('');
-const verificationCode = ref('');
+<!--// 登录-->
+<!--const loginEmail = ref('');-->
+<!--const loginUsername = ref('');-->
+<!--const loginPassword = ref('');-->
+<!--const verificationCode = ref('');-->
 
-// 注册
-const registerUsername = ref('');
-const registerEmail = ref('');
-const registerPassword = ref('');
+<!--// 注册-->
+<!--const registerUsername = ref('');-->
+<!--const registerEmail = ref('');-->
+<!--const registerPassword = ref('');-->
 
-function handleLogin() {
-  if (useEmail.value) {
-    login(loginEmail.value, verificationCode.value, 'email');
-  } else if (useAccount.value) {
-    login(loginEmail.value, verificationCode.value, "email");
-  }
-}
+<!--function handleLogin() {-->
+<!--  if (useEmail.value) {-->
+<!--    login(loginEmail.value, verificationCode.value, 'email');-->
+<!--  } else if (useAccount.value) {-->
+<!--    login(loginEmail.value, verificationCode.value, "email");-->
+<!--  }-->
+<!--}-->
 
-function handleRegister() {
-  register(registerUsername.value, registerEmail.value, registerPassword.value);
-}
+<!--function handleRegister() {-->
+<!--  register(registerUsername.value, registerEmail.value, registerPassword.value);-->
+<!--}-->
 
-function useEmailCode() {
-  useEmail.value = true;
-  useAccount.value = false;
-}
+<!--function useEmailCode() {-->
+<!--  useEmail.value = true;-->
+<!--  useAccount.value = false;-->
+<!--}-->
 
-function useAccountPassword() {
-  useEmail.value = false;
-  useAccount.value = true;
-}
+<!--function useAccountPassword() {-->
+<!--  useEmail.value = false;-->
+<!--  useAccount.value = true;-->
+<!--}-->
 
-function sendVerificationCode() {
-  // 发送验证码逻辑
-}
+<!--function sendVerificationCode() {-->
+<!--  // 发送验证码逻辑-->
+<!--}-->
 
-function toggleForm() {
-  isRegister.value = !isRegister.value;
-}
+<!--function toggleForm() {-->
+<!--  isRegister.value = !isRegister.value;-->
+<!--}-->
 
-function toggleLoginMethod() {
-  if (useEmail.value) {
-    useAccountPassword();
-  } else {
-    useEmailCode();
-  }
-}
-</script>
+<!--function toggleLoginMethod() {-->
+<!--  if (useEmail.value) {-->
+<!--    useAccountPassword();-->
+<!--  } else {-->
+<!--    useEmailCode();-->
+<!--  }-->
+<!--}-->
+<!--</script>-->
 
 <style scoped>
 .login-container {
