@@ -42,11 +42,11 @@ const setupInputListeners = () => {
     });
   }
 };
-
 // 组件挂载后设置输入框事件监听
 onMounted(() => {
   setupInputListeners();
 });
+
 </script>
 
 <template>
