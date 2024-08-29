@@ -1,18 +1,27 @@
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
+import { ElMessage } from 'element-plus';
 
+// 响应式变量
+const username = ref<string>('');
+const password = ref<string>('');
+
+// 表单提交函数
+const submitForm = () => {
+  ElMessage.success('提交成功');
+};
+
+// 输入框事件监听
 const setupInputListeners = () => {
   const phoneInput = document.querySelector('.PhoneNumber') as HTMLInputElement;
   const passwordInput = document.querySelector('.InputPasswd') as HTMLInputElement;
 
-  // 当输入框获得焦点时，如果其值是默认的占位符文本（请输入用户名），则清空输入框内容。
   if (phoneInput) {
     phoneInput.addEventListener('focus', () => {
       if (phoneInput.value === '请输入用户名') {
         phoneInput.value = '';
       }
     });
-    // 当输入框失去焦点时，如果其值为空，则恢复为默认的占位符文本（请输入用户名）。
     phoneInput.addEventListener('blur', () => {
       if (phoneInput.value === '') {
         phoneInput.value = '请输入用户名';
@@ -26,7 +35,6 @@ const setupInputListeners = () => {
         passwordInput.value = '';
       }
     });
-
     passwordInput.addEventListener('blur', () => {
       if (passwordInput.value === '') {
         passwordInput.value = '请输入密码';
@@ -35,208 +43,123 @@ const setupInputListeners = () => {
   }
 };
 
+// 组件挂载后设置输入框事件监听
 onMounted(() => {
   setupInputListeners();
 });
 </script>
 
 <template>
-  <el-header class="custom-header">
-    <el-row class="header-row" type="flex" justify="space-between" align="middle">
-      <!-- 左半部 -->
-      <el-col :span="16">
-        <div class="left-part">
-          <img src="../Home/assets/images/logo.svg" alt="CatNote Logo" class="logo"/>
-          <el-text tag="b">CatNote</el-text>
-        </div>
-      </el-col>
-
-      <!-- 右半部 -->
-      <el-col :span="5">
-        <div class="right-part">
-
-          <div class="link-container">
-            <!-- <img src="./assets/images/shouye1.svg" alt="icon" class="icon"/>-->
-            <el-text>首页</el-text>
-          </div>
-          <div class="link-container">
-            <el-text>GitHub</el-text>
-          </div>
-
-
-        </div>
-      </el-col>
-
-    </el-row>
-  </el-header>
   <el-container class="container">
-    <div class="login">
-      <p class="Manager">管理员登录</p>
-      <div class="phone-wrapper">
-        <div class="inner-container">
-          <!--用户名输入框-->
-          <p class="userName">用户名</p>
-          <input class="PhoneNumber" value="请输入用户名" @click="CancelBorder">
-        </div>
-      </div>
-      <br>
-      <p class="password">密码</p>
-      <div class="input-group">
-          <!--密码输入框-->
-        <input class="InputPasswd" value="请输入密码" />
-      </div>
-      <br>
-      <button class="logBtn">登录</button>
-      <br>
-      <router-link to="" class="FreeRegister">注册</router-link>
-    </div>
+    <el-card class="login-box">
+      <h1 class="title">管理员登录</h1>
+      <el-form @submit.prevent="submitForm">
+        <el-form-item class="form-item">
+          <label for="username">用户名</label>
+          <el-input
+              id="username"
+              v-model="username"
+              placeholder="请输入用户名"
+              clearable
+              class="input-field"></el-input>
+        </el-form-item>
+
+        <el-form-item class="form-item">
+          <label for="password">密码</label>
+          <el-input
+              id="password"
+              type="password"
+              v-model="password"
+              placeholder="请输入密码"
+              clearable
+              class="input-field"></el-input>
+        </el-form-item>
+
+        <el-form-item>
+          <el-button
+              type="primary"
+              class="logBtn"
+              @click="submitForm">登录</el-button>
+        </el-form-item>
+
+        <el-form-item>
+          <router-link to="" class="FreeRegister">注册</router-link>
+        </el-form-item>
+      </el-form>
+    </el-card>
   </el-container>
 </template>
 
+
 <style scoped>
-.custom-header {
-  height: 50px;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.header-row {
-  height: 100%; /* 使 el-row 高度填满 el-header */
-}
-
-.left-part {
-  display: flex;
-  align-items: center;
-  margin-left: 12px;
-  margin-bottom: 5px;
-}
-
-.logo {
-  width: 32px; /* 根据需要调整 logo 大小 */
-  height: 32px; /* 确保高度与宽度一致以保持圆形 */
-  border-radius: 15%; /* 设置圆角半径为 50% 以实现圆形效果 */
-  margin-left: 5px;
-  margin-right: 8px;
-}
-
-.right-part {
-  display: flex;
-  align-items: center;
-}
-
-.icon {
-  width: 28px; /* 根据需要调整图标大小 */
-  height: 28px; /* 确保图标宽高一致 */
-  margin-right: 1px; /* 图片与文本之间的间距 */
-}
-
-.link-container {
-  display: flex;
-  align-items: center; /* 垂直居中对齐图片和文本 */
-  cursor: pointer; /* 鼠标指针变为手型 */
-
-  position: relative; /* 使下划线定位相对于容器 */
-  padding-bottom: 2px; /* 为下划线留出空间 */
-
-  margin-right: 16px;
-
-}
-
-.container {
-  display: flex; /*使用 Flexbox 布局模型来水平和垂直居中对齐*/
-  justify-content: center;
-  align-items: center;
-  height: 80vh;  /*设置其高度为视口高度的 80%。*/
-}
-
-.Manager{
-    font-size: 25px;
-    text-align: center;
-}
-
-.login {
-  font-size: 23px;
-  display: flex;
-  flex-direction: column;
-  //align-items: center;  /*垂直排列子元素，并居中对齐。*/
-}
-
-.phone-wrapper {
-  display: flex;
-  justify-content: center;  /*水平居中对齐内部的内容。*/
-}
-
-.inner-container {
-  position: relative;
-}
-
-.userName{
-    font-size: 20px;
-    margin-bottom: 5px;
-}
-
-.password{
-    font-size: 20px;
-    margin-bottom: 5px;
-    margin-top: 0;
-}
-
-.PhoneNumber {
-  padding-left: 30px;
-  width: 360px;
-  height: 40px;
-  border-radius: 5px;
-  border: none;
-  background-color: rgba(125, 125, 125, 0.1);
-  font-size: 18px;
-  outline: none;
-}
-
-.input-group {
-  position: relative;
-  display: flex;
-  align-items: center;
+/* 确保输入框宽度填满父容器 */
+.input-field {
   width: 100%;
 }
 
-.InputPasswd {
-  flex: 1;
-  padding-left: 30px;
-  height: 40px;
-  border-radius: 5px;
-  border: none;
-  background-color: rgba(125, 125, 125, 0.1);
-  font-size: 18px;
-  outline: none;
-}
-
-
-input:focus {
-  border: none;
-  outline: none;
-}
-
-.FreeRegister{
-  color: black;
-  text-decoration: none;
-}
-
-
 .logBtn {
+  width: 100%;
   border-radius: 5px;
   border: 0;
   background-color: aqua;
   font-size: 20px;
   color: white;
-  width: 100%;
-  height: 50px;
+  height: 40px;
   cursor: pointer;
 }
 
-.FreeRegister {
-  font-weight: bold;
-  align-self: center;
-  color: black;
-  text-decoration: none;
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: rgba(125, 125, 125, 0.1);
+  padding: 20px;
+  box-sizing: border-box;
 }
 
+.login-box {
+  width: 320px;
+  padding: 40px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  margin-bottom: 24px;
+  color: #333;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 300; /* 标题的字体粗细 */
+}
+
+.el-form-item {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch; /* 确保子元素填满父容器 */
+}
+
+.form-item {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* 标签与输入框之间的间距 */
+}
+
+.form-item label {
+  width: 100px; /* 标签宽度，可以根据需要调整 */
+  font-weight: 300; /* 与标题一致的字体粗细 */
+  margin-right: 10px; /* 标签与输入框之间的间距 */
+}
+
+.FreeRegister {
+  display: block;
+  font-weight: 300;
+  text-align: center;
+  color: black;
+  text-decoration: none;
+  margin-top: 10px;
+}
 </style>
+
