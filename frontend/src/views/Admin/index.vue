@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { ElMessage } from 'element-plus';
 
 // 响应式变量
 const username = ref<string>('');
@@ -8,7 +7,6 @@ const password = ref<string>('');
 
 // 表单提交函数
 const submitForm = () => {
-  ElMessage.success('提交成功');
 };
 
 // 输入框事件监听
