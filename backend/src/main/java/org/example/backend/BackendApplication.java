@@ -1,5 +1,8 @@
 package org.example.backend;
 
+import org.example.backend.util.MailUtil;
+import org.example.backend.util.VerificationCodeUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

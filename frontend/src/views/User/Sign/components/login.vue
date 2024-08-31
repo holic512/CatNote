@@ -3,68 +3,99 @@ import {ref} from "vue";
 import {ElMessage} from "element-plus";
 
 // 导入登录函数
-import pwLogin from "./login.ts"
+import pwLogin from "../services/pwLogin.ts"
+import {sendMail, verifyLoginCode} from "../services/emLogin.ts";
 
 
 const loginType = ref<string>('password'); // 控制是密码登录还是验证码登录
 const username = ref<string>('');
 const password = ref<string>('');
-const email = ref('');
-const code = ref('');
-const codeSent = ref(false);
+
 const agreedToTerms = ref(false); // 控制是否同意服务协议
-
-const submitForm = async () => {
-  // 验证服务协议是否同意
-  if (!agreedToTerms.value) {
-    ElMessage('请同意服务协议');
-    return;
-  }
-
-  if (loginType.value === 'password') {
-    // 密码登录逻辑
-
-    // 判断账号密码是否为空
-    if (username.value === '' || password.value === '') {
-      return;
-    }
-
-    // 密码登录逻辑
-    const stats = await pwLogin(username.value, password.value)
-
-    if (stats === 0) {
-      ElMessage.success("登陆成功")
-    } else if (stats === 1) {
-      ElMessage.info("密码错误")
-
-    } else if (stats === 2) {
-      ElMessage.info("没有找到此账号")
-    } else {
-      ElMessage.info("请检查你的网络")
-    }
-
-  } else {
-    // 验证码登录逻辑
-    console.log('邮箱地址:', email.value);
-    console.log('验证码:', code.value);
-
-  }
-};
-
-const sendCode = () => {
-  // 发送邮箱逻辑
-  if (!email.value) {
-    ElMessage('请输入邮箱地址');
-    return;
-  }
-  codeSent.value = true;
-  setTimeout(() => (codeSent.value = false), 60000); // 模拟发送验证码并在60秒后重置按钮
-};
 
 // 不同条件选择框
 const switchLoginType = () => {
   loginType.value = loginType.value === 'password' ? 'code' : 'password';
 };
+
+// 协议同意处理
+const validateTerms = () => {
+  if (!agreedToTerms.value) {
+    ElMessage('请同意服务协议');
+    return false;
+  }
+  return true;
+};
+
+// 登录按钮逻辑
+const submitForm = async () => {
+  if (!validateTerms()) {
+    return;
+  }
+
+  if (loginType.value === 'password') {
+    await handlePasswordLogin();
+  } else {
+    await handleCodeLogin();
+  }
+};
+
+
+// 账号密码登录逻辑
+const handlePasswordLogin = async () => {
+  if (!username.value || !password.value) {
+    return;
+  }
+
+  const status = await pwLogin(username.value, password.value);
+  const messages: { [key: number]: string } = {
+    200: '登陆成功',
+    401: '密码错误',
+    404: '没有找到此账号',
+    408: '无法连接服务器'
+  };
+
+  ElMessage[status === 200 ? 'success' : 'info'](messages[status]);
+};
+
+const email = ref('');
+const code = ref('');
+const codeSent = ref(false);
+
+// 发送邮箱逻辑
+const sendEmCode = async () => {
+  if (!email.value) {
+    ElMessage('请输入邮箱地址');
+    return;
+  }
+
+  const status = await sendMail(email.value)
+  const messages: { [key: number]: string } = {
+    200: '发送成功',
+    400: '邮箱格式不正确',
+    404: '该邮箱不存在',
+    408: '无法连接服务器'
+  };
+  ElMessage[status === 200 ? 'success' : 'info'](messages[status]);
+
+  codeSent.value = true;
+  setTimeout(() => (codeSent.value = false), 60000); // 模拟发送验证码并在60秒后重置按钮
+};
+
+// 邮箱登录逻辑
+const handleCodeLogin = async () => {
+  console.log('邮箱地址:', email.value);
+  console.log('验证码:', code.value);
+  const status = await verifyLoginCode(email.value, code.value)
+  const messages: { [key: number]: string } = {
+    200: '登录成功',
+    400: '请输入正确的验证码和邮箱格式',
+    401: '验证失败',
+    408: '无法连接服务器'
+  };
+  ElMessage[status === 200 ? 'success' : 'info'](messages[status]);
+};
+
 
 </script>
 <template>
@@ -95,7 +126,7 @@ const switchLoginType = () => {
             <label for="code">验证码</label>
             <el-input type="text" id="code" v-model="code" placeholder="请输入验证码" clearable>
               <template #append>
-                <el-button @click="sendCode" :disabled="codeSent">{{ codeSent ? '已发送' : '发送验证码' }}</el-button>
+                <el-button @click="sendEmCode" :disabled="codeSent">{{ codeSent ? '已发送' : '发送验证码' }}</el-button>
               </template>
             </el-input>
           </div>

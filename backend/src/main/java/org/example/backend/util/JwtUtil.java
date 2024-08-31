@@ -8,6 +8,7 @@ package org.example.backend.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import org.example.backend.enums.UserRole;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
@@ -22,7 +23,6 @@ public class JwtUtil {
 
 
     // 过期时间(单位:秒)
-
     public static final int ACCESS_EXPIRE = 3600;
 
     // 私有构造函数，防止外部实例化
@@ -31,7 +31,7 @@ public class JwtUtil {
     }
 
     // 生成 JWT
-    public static String generateToken(String uid, String role) {
+    public static String generateToken(String uid, UserRole role) {
         return Jwts.builder()
                 .subject(uid) // 用户ID作为主题
                 .claim("role", role) // 用户角色作为自定义声明
@@ -90,18 +90,18 @@ public class JwtUtil {
     }
 
     // 使用演示
-    public static void main(String[] args) {
-
-        // 传入 uid 和 role 生成 token
-        String uid = "478522016";
-        String role = "admin";
-        String token = generateToken(uid, role);
-
-        // 解析 token 的 uid role 和有效性
-        Map<String, Object> info = JwtUtil.getClaimsFromToken(token);
-        System.out.println(info.get("uid"));
-        System.out.println(info.get("role"));
-        System.out.println(info.get("valid"));
-    }
+    // public static void main(String[] args) {
+    //
+    //     // 传入 uid 和 role 生成 token
+    //     String uid = "478522016";
+    //     String role = "admin";
+    //     String token = generateToken(uid, role);
+    //
+    //     // 解析 token 的 uid role 和有效性
+    //     Map<String, Object> info = JwtUtil.getClaimsFromToken(token);
+    //     System.out.println(info.get("uid"));
+    //     System.out.println(info.get("role"));
+    //     System.out.println(info.get("valid"));
+    // }
 
 }

@@ -10,29 +10,36 @@ public class User {
 
     @Id // 主键 id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 指定主键生成策略为自增
-    @Column(name = "id", nullable = false, updatable = false) // 列名为 "id"，不可为 null，不可更新
+    // 列名为 "id"，不可为 null，不可更新
+    @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 
-    @Column(name = "uid", unique = true, nullable = false, length = 50) // 列名为 "uid"，唯一，不可为 null，最大长度为 50
+    // 列名为 "uid"，唯一，不可为 null，最大长度为 50
+    @Column(name = "uid", unique = true, nullable = false, length = 50)
     private String uid;
 
-    @Column(name = "username", unique = true, nullable = false, length = 50) // 列名为 "username"，唯一，不可为 null，最大长度为 50
+    // 列名为 "username"，唯一，不可为 null，最大长度为 50
+    @Column(name = "username", unique = true, nullable = false, length = 50)
     private String username;
 
-    @Column(name = "password", nullable = false, length = 255) // 列名为 "password"，不可为 null，最大长度为 255
+    // 列名为 "password"，不可为 null，最大长度为 255
+    @Column(name = "password", nullable = false, length = 255)
     private String password;
 
-    @Column(name = "email", unique = true, nullable = false, length = 100) // 列名为 "email"，唯一，不可为 null，最大长度为 100
+    // 列名为 "email"，唯一，不可为 null，最大长度为 100
+    @Column(name = "email", unique = true, nullable = false, length = 100)
     private String email;
 
-    @Column(name = "created_at", nullable = false, updatable = false) // 列名为 "created_at"，不可为 null，不可更新
+    // 列名为 "created_at"，不可为 null，不可更新
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at", nullable = false) // 列名为 "updated_at"，不可为 null
+    // 列名为 "updated_at"，不可为 null
+    @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    // Getters and Setters
 
+    // Getters and Setters
     public Long getId() {
         return id;
     }

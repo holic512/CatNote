@@ -10,6 +10,10 @@ public class AuthDto {
     private String uid;
     private String password;
 
+    public AuthDto(String uid) {
+        this.uid = uid;
+    }
+
     public AuthDto(String uid, String password) {
         this.uid = uid;
         this.password = password;
