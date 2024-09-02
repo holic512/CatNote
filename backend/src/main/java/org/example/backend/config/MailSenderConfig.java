@@ -68,7 +68,7 @@ public class MailSenderConfig {
                 break;
         }
         // 开启调试模式（可选）
-        props.put("mail.debug", "true");
+        props.put("mail.debug", "false");
 
         return mailSender;
     }

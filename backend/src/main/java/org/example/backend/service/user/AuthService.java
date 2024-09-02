@@ -6,18 +6,24 @@
  */
 package org.example.backend.service.user;
 
-import jakarta.mail.MessagingException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.antlr.v4.runtime.misc.Pair;
 import org.example.backend.Dto.user.AuthDto;
 import org.example.backend.Repository.UserRepository;
+import org.example.backend.entity.User;
 import org.example.backend.enums.UserRole;
 import org.example.backend.enums.VerificationCodePurpose;
-import org.example.backend.util.JwtUtil;
-import org.example.backend.util.MailUtil;
-import org.example.backend.util.VerificationCodeUtil;
+import org.example.backend.enums.user.AuthServiceEnum;
+import org.example.backend.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -33,6 +39,11 @@ public class AuthService {
         this.redisTemplate = redisTemplate;
         this.mailUtil = mailUtil;
     }
+
+    // 定义注册行为的时效性
+    final int timeout = 5;
+    final String keyRegPend = "CodeNote:user:register:pending:";
+    final String keyReg = "CodeNote:user:register:";
 
 
     /**
@@ -61,9 +72,8 @@ public class AuthService {
      * 登录验证码的邮件发送,数据存储 服务层
      *
      * @param email 邮箱地址
-     * @throws MessagingException 邮件错误
      */
-    public boolean sendLoginCode(String email) throws MessagingException {
+    public boolean sendLoginCode(String email) {
 
         // 键名 与 过期时间(分钟)
         final String keyName = "CodeNote:user:login:";
@@ -96,7 +106,7 @@ public class AuthService {
      * @return token
      */
     public String verifyLoginCode(String email, String code) {
-        
+
         final String keyName = "CodeNote:user:login:";
 
         // 查询该键的value
@@ -112,5 +122,128 @@ public class AuthService {
         final AuthDto authDto = userRepository.findAuthDtoByEmail(email);
         return JwtUtil.generateToken(authDto.getUid(), UserRole.USER);
 
+    }
+
+    /**
+     * 发送 注册请求
+     *
+     * @param username 用户名
+     * @param password 密码
+     * @param email    邮箱
+     * @return 是否成功添加请求
+     */
+    public Pair<AuthServiceEnum, String> initiateReg(String username, String password, String email) throws JsonProcessingException {
+
+
+        // 检测 用户名和邮箱 是否被创建
+        if (userRepository.existsByUsername(username)) {
+            return new Pair<>(AuthServiceEnum.UserAlreadyExists, null);
+        }
+        if (userRepository.existsByEmail(email)) {
+            return new Pair<>(AuthServiceEnum.EmailAlreadyExists, null);
+        }
+
+
+        // 验证待注册区内是否有 此用户名 或者 邮箱 的请求 -> 存在则删除原先,以用来覆盖
+        boolean exUser = Boolean.TRUE.equals(redisTemplate.hasKey(keyRegPend + username));
+        boolean exEmail = Boolean.TRUE.equals(redisTemplate.hasKey(keyRegPend + email));
+
+        if (exUser) {
+            String ex1 = (String) redisTemplate.opsForValue().get(keyRegPend + username);
+            redisTemplate.delete(keyRegPend + username);
+            if (ex1 != null) {
+                redisTemplate.delete(keyReg + ex1);
+            }
+        }
+        if (exEmail) {
+            String ex2 = (String) redisTemplate.opsForValue().get(keyRegPend + email);
+            redisTemplate.delete(keyRegPend + email);
+            if (ex2 != null) {
+                redisTemplate.delete(keyReg + ex2);
+            }
+        }
+
+
+        // 生成用于标识注册对话行为的id 以及 验证码
+        String regID = UuidUtil.getUuid();
+        String code = VerificationCodeUtil.generateVerificationCode();
+
+        // 将此用户名,邮箱 添加到 待注册区
+        redisTemplate.opsForValue().set(keyRegPend + username, regID, timeout, TimeUnit.MINUTES);
+        redisTemplate.opsForValue().set(keyRegPend + email, regID, timeout, TimeUnit.MINUTES);
+
+        // 将regID:邮箱,用户名,密码,验证码 添加到 注册区
+        Map<String, String> registerData = new HashMap<>();
+        registerData.put("username", username);
+        registerData.put("password", SCryptUtil.hashPassword(password)); // 加密后的密码
+        registerData.put("email", email);
+        registerData.put("code", code);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonString = objectMapper.writeValueAsString(registerData);
+
+
+        redisTemplate.opsForValue().set(keyReg + regID, jsonString, timeout, TimeUnit.MINUTES);
+
+        // 发送验证码
+        boolean result = mailUtil.sendVerificationCode(email, code, VerificationCodePurpose.UserRegister);
+        if (!result) {
+            return new Pair<>(AuthServiceEnum.EmailSendFailure, null);
+        }
+
+        // 返回 regID
+        return new Pair<>(AuthServiceEnum.Success, regID);
+    }
+
+    /**
+     * 用于验证 注册申请
+     *
+     * @param regID 注册会话标识符
+     * @param code  验证码
+     * @return 用户授权服务 状态(枚举)
+     */
+    public AuthServiceEnum verificationReg(String regID, String code) {
+
+        // 提取用户信息
+        String userData = (String) redisTemplate.opsForValue().get(keyReg + regID);
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, String> map;
+        try {
+            map = objectMapper.readValue(userData, new TypeReference<>() {
+            });
+        } catch (JsonProcessingException e) {
+            // 处理解析异常
+            return AuthServiceEnum.JsonParseError;
+        }
+        if (map == null) return AuthServiceEnum.RegIdNotFound;
+
+        // 比对验证码
+        String mapCode = map.get("code");
+        if (code == null || !code.equals(mapCode)) {
+            return AuthServiceEnum.INVALID_CODE; // 验证码错误
+        }
+
+        // 验证成功 - 清理 redis 数据
+        redisTemplate.delete(keyReg + regID);
+        redisTemplate.delete(keyReg + map.get("username"));
+        redisTemplate.delete(keyReg + map.get("email"));
+
+        // 执行注册逻辑
+        String uid;      // 获取uid
+        do {
+            uid = UuidUtil.getUuid();
+        } while (userRepository.existsByUid(uid));
+
+        User user = new User();
+        user.setUid(uid);
+        user.setUsername(map.get("username"));
+        user.setPassword(map.get("password"));
+        user.setEmail(map.get("email"));
+        user.setCreatedAt(LocalDateTime.now());
+        user.setUpdatedAt(LocalDateTime.now());
+
+        userRepository.save(user);
+
+        return AuthServiceEnum.Success;
     }
 }

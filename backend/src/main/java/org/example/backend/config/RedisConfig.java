@@ -6,6 +6,7 @@
  */
 package org.example.backend.config;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
@@ -23,9 +24,11 @@ public class RedisConfig {
 
         // 配置 redis 配置
         RedisStandaloneConfiguration redisConfig = new RedisStandaloneConfiguration();
-        redisConfig.setHostName("123.57.19.179"); // Redis 服务器地址
-        redisConfig.setPort(6379);            // Redis 服务器端口
-        redisConfig.setPassword("redis_m13245jia"); // 设置 Redis 密码
+
+        Dotenv dotenv = Dotenv.configure().directory("backend/.env").load(); // 加载 .env 文件
+        redisConfig.setHostName(dotenv.get("REDIS_HOST"));
+        redisConfig.setPort(Integer.parseInt(dotenv.get("REDIS_PORT")));
+        redisConfig.setPassword(dotenv.get("REDIS_PASSWORD"));
 
         LettuceConnectionFactory connectionFactory = new LettuceConnectionFactory(redisConfig);
         connectionFactory.afterPropertiesSet();

@@ -25,8 +25,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select new org.example.backend.Dto.user.AuthDto(u.uid) from User u where u.email = :email")
     AuthDto findAuthDtoByEmail(@Param("email") String email);
 
-    // 判断邮箱是否存在
-    @Query("SELECT COUNT(u) > 0 FROM User u WHERE u.email = :email")
-    boolean existsByEmail(@Param("email") String email);
+    // 判断 email 是否存在
+    boolean existsByEmail(String email);
+
+    // 判断 username 是否存在
+    boolean existsByUsername(String username);
+
+    // 判断 uid 是否存在
+    boolean existsByUid(String uid);
 
 }

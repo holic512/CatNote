@@ -1,13 +1,13 @@
 // signRouter.ts
 
-import signPage from './Sign/index.vue'
+import userAuth from './Auth/router.ts'
 
 export default [
 
     {
-        path: '/user/sign',
-        name: 'user-sign',
-        component: signPage,
+        path: '/user/auth',
+        name: 'user-auth',
+        children:userAuth,
     },
 
 ];

@@ -32,39 +32,44 @@ public class MailUtil {
      * @param toEmail          发送邮箱
      * @param verificationCode 验证码
      * @param use              用途
-     * @throws MessagingException 邮箱错误
+     * @return 发送状态
      */
-    public void sendVerificationCode(String toEmail, String verificationCode, VerificationCodePurpose use) throws MessagingException {
-        // 创建邮件内容
-        String subject = verificationCode + "是你的CatNote验证码";
+    public boolean sendVerificationCode(String toEmail, String verificationCode, VerificationCodePurpose use) {
+        try {
+            // 创建邮件内容
+            String subject = verificationCode + "是你的CatNote验证码";
 
-        // 创建并配置邮件消息
-        MimeMessage message = javaMailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
-        helper.setFrom("holic512@163.com");
-        helper.setTo(toEmail);
-        helper.setSubject(subject);
+            // 创建并配置邮件消息
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setFrom("holic512@163.com");
+            helper.setTo(toEmail);
+            helper.setSubject(subject);
 
-        // 创建 Thymeleaf 上下文并渲染模板
-        Context context = new Context();
-        context.setVariable("username", toEmail);
-        context.setVariable("verificationCode", verificationCode);
+            // 创建 Thymeleaf 上下文并渲染模板
+            Context context = new Context();
+            context.setVariable("username", toEmail);
+            context.setVariable("verificationCode", verificationCode);
 
-        // 针对不同用途,加载不同模板
-        String template = switch (use) {
-            case UserLogin -> "email/user/login.html";
-            case UserRegister -> "email/user/register.html";
-            case UserSetPassword -> "email/user/resetPassword.html";
-            default -> "email/user/404.html";
-        };
+            // 针对不同用途,加载不同模板
+            String template = switch (use) {
+                case UserLogin -> "email/user/login.html";
+                case UserRegister -> "email/user/register.html";
+                case UserSetPassword -> "email/user/resetPassword.html";
+                default -> "email/user/404.html";
+            };
 
-        String htmlContent = templateEngine.process(template, context);
+            String htmlContent = templateEngine.process(template, context);
 
-        // 设置邮件内容为 HTML 格式
-        helper.setText(htmlContent, true);
+            // 设置邮件内容为 HTML 格式
+            helper.setText(htmlContent, true);
 
-        // 发送邮件
-        javaMailSender.send(message);
+            // 发送邮件
+            javaMailSender.send(message);
+            return true;
+        } catch (MessagingException e) {
+            return false;
+        }
     }
 
 

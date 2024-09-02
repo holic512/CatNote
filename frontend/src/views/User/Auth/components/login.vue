@@ -2,10 +2,14 @@
 import {ref} from "vue";
 import {ElMessage} from "element-plus";
 
+
 // 导入登录函数
 import pwLogin from "../services/pwLogin.ts"
 import {sendMail, verifyLoginCode} from "../services/emLogin.ts";
+import {useRouter} from "vue-router";
 
+// 路由实例
+const router = useRouter();
 
 const loginType = ref<string>('password'); // 控制是密码登录还是验证码登录
 const username = ref<string>('');
@@ -142,9 +146,12 @@ const handleCodeLogin = async () => {
           </el-link>
           <div class="more-options" v-if="loginType === 'password'">
             <el-link type="info">忘记密码</el-link>
-            <el-link type="info">创建账号</el-link>
+            <el-link type="info" @click="router.push({name:'user-register'})">创建账号</el-link>
           </div>
-          <el-link type="info" v-if="loginType === 'code'">创建账号</el-link>
+
+          <el-link type="info" v-if="loginType === 'code'"
+                   @click="router.push({name:'user-register'})">创建账号
+          </el-link>
         </div>
       </el-form>
     </el-card>

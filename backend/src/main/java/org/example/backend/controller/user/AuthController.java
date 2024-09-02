@@ -6,8 +6,12 @@
  */
 package org.example.backend.controller.user;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import io.micrometer.common.util.StringUtils;
 import jakarta.mail.MessagingException;
+import org.antlr.v4.runtime.misc.Pair;
 import org.example.backend.config.ApiResponse;
+import org.example.backend.enums.user.AuthServiceEnum;
 import org.example.backend.service.user.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +41,8 @@ public class AuthController {
      * 使用 账号密码 的 登录
      *
      * @param requestBody 请求体
+     *                    username 账号
+     *                    password 密码
      * @return http状态码
      */
     @PostMapping("/PLogin")
@@ -60,6 +66,7 @@ public class AuthController {
      * 发送用于邮箱登录的验证码
      *
      * @param requestBody 请求体
+     *                    email 邮箱地址
      * @return http状态码
      */
     @PostMapping("/sendLoginCode")
@@ -90,7 +97,9 @@ public class AuthController {
     /**
      * 验证 用于 邮箱登录 的 验证码
      *
-     * @param requestBody 请求体
+     * @param requestBody 请求体,
+     *                    email 邮箱,
+     *                    code 验证码
      * @return 状态码
      */
     @PostMapping("/verifyLoginCode")
@@ -105,12 +114,73 @@ public class AuthController {
         }
 
         // 验证 邮箱登录 验证码 服务层
-        String result = authService.verifyLoginCode(email, code);
+        String token = authService.verifyLoginCode(email, code);
 
-        if (result == null) {
+        if (token == null) {
             return ResponseEntity.ok(new ApiResponse<>(401, "邮箱登录验证失败"));
         }
-        return ResponseEntity.ok(new ApiResponse<>(200, "登录成功", result));
+        return ResponseEntity.ok(new ApiResponse<>(200, "登录成功", token));
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<Object> register(@RequestBody Map<String, String> requestBody) throws MessagingException, JsonProcessingException {
+        String username = requestBody.get("username");
+        String password = requestBody.get("password");
+        String email = requestBody.get("email");
+
+        if (email == null || email.isEmpty() || password == null || password.isEmpty() || username.isEmpty()) {
+            return ResponseEntity.ok(new ApiResponse<>(400, "参数格式不正确"));
+        }
+
+        // 服务层
+        Pair<AuthServiceEnum, String> regService = authService.initiateReg(username, password, email);
+
+        switch (regService.a) {
+            case Success -> {
+                return ResponseEntity.ok(new ApiResponse<>(200, "请求注册成功", regService.b));
+            }
+            case EmailAlreadyExists -> {
+                return ResponseEntity.ok(new ApiResponse<>(409, "邮箱已存在"));
+            }
+            case UserAlreadyExists -> {
+                return ResponseEntity.ok(new ApiResponse<>(409, "用户已存在"));
+            }
+            default -> {
+                return ResponseEntity.ok(new ApiResponse<>(500, "无法连接服务器"));
+            }
+        }
+    }
+
+    @PostMapping("/verificationReg")
+    public ResponseEntity<Object> verificationReg(@RequestBody Map<String, String> requestBody) throws MessagingException {
+        // 验证数据
+        String regID = requestBody.get("regID");
+        String code = requestBody.get("code");
+        if (StringUtils.isBlank(regID) || StringUtils.isBlank(regID) || StringUtils.isBlank(code) || StringUtils.isBlank(code)) {
+            return ResponseEntity.ok(new ApiResponse<>(400, "参数格式不正确"));
+        }
+
+        // 服务层
+        AuthServiceEnum authServiceEnum = authService.verificationReg(regID, code);
+
+        switch (authServiceEnum) {
+            case Success -> {
+                return ResponseEntity.ok(new ApiResponse<>(200, "注册成功"));
+            }
+            case JsonParseError -> {
+                return ResponseEntity.ok(new ApiResponse<>(409, "json解析失败"));
+            }
+            case RegIdNotFound -> {
+                return ResponseEntity.ok(new ApiResponse<>(409, "未找到注册请求"));
+            }
+            case INVALID_CODE -> {
+                return ResponseEntity.ok(new ApiResponse<>(409, "验证码错误"));
+            }
+            default -> {
+                return ResponseEntity.ok(new ApiResponse<>(500, "无法连接服务器"));
+            }
+        }
+
     }
 
 

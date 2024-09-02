@@ -39,6 +39,8 @@ public class User {
     private LocalDateTime updatedAt;
 
 
+
+
     // Getters and Setters
     public Long getId() {
         return id;

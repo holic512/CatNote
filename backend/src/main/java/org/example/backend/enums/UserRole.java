@@ -1,3 +1,9 @@
+/**
+ * CreateTime: 2024-08-29
+ * Description: 用户权限
+ * Version: 1.0
+ * Author: holic512
+ */
 package org.example.backend.enums;
 
 public enum UserRole {
