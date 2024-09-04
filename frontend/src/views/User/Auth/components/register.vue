@@ -2,14 +2,19 @@
 import {ref} from "vue";
 import {ElMessage} from "element-plus";
 import {useRouter} from "vue-router";
+import {initiateReg} from "../services/register.ts";
+// 验证验证码页面
+import RegisterVer from "./registerVer.vue";
 
 // 路由实例
 const router = useRouter();
 
+// 账号参数
 const username = ref<string>('');
 const password = ref<string>('');
 const confirmPassword = ref<string>('');
 const email = ref<string>('');
+
 
 // 控制服务协议是否同意
 const agreedToTerms = ref(false);
@@ -23,12 +28,16 @@ const validateTerms = () => {
   return true;
 };
 
+
+// 控制是否发送注册请求
+const isVerificationStep = ref<boolean>(false);
+
+
 // 注册按钮逻辑
 const submitForm = async () => {
   if (!validateTerms()) {
     return;
   }
-
   if (!username.value || !password.value || !confirmPassword.value || !email.value) {
     ElMessage('请填写完整的注册信息');
     return;
@@ -38,17 +47,25 @@ const submitForm = async () => {
     ElMessage('两次输入的密码不一致');
     return;
   }
+  console.log(1);
+  // 发送注册请求
+  const status = await initiateReg(username.value, password.value, email.value);
+  console.log(status);
+  switch (status) {
+    case 200:
+      ElMessage.success('注册成功');
+      // 跳转输入验证码页面
+      isVerificationStep.value = true;
+  }
 
 
-  // 注册成功跳转到登录页面
-  ElMessage.success('注册成功');
-  router.push({name: 'user-login'});
 };
+
 
 </script>
 
 <template>
-  <div class="register-container">
+  <div class="register-container" v-if="!isVerificationStep">
     <el-card class="register-box">
       <h1 class="title">用户注册</h1>
       <el-form @submit.prevent="submitForm">
@@ -74,14 +91,16 @@ const submitForm = async () => {
         <!-- 确认密码 -->
         <div class="input-group">
           <label for="confirmPassword">确认密码</label>
-          <el-input type="password" id="confirmPassword" v-model="confirmPassword" placeholder="请再次输入密码" clearable></el-input>
+          <el-input type="password" id="confirmPassword" v-model="confirmPassword" placeholder="请再次输入密码"
+                    clearable></el-input>
         </div>
 
         <!-- 服务协议 -->
         <el-checkbox v-model="agreedToTerms">我已阅读并同意<a href="#">服务协议</a></el-checkbox>
 
         <!-- 注册按钮 -->
-        <el-button type="primary" class="register-button" :disabled="!agreedToTerms" @click="submitForm">注册</el-button>
+        <el-button type="primary" class="register-button" :disabled="!agreedToTerms" @click="submitForm">注册
+        </el-button>
 
         <!-- 登录选项 -->
         <div class="register-options">
@@ -91,6 +110,9 @@ const submitForm = async () => {
       </el-form>
     </el-card>
   </div>
+
+  <RegisterVer v-else/>
+
 </template>
 
 <style scoped>
@@ -103,7 +125,7 @@ const submitForm = async () => {
 }
 
 .register-box {
-  width: 320px;
+  width: 400px;
   padding: 40px;
   background-color: #fff;
   border-radius: 8px;

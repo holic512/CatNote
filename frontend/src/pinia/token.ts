@@ -2,7 +2,7 @@
 // * Version: 1.0
 import {defineStore} from "pinia";
 
-export const tokenStore = defineStore('toke', {
+export const tokenStore = defineStore('token', {
     // 定义变量 存储状态数据
     state() {
         return {

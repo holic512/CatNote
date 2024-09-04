@@ -9,10 +9,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@primevue/themes": "^4.0.5",
     "axios": "^1.7.3",
     "element-plus": "^2.8.0",
     "pinia": "^2.2.2",
     "pinia-plugin-persistedstate": "^4.0.0-alpha.4",
+    "primeicons": "^7.0.0",
+    "primevue": "^4.0.5",
     "routed": "^0.0.1",
     "vue": "^3.4.35",
     "vue-router": "^4.4.3"

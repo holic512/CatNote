@@ -122,7 +122,7 @@ public class AuthController {
         return ResponseEntity.ok(new ApiResponse<>(200, "登录成功", token));
     }
 
-    @PostMapping("/register")
+    @PostMapping("/initiateReg")
     public ResponseEntity<Object> register(@RequestBody Map<String, String> requestBody) throws MessagingException, JsonProcessingException {
         String username = requestBody.get("username");
         String password = requestBody.get("password");

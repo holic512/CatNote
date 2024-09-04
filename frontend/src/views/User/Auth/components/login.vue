@@ -164,12 +164,12 @@ const handleCodeLogin = async () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 97vh;
+  height: 100vh;
   background-color: #f5f5f5;
 }
 
 .login-box {
-  width: 320px;
+  width: 400px;
   padding: 40px;
   background-color: #fff;
   border-radius: 8px;

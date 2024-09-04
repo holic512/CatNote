@@ -86,7 +86,7 @@ const navigateToLogin = () => {
       </el-header>
       <!--主要内容-->
       <el-main style="margin-top: 12px; margin-bottom: 12px; height: calc(100vh - 100px);">
-        <el-scrollbar height="100%">
+        <el-scrollbar height="100%" width="100%">
 
           <el-row justify="center">
             <!-- 左半部分：展示图片 -->
