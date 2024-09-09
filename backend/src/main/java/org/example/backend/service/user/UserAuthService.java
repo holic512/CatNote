@@ -27,14 +27,14 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Service
-public class AuthService {
+public class UserAuthService {
     // 通过构造函数注入
     private final UserRepository userRepository;
     private final RedisTemplate<String, Object> redisTemplate;
     private final MailUtil mailUtil;
 
     @Autowired
-    public AuthService(UserRepository userRepository, RedisTemplate<String, Object> redisTemplate, MailUtil mailUtil) {
+    public UserAuthService(UserRepository userRepository, RedisTemplate<String, Object> redisTemplate, MailUtil mailUtil) {
         this.userRepository = userRepository;
         this.redisTemplate = redisTemplate;
         this.mailUtil = mailUtil;
@@ -53,18 +53,20 @@ public class AuthService {
      * @param password 密码
      * @return 由 uid 用户权限组成 token
      */
-    public String PLogin(String username, String password) {
+    public Pair<AuthServiceEnum, String> PLogin(String username, String password) {
         final AuthDto authDto = userRepository.findAuthDtoByUsername(username);
 
         if (authDto == null) {
-            return "-1"; // 用户未找到
+            return new Pair<>(AuthServiceEnum.UserNotFound, null); // 用户未找到
         }
 
-        if (!password.equals(authDto.getPassword())) {
-            return "-2"; // 密码不匹配
+
+        if (!SCryptUtil.verifyPassword(password, authDto.getPassword())) {
+            return new Pair<>(AuthServiceEnum.INCORRECT, null); // 密码不匹配
         }
 
-        return JwtUtil.generateToken(authDto.getUid(), UserRole.USER);
+        String token = JwtUtil.generateToken(authDto.getUid(), UserRole.USER);
+        return new Pair<>(AuthServiceEnum.Success, token);
     }
 
 
@@ -225,8 +227,8 @@ public class AuthService {
 
         // 验证成功 - 清理 redis 数据
         redisTemplate.delete(keyReg + regID);
-        redisTemplate.delete(keyReg + map.get("username"));
-        redisTemplate.delete(keyReg + map.get("email"));
+        redisTemplate.delete(keyRegPend + map.get("username"));
+        redisTemplate.delete(keyRegPend + map.get("email"));
 
         // 执行注册逻辑
         String uid;      // 获取uid

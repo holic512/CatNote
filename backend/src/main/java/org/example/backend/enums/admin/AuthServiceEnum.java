@@ -1,13 +1,13 @@
 /**
  * File Name: RegStatus.java
- * Description: 用户注册服务的状态
+ * Description: 管理员授权状态
  * Author: holic512
  * Created Date: 2024-08-29
  * Version: 1.0
  * Usage:
- * 这个枚举用于区分于用户注册服务状态的行为,成功状态:AuthServiceEnum.success
+ * 这个枚举用于区分于管理员注册服务状态的行为,成功状态:AuthServiceEnum.success
  */
-package org.example.backend.enums.user;
+package org.example.backend.enums.admin;
 
 public enum AuthServiceEnum {
     Success,                // 成功
@@ -18,8 +18,7 @@ public enum AuthServiceEnum {
     JsonParseError,         // Json解析错误
     RegIdNotFound,          // 注册标识符未找到
     INVALID_CODE,           // 验证码无效
-    UserNotFound,           // 用户未找到
+    UserNotExists,          // 用户不存在
     INCORRECT,              // 密码错误(与数据库存储比对不符)
-
 
 }

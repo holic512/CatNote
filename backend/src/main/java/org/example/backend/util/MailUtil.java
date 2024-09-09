@@ -34,7 +34,7 @@ public class MailUtil {
      * @param use              用途
      * @return 发送状态
      */
-    public boolean sendVerificationCode(String toEmail, String verificationCode, VerificationCodePurpose use) {
+    public  boolean sendVerificationCode(String toEmail, String verificationCode, VerificationCodePurpose use) {
         try {
             // 创建邮件内容
             String subject = verificationCode + "是你的CatNote验证码";
@@ -56,7 +56,7 @@ public class MailUtil {
                 case UserLogin -> "email/user/login.html";
                 case UserRegister -> "email/user/register.html";
                 case UserSetPassword -> "email/user/resetPassword.html";
-                default -> "email/user/404.html";
+                case AdminLogin -> "email/admin/login.html";
             };
 
             String htmlContent = templateEngine.process(template, context);

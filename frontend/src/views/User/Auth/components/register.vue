@@ -2,9 +2,10 @@
 import {ref} from "vue";
 import {ElMessage} from "element-plus";
 import {useRouter} from "vue-router";
-import {initiateReg} from "../services/register.ts";
+import {initiateReg, VerReg} from "../services/register.ts";
 // 验证验证码页面
-import RegisterVer from "./registerVer.vue";
+
+import InputOtp from "primevue/inputotp";
 
 // 路由实例
 const router = useRouter();
@@ -18,8 +19,6 @@ const email = ref<string>('');
 
 // 控制服务协议是否同意
 const agreedToTerms = ref(false);
-
-// 协议同意处理
 const validateTerms = () => {
   if (!agreedToTerms.value) {
     ElMessage('请同意服务协议');
@@ -28,10 +27,8 @@ const validateTerms = () => {
   return true;
 };
 
-
 // 控制是否发送注册请求
 const isVerificationStep = ref<boolean>(false);
-
 
 // 注册按钮逻辑
 const submitForm = async () => {
@@ -55,17 +52,38 @@ const submitForm = async () => {
     case 200:
       ElMessage.success('注册成功');
       // 跳转输入验证码页面
-      isVerificationStep.value = true;
+      isVerificationStep.value = false;
   }
-
 
 };
 
+// 邮箱验证流程
+const codeValue = ref<string>('');
+const verR = async () => {
+  if (!codeValue.value || codeValue.value.length != 6) {
+    return
+  }
+
+  const status = await VerReg(codeValue.value)
+  const messages: { [key: number]: string } = {
+    200: '登录成功',
+    401: '验证码错误错误',
+    404: '没有找到此请求',
+    400: 'json解析错误',
+    500: '无法连接服务器'
+  };
+  ElMessage[status === 200 ? 'success' : 'error'](messages[status]);
+
+  // 登录成功跳转其他页面
+  if (status === 200) {
+    await router.push("login")
+  }
+}
 
 </script>
 
 <template>
-  <div class="register-container" v-if="!isVerificationStep">
+  <div class="register-container" v-if="isVerificationStep">
     <el-card class="register-box">
       <h1 class="title">用户注册</h1>
       <el-form @submit.prevent="submitForm">
@@ -111,7 +129,16 @@ const submitForm = async () => {
     </el-card>
   </div>
 
-  <RegisterVer v-else/>
+  <!--  二次验证页面  -->
+  <div class="login-container" v-else>
+    <el-card class="login-box">
+      <h1 class="verTitle">账号注册验证</h1>
+      <p class="description">请输入您收到的 6 位数字验证码</p>
+      <InputOtp v-model="codeValue" integerOnly :length="6"/>
+      <el-button type="primary" class="login-button" @click="verR">注册</el-button>
+
+    </el-card>
+  </div>
 
 </template>
 
@@ -120,7 +147,7 @@ const submitForm = async () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 97vh;
+  height: 100vh;
   background-color: #f5f5f5;
 }
 
@@ -171,5 +198,63 @@ label {
   display: flex;
   justify-content: center;
   margin-top: 20px;
+}
+
+.login-box {
+  width: 400px;
+  padding: 40px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.verTitle {
+  margin-bottom: 24px; /* 底部外边距 */
+  color: #333; /* 文字颜色 */
+  text-align: center; /* 文字居中 */
+  font-size: 30px; /* 字体大小 */
+  font-weight: 800; /* 字体粗细 */
+}
+
+/* 描述文字样式 */
+.description {
+  text-align: center; /* 文字居中 */
+  margin-bottom: 20px; /* 底部外边距 */
+  color: #666; /* 文字颜色 */
+  font-size: 14px; /* 字体大小 */
+  font-weight: 600
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.login-button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #333;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.login-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.verTitle {
+  margin-bottom: 24px; /* 底部外边距 */
+  color: #333; /* 文字颜色 */
+  text-align: center; /* 文字居中 */
+  font-size: 30px; /* 字体大小 */
+  font-weight: 800; /* 字体粗细 */
 }
 </style>

@@ -24,6 +24,9 @@ pinia.use(piniaPluginPersistedstate)
 import PrimeVue from 'primevue/config';
 import Aura from '@primevue/themes/aura';
 import {definePreset} from "@primevue/themes";
+import Tooltip from 'primevue/tooltip';
+
+app.directive('tooltip', Tooltip);
 
 import 'primeicons/primeicons.css'
 

@@ -24,6 +24,7 @@ async function initiateReg(username: string, password: string, email: string) {
     }
 }
 
+// 用户注册 验证 验证码流程
 async function VerReg(code: string) {
     try {
 

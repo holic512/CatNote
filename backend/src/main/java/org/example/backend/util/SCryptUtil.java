@@ -15,6 +15,7 @@ import org.bouncycastle.crypto.generators.SCrypt;
 import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.Scanner;
 
 public class SCryptUtil {
 
@@ -66,5 +67,12 @@ public class SCryptUtil {
 
         // 比较散列
         return Arrays.equals(hash, storedHashBytes);
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String password = scanner.nextLine();
+        System.out.println(hashPassword(password));
+
     }
 }

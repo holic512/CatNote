@@ -18,6 +18,13 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Configuration
 public class RedisConfig {
 
+    private final static String key = "CodeNote:";
+
+    public static String getKey() {
+        return key; // 通过公共方法在类内部访问 private 属性
+    }
+
+
     // Bean redis 用来调用
     @Bean
     public RedisTemplate<String, Object> redisTemplate() {

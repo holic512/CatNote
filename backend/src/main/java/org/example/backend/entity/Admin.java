@@ -1,3 +1,12 @@
+/**
+ * File Name: Admin.java
+ * Description: 管理员信息类
+ * Author: holic512
+ * Created Date: 2024-09-04
+ * Version: 1.0
+ * Usage:
+ * 用于存储管理员的 授权信息
+ */
 package org.example.backend.entity;
 
 import jakarta.persistence.*;
@@ -5,8 +14,8 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "users") // 指定该类映射到数据库表
-public class User {
+@Table(name = "admins") // 指定该类映射到数据库表 "auth"
+public class Admin {
 
     @Id // 主键 id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 指定主键生成策略为自增
@@ -38,10 +47,6 @@ public class User {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-
-
-
-    // Getters and Setters
     public Long getId() {
         return id;
     }

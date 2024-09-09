@@ -1,6 +1,6 @@
 /**
  * CreateTime: 2024-08-27
- * Description: 用于用户登录控制器
+ * Description: 用户登录控制器
  * Version: 1.0
  * Author: holic512
  */
@@ -12,7 +12,7 @@ import jakarta.mail.MessagingException;
 import org.antlr.v4.runtime.misc.Pair;
 import org.example.backend.config.ApiResponse;
 import org.example.backend.enums.user.AuthServiceEnum;
-import org.example.backend.service.user.AuthService;
+import org.example.backend.service.user.UserAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,12 +24,12 @@ import java.util.regex.Matcher;
 
 @RestController
 @RequestMapping("/user")
-public class AuthController {
-    private final AuthService authService;
+public class UserAuthController {
+    private final UserAuthService userAuthService;
 
     @Autowired
-    AuthController(AuthService authService) {
-        this.authService = authService;
+    UserAuthController(UserAuthService userAuthService) {
+        this.userAuthService = userAuthService;
     }
 
     // 邮箱格式验证规则
@@ -43,23 +43,34 @@ public class AuthController {
      * @param requestBody 请求体
      *                    username 账号
      *                    password 密码
-     * @return http状态码
+     * @return ResponseEntity 响应体
      */
     @PostMapping("/PLogin")
     public ResponseEntity<Object> PLogin(@RequestBody Map<String, String> requestBody) {
         String username = requestBody.get("username");
         String password = requestBody.get("password");
 
-        String result = authService.PLogin(username, password);
-        // 账号未找到
-        if (Objects.equals(result, "-1")) {
-            return ResponseEntity.ok(new ApiResponse<>(404, "账号不存在"));
+        if (username.isEmpty() || password.isEmpty()) {
+            return ResponseEntity.ok(new ApiResponse<>(400, "参数格式不正确"));
         }
-        // 密码错误
-        else if (Objects.equals(result, "-2")) {
-            return ResponseEntity.ok(new ApiResponse<>(401, "账号密码错误"));
+
+        // 调用服务层
+        Pair<AuthServiceEnum, String> result = userAuthService.PLogin(username, password);
+
+        switch (result.a) {
+            case Success -> {
+                return ResponseEntity.ok(new ApiResponse<>(200, "登录成功", result));
+            }
+            case UserNotFound -> {
+                return ResponseEntity.ok(new ApiResponse<>(404, "账号不存在"));
+            }
+            case INCORRECT -> {
+                return ResponseEntity.ok(new ApiResponse<>(401, "账号密码错误"));
+            }
+            default -> {
+                return ResponseEntity.ok(new ApiResponse<>(500, "无法连接服务器"));
+            }
         }
-        return ResponseEntity.ok(new ApiResponse<>(200, "登录成功", result));
     }
 
     /**
@@ -86,7 +97,7 @@ public class AuthController {
         }
 
         // service
-        boolean result = authService.sendLoginCode(email);
+        boolean result = userAuthService.sendLoginCode(email);
         if (!result) {
             return ResponseEntity.ok(new ApiResponse<>(404, "邮箱不存在"));
         }
@@ -114,7 +125,7 @@ public class AuthController {
         }
 
         // 验证 邮箱登录 验证码 服务层
-        String token = authService.verifyLoginCode(email, code);
+        String token = userAuthService.verifyLoginCode(email, code);
 
         if (token == null) {
             return ResponseEntity.ok(new ApiResponse<>(401, "邮箱登录验证失败"));
@@ -133,7 +144,7 @@ public class AuthController {
         }
 
         // 服务层
-        Pair<AuthServiceEnum, String> regService = authService.initiateReg(username, password, email);
+        Pair<AuthServiceEnum, String> regService = userAuthService.initiateReg(username, password, email);
 
         switch (regService.a) {
             case Success -> {
@@ -161,7 +172,7 @@ public class AuthController {
         }
 
         // 服务层
-        AuthServiceEnum authServiceEnum = authService.verificationReg(regID, code);
+        AuthServiceEnum authServiceEnum = userAuthService.verificationReg(regID, code);
 
         switch (authServiceEnum) {
             case Success -> {

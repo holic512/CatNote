@@ -17,5 +17,4 @@ export const regIDStore = defineStore('regID', {
             this.regID = regID;
         },
     },
-    persist: true,
 })
