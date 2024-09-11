@@ -8,7 +8,7 @@ import {UnwrapRef} from "vue";
 async function login(username: string, password: string) {
     try {
         const response = await axios.post(
-            "admin/login",
+            "admin/auth/login",
             {
                 username: username,
                 password: password,
@@ -30,7 +30,7 @@ async function verCode(code: UnwrapRef<string>) {
     try {
         const logID = logIDStore().getLogID()
         const response = await axios.post(
-            "admin/verLogin",
+            "admin/auth/verLogin",
             {
                 code: code,
                 logID: logID,

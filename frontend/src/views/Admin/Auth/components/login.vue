@@ -4,6 +4,10 @@ import {ElMessage} from 'element-plus';
 import {login, verCode} from "../services/login.ts";
 
 import InputOtp from 'primevue/inputotp';
+import {useRouter} from 'vue-router';
+
+// 路由实例
+const router = useRouter();
 
 // 一次登录,二次登录 状态区分标识符
 const logView = ref(true);
@@ -51,7 +55,7 @@ const verLogin = async () => {
 
   // 登录成功跳转其他页面
   if (status === 200) {
-
+    await router.push("main")
   }
 }
 </script>

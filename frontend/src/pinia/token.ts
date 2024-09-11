@@ -17,6 +17,9 @@ export const tokenStore = defineStore('token', {
         setToken(token: string | undefined) {
             this.token = token;
         },
+        clearToken(): void {
+            this.token = undefined;
+        }
     },
     persist: true,
 })

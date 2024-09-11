@@ -1,16 +1,21 @@
 export default [
     {
         path: '/user',
-        component: () => import('./index.vue'), // 假设你有一个用户布局组件
+        component: () => import('./index.vue'),
+        meta: { requiresAuth: true },
         children: [
+            // 默认页面
             {
                 path: '',
                 name: 'user-home',
+                meta: { requiresAuth: false },
                 component: () => import('./Auth/components/login.vue'),
             },
+            // 授权页面
             {
                 path: 'auth',
                 name: 'user-auth',
+                meta: { requiresAuth: false },
                 component: () => import("./Auth/index.vue"),
                 children: [
                     {
@@ -35,6 +40,7 @@ export default [
                     }
                 ],
             },
+            // 主页面
             {
                 path: 'main',
                 name: 'user-main',

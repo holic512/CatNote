@@ -9,6 +9,10 @@ export default [
         component: HomeView
     },
     {
+        path: '/pd',
+        component: () => import('./PermissionDenied.vue'),
+    },
+    {
         path: '/:pathMatch(.*)*',
         name: '404',
         component: () => import('./404.vue'),
