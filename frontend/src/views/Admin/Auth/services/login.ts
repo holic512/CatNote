@@ -1,6 +1,6 @@
 // login.ts
 import axios from "../../../../axios";
-import {logIDStore} from "./logIDStore.ts";
+import {logIDStore} from "../../../../pinia/logIDStore.ts";
 import {tokenStore} from "../../../../pinia/token.ts";
 import {UnwrapRef} from "vue";
 
@@ -15,6 +15,8 @@ async function login(username: string, password: string) {
             }
         );
         const status = response.data.status;
+        console.log("status:"+status);
+
         if (status === 200) {
             logIDStore().setLogID(response.data.data);
             return status;
@@ -39,6 +41,7 @@ async function verCode(code: UnwrapRef<string>) {
         const status = response.data.status;
         if (status === 200) {
             tokenStore().setToken(response.data.data);
+            logIDStore().clearLogID();
         }
         return status;
     } catch (error) {

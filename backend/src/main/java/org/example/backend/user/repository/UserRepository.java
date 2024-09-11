@@ -18,11 +18,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 
     // 查询用于登录中的所获取的用户 密码和UID
-    @Query("select new org.example.backend.user.dto.AuthDto(u.uid,u.password) from User u where u.username = :username")
+    @Query("select new org.example.backend.user.dto.AuthDto(u.uid,u.password,u.status) from User u where u.username = :username")
     AuthDto findAuthDtoByUsername(@Param("username") String username);
 
     // 查询用于登录中的所获取的用户 密码和UID
-    @Query("select new org.example.backend.user.dto.AuthDto(u.uid) from User u where u.email = :email")
+    @Query("select new org.example.backend.user.dto.AuthDto(u.uid,u.status) from User u where u.email = :email")
     AuthDto findAuthDtoByEmail(@Param("email") String email);
 
     // 判断 email 是否存在

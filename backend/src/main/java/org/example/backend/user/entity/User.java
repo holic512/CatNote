@@ -1,6 +1,7 @@
 package org.example.backend.user.entity;
 
 import jakarta.persistence.*;
+import org.example.backend.user.enums.StatusEnum;
 
 import java.time.LocalDateTime;
 
@@ -8,37 +9,44 @@ import java.time.LocalDateTime;
 @Table(name = "users") // 指定该类映射到数据库表
 public class User {
 
-    @Id // 主键 id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // 指定主键生成策略为自增
-    // 列名为 "id"，不可为 null，不可更新
-    @Column(name = "id", nullable = false, updatable = false)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, updatable = false)
     private Long id;
 
-    // 列名为 "uid"，唯一，不可为 null，最大长度为 50
-    @Column(name = "uid", unique = true, nullable = false, length = 50)
+    @Column(unique = true, nullable = false, length = 50)
     private String uid;
 
-    // 列名为 "username"，唯一，不可为 null，最大长度为 50
-    @Column(name = "username", unique = true, nullable = false, length = 50)
+    @Column(unique = true, nullable = false, length = 50)
     private String username;
 
-    // 列名为 "password"，不可为 null，最大长度为 255
-    @Column(name = "password", nullable = false, length = 255)
+    @Column(nullable = false, length = 255)
     private String password;
 
-    // 列名为 "email"，唯一，不可为 null，最大长度为 100
-    @Column(name = "email", unique = true, nullable = false, length = 100)
+    @Column(unique = true, nullable = false, length = 100)
     private String email;
 
-    // 列名为 "created_at"，不可为 null，不可更新
+    @Enumerated(EnumType.STRING)  // 状态使用枚举类型存储
+    @Column(nullable = false, length = 100)
+    private StatusEnum status;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    // 列名为 "updated_at"，不可为 null
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
+    // 可以在实体类中添加 @PrePersist 和 @PreUpdate 方法来自动处理创建时间和更新时间
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
 
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 
 
     // Getters and Setters
@@ -96,5 +104,13 @@ public class User {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public StatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusEnum status) {
+        this.status = status;
     }
 }

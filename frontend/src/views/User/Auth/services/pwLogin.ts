@@ -4,7 +4,7 @@ import {tokenStore} from "../../../../pinia/token.ts";
 async function pwLogin(username: string, password: string): Promise<number> {
     try {
         const response = await axios.post(
-            "user/PLogin",
+            "user/auth/PLogin",
             {
                 username: username,
                 password: password,
@@ -12,15 +12,14 @@ async function pwLogin(username: string, password: string): Promise<number> {
         );
         const status = response.data.status;
         if (status === 200) {
-            const store = tokenStore();
-            store.setToken(response.data);
+            tokenStore().setToken(response.data.data);
             return status;
         }
 
         return status; // 登录成功
 
     } catch (error) {
-        return 408;
+        return 500;
     }
 }
 

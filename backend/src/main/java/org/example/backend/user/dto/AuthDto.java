@@ -6,17 +6,47 @@
  */
 package org.example.backend.user.dto;
 
+import org.example.backend.user.enums.StatusEnum;
+
 public class AuthDto {
     private String uid;
     private String password;
+    StatusEnum status;
+    String code;
 
-    public AuthDto(String uid) {
+    public AuthDto() {
+    }
+
+    public AuthDto(String uid, StatusEnum status) {
         this.uid = uid;
+        this.status = status;
+    }
+
+    public AuthDto(String uid, String password, StatusEnum status) {
+        this.uid = uid;
+        this.password = password;
+        this.status = status;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public AuthDto(String uid, String password) {
         this.uid = uid;
         this.password = password;
+    }
+
+    public StatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusEnum status) {
+        this.status = status;
     }
 
     public String getUid() {

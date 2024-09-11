@@ -28,7 +28,7 @@ const validateTerms = () => {
 };
 
 // 控制是否发送注册请求
-const isVerificationStep = ref<boolean>(false);
+const isVerificationStep = ref<boolean>(true);
 
 // 注册按钮逻辑
 const submitForm = async () => {
@@ -44,10 +44,8 @@ const submitForm = async () => {
     ElMessage('两次输入的密码不一致');
     return;
   }
-  console.log(1);
   // 发送注册请求
   const status = await initiateReg(username.value, password.value, email.value);
-  console.log(status);
   switch (status) {
     case 200:
       ElMessage.success('注册成功');

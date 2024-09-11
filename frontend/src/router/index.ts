@@ -75,7 +75,7 @@ router.beforeEach(async (to, from, next) => {
         }
 
         // 关闭路由守卫 阻止响应拦截器操作页面
-        routerStore().onGuard()
+        routerStore().offGuard()
 
     } else {
         // 不需要登录，直接访问

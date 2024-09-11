@@ -16,5 +16,8 @@ export const regIDStore = defineStore('regID', {
         setRegID(regID: string | undefined) {
             this.regID = regID;
         },
+        clearRegID(): void {
+            this.regID = undefined;
+        }
     },
 })

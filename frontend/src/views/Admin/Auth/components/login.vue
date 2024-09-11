@@ -55,7 +55,7 @@ const verLogin = async () => {
 
   // 登录成功跳转其他页面
   if (status === 200) {
-    await router.push("main")
+    await router.push("/admin/main")
   }
 }
 </script>

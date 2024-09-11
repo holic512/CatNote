@@ -46,6 +46,7 @@ public class SecurityConfig {
 
                         // 认证相关的接口允许访问
                         .requestMatchers("/admin/auth/**").permitAll()
+                        .requestMatchers("/user/auth/**").permitAll()
 
                         // 接口权限配置
                         .requestMatchers("/admin/**").hasRole("ADMIN")

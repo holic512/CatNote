@@ -13,6 +13,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.antlr.v4.runtime.misc.Pair;
+import org.example.backend.admin.dto.AuthDto;
 import org.example.backend.common.dto.MailCodeMessage;
 import org.example.backend.admin.repository.AdminRepository;
 import org.example.backend.common.config.Redis.RedisConfig;
@@ -65,20 +66,20 @@ public class AdminAuthService {
      */
     public Pair<AuthServiceEnum, String> login(String username, String password) throws JsonProcessingException {
         // 根据username 获取用户数据
-        Admin admin = adminRepository.findByUsername(username);
+        AuthDto authDto = adminRepository.findByUsername(username);
 
-        if (admin == null) {
+        if (authDto == null) {
             return new Pair<>(AuthServiceEnum.UserNotExists, null);
         }
 
-        if (!SCryptUtil.verifyPassword(password, admin.getPassword())) {
+        if (!SCryptUtil.verifyPassword(password, authDto.getPassword())) {
             return new Pair<>(AuthServiceEnum.INCORRECT, null);
         }
 
         // 密码验证成功->开始二次邮箱验证
         String code = VerificationCodeUtil.generateVerificationCode();
-        String uid = admin.getUid();
-        String email = admin.getEmail();
+        String uid = authDto.getUid();
+        String email = authDto.getEmail();
         String logID = UuidUtil.getUuid();
         Map<String, String> map = new HashMap<>();
         map.put("uid", uid);

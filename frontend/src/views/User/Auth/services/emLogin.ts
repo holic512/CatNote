@@ -1,39 +1,51 @@
 import axios from "../../../../axios";
 import {tokenStore} from "../../../../pinia/token.ts";
+import {logIDStore} from "../../../../pinia/logIDStore.ts";
 
 async function sendMail(email: string): Promise<number> {
     try {
         const response = await axios.post(
-            "user/sendLoginCode",
+            "user/auth/sendLoginCode",
             {
                 email: email,
             });
-        return response.data.status;
+        const status = response.data.status;
+
+        // 请求成功 获取logID 作为登录唯一标识符
+        if (status == 200) {
+            logIDStore().setLogID(response.data.data)
+        }
+        return status;
+
     } catch (error) {
-        return 408;
+        console.error("Error sending mail:", error);
+        return 500;
     }
 }
 
-async function verifyLoginCode(email: string, code: string): Promise<number> {
+async function verifyLoginCode(code: string): Promise<number> {
     try {
         const response = await axios.post(
-            "user/verifyLoginCode",
+            "user/auth/verifyLoginCode",
             {
-                email: email,
+                logID: logIDStore().getLogID(),
                 code: code,
             }
         )
         const status = response.data.status;
         if (status === 200) {
             // 插入token
-            const store = tokenStore();
-            store.setToken(response.data.data);
+            tokenStore().setToken(response.data.data);
+
+            // 清空 logID
+            logIDStore().clearLogID()
+
             return status;
         } else {
             return status;
         }
     } catch (error) {
-        return 408;
+        return 500;
     }
 }
 

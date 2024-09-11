@@ -16,10 +16,12 @@ public enum AuthServiceEnum {
     EmailSendFailure,       // 邮箱发送失败
     EmailNotFound,          // 邮箱不存在
     JsonParseError,         // Json解析错误
+    LogIdNotFound,          // 登录标识符未找到
     RegIdNotFound,          // 注册标识符未找到
     INVALID_CODE,           // 验证码无效
     UserNotFound,           // 用户未找到
     INCORRECT,              // 密码错误(与数据库存储比对不符)
-
+    AccountDisabled,         // 用户账户已停用
+    AccountBanned            // 用户账户已封禁
 
 }

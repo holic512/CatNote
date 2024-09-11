@@ -21,6 +21,7 @@ import org.example.backend.common.enums.UserRole;
 import org.example.backend.common.enums.MailCodePurpose;
 import org.example.backend.user.enums.AuthServiceEnum;
 import org.example.backend.user.dto.AuthDto;
+import org.example.backend.user.enums.StatusEnum;
 import org.example.backend.user.repository.UserRepository;
 import org.example.backend.user.entity.User;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -71,6 +72,15 @@ public class UserAuthService {
             return new Pair<>(AuthServiceEnum.UserNotFound, null); // 用户未找到
         }
 
+        // 判断用户状态
+        if (authDto.getStatus().equals(StatusEnum.DISABLED)) {
+            return new Pair<>(AuthServiceEnum.AccountDisabled, null);
+        }
+
+        if (authDto.getStatus().equals(StatusEnum.BANNED)) {
+            return new Pair<>(AuthServiceEnum.AccountBanned, null);
+        }
+
 
         if (!SCryptUtil.verifyPassword(password, authDto.getPassword())) {
             return new Pair<>(AuthServiceEnum.INCORRECT, null); // 密码不匹配
@@ -86,7 +96,7 @@ public class UserAuthService {
      *
      * @param email 邮箱地址
      */
-    public boolean sendLoginCode(String email) throws JsonProcessingException {
+    public Pair<AuthServiceEnum, String> sendLoginCode(String email) throws JsonProcessingException {
 
         // 键名 与 过期时间(分钟)
         final String keyName = "CodeNote:user:login:";
@@ -95,48 +105,74 @@ public class UserAuthService {
         // 判断邮箱是否存在
         final boolean exists = userRepository.existsByEmail(email);
         if (!exists) {
-            return false;
+            return new Pair<>(AuthServiceEnum.EmailNotFound, null);
         }
 
-        // 获取验证码
+        // 获取用户数据
+        final AuthDto authDto = userRepository.findAuthDtoByEmail(email);
+
+        // 判断用户状态
+        if (authDto.getStatus().equals(StatusEnum.DISABLED)) {
+            return new Pair<>(AuthServiceEnum.AccountDisabled, null);
+        }
+
+        if (authDto.getStatus().equals(StatusEnum.BANNED)) {
+            return new Pair<>(AuthServiceEnum.AccountBanned, null);
+        }
+
+        // 获取logID,验证码
+        String logID = UuidUtil.getUuid();
         String code = VerificationCodeUtil.generateVerificationCode();
+        authDto.setCode(code);
+
+        // 序列化
+        String userInfo = objectMapper.writeValueAsString(authDto);
 
         // 将验证码放入Redis
-        redisTemplate.opsForValue().set(keyName + email, code, timeout, TimeUnit.MINUTES);
-
+        redisTemplate.opsForValue().set(keyName + logID, userInfo, timeout, TimeUnit.MINUTES);
 
         // 将验证码发送邮箱 - 添加队列
         MailCodeMessage mailCodeMessage = new MailCodeMessage(email, code, MailCodePurpose.UserLogin);
         String message = objectMapper.writeValueAsString(mailCodeMessage);
         rabbitTemplate.convertAndSend(MQExchangeType.DIRECT_EXCHANGE.getValue(), MQRoutingKey.EMAIL_ROUTING_KEY.getKey(), message);
 
-        return true;
+        return new Pair<>(AuthServiceEnum.Success, logID);
 
     }
 
     /**
      * 验证 登录验证码 的 服务层
      *
-     * @param email 邮箱地址
+     * @param logID 登录标识符
      * @param code  验证码
      * @return token
      */
-    public String verifyLoginCode(String email, String code) {
+    public Pair<AuthServiceEnum, String> verifyLoginCode(String logID, String code) throws JsonProcessingException {
 
         final String keyName = "CodeNote:user:login:";
 
-        // 查询该键的value
-        String value = (String) redisTemplate.opsForValue().get(keyName + email);
+        // 查询该键的此键 用户数据
+        String userInfoJson = (String) redisTemplate.opsForValue().get(keyName + logID);
 
         // 表示没有这个请求,或验证码不正确
-        if (value == null || !value.equals(code)) {
-            return null;
+        if (userInfoJson == null) {
+            return new Pair<>(AuthServiceEnum.LogIdNotFound, null);
+        }
+
+        // 使用 ObjectMapper 反序列化
+        AuthDto authDto = objectMapper.readValue(userInfoJson, AuthDto.class);
+
+
+        if (!authDto.getCode().equals(code)) {
+            return new Pair<>(AuthServiceEnum.INCORRECT, null);
         }
 
         // 移除已验证的验证码,确定用户uid并返回token
-        redisTemplate.delete(keyName + email);
-        final AuthDto authDto = userRepository.findAuthDtoByEmail(email);
-        return JwtUtil.generateToken(authDto.getUid(), UserRole.USER);
+        redisTemplate.delete(keyName + logID);
+
+        // success
+        String token = JwtUtil.generateToken(authDto.getUid(), UserRole.USER);
+        return new Pair<>(AuthServiceEnum.Success, token);
 
     }
 
@@ -251,6 +287,7 @@ public class UserAuthService {
         user.setUid(uid);
         user.setUsername(map.get("username"));
         user.setPassword(map.get("password"));
+        user.setStatus(StatusEnum.ACTIVE);
         user.setEmail(map.get("email"));
         user.setCreatedAt(LocalDateTime.now());
         user.setUpdatedAt(LocalDateTime.now());

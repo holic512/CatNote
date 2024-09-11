@@ -10,5 +10,7 @@
 package org.example.backend.user.enums;
 
 public enum StatusEnum {
-
+    ACTIVE,    // 用户正常状态
+    DISABLED,  // 用户被停用
+    BANNED;    // 用户被封禁
 }

@@ -16,31 +16,32 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Entity
-@Table(name = "email_configurations")
+@Table(name = "mail_server_settings")
 public class EmailConfiguration {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, updatable = false)
     private Long id;
 
-    @Column(name = "host", nullable = false)
+    @Column(name = "host", nullable = false, length = 255)
     private String host;  // 邮件服务器主机名
 
     @Column(name = "port", nullable = false)
     private int port;  // 邮件服务器端口
 
-    @Column(name = "username", nullable = false)
+    @Column(name = "username", nullable = false, length = 255)
     private String username;  // 邮箱用户名
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password", nullable = false, length = 255)
     private String password;  // 邮箱密码
 
     @Column(name = "auth", nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
     private boolean auth = true;  // 是否需要认证
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "security_protocol", nullable = false)
-    private MailSecurityProtocol MailSecurityProtocol; // 加密协议类型
+    @Column(name = "security_protocol", nullable = false, length = 50)
+    private MailSecurityProtocol securityProtocol; // 加密协议类型
 
     @Column(name = "created_at", updatable = false, nullable = false)
     private LocalDateTime createdAt;  // 账号创建时间
@@ -100,12 +101,12 @@ public class EmailConfiguration {
         this.auth = auth;
     }
 
-    public org.example.backend.common.enums.MailSecurityProtocol getMailSecurityProtocol() {
-        return MailSecurityProtocol;
+    public MailSecurityProtocol getMailSecurityProtocol() {
+        return securityProtocol;
     }
 
-    public void setMailSecurityProtocol(org.example.backend.common.enums.MailSecurityProtocol mailSecurityProtocol) {
-        MailSecurityProtocol = mailSecurityProtocol;
+    public void setMailSecurityProtocol(MailSecurityProtocol mailSecurityProtocol) {
+        securityProtocol = mailSecurityProtocol;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -124,19 +125,5 @@ public class EmailConfiguration {
         this.updatedAt = updatedAt;
     }
 
-    @Override
-    public String toString() {
-        return "EmailConfiguration{" +
-                "id=" + id +
-                ", host='" + host + '\'' +
-                ", port=" + port +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", auth=" + auth +
-                ", MailSecurityProtocol=" + MailSecurityProtocol +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                '}';
-    }
 }
 

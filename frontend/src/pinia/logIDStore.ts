@@ -16,5 +16,8 @@ export const logIDStore = defineStore('logID', {
         setLogID(logID: string | undefined): void {
             this.logID = logID;
         },
+        clearLogID(): void {
+            this.logID = undefined;
+        }
     },
 })

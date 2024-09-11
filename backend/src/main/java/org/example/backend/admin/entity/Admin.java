@@ -14,39 +14,44 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "admins") // 指定该类映射到数据库表 "auth"
+@Table(name = "admins")  // 指定该类映射到数据库表 "admins"
 public class Admin {
 
-    @Id // 主键 id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // 指定主键生成策略为自增
-    // 列名为 "id"，不可为 null，不可更新
-    @Column(name = "id", nullable = false, updatable = false)
-    private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, updatable = false)
+    private Long id;  // 主键 ID
 
-    // 列名为 "uid"，唯一，不可为 null，最大长度为 50
     @Column(name = "uid", unique = true, nullable = false, length = 50)
-    private String uid;
+    private String uid;  // 用户 ID
 
-    // 列名为 "username"，唯一，不可为 null，最大长度为 50
     @Column(name = "username", unique = true, nullable = false, length = 50)
-    private String username;
+    private String username;  // 用户名
 
-    // 列名为 "password"，不可为 null，最大长度为 255
     @Column(name = "password", nullable = false, length = 255)
-    private String password;
+    private String password;  // 密码
 
-    // 列名为 "email"，唯一，不可为 null，最大长度为 100
     @Column(name = "email", unique = true, nullable = false, length = 100)
-    private String email;
+    private String email;  // 邮箱
 
-    // 列名为 "created_at"，不可为 null，不可更新
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt;  // 账户创建时间
 
-    // 列名为 "updated_at"，不可为 null
     @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
+    private LocalDateTime updatedAt;  // 信息更新时间
 
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    // Getters and Setters
     public Long getId() {
         return id;
     }

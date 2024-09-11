@@ -56,10 +56,13 @@ const handlePasswordLogin = async () => {
     200: '登陆成功',
     401: '密码错误',
     404: '没有找到此账号',
-    408: '无法连接服务器'
+    500: '无法连接服务器'
   };
 
   ElMessage[status === 200 ? 'success' : 'info'](messages[status]);
+  if (status === 200) {
+    await router.push("/user/main")
+  }
 };
 
 const email = ref('');
@@ -78,7 +81,7 @@ const sendEmCode = async () => {
     200: '发送成功',
     400: '邮箱格式不正确',
     404: '该邮箱不存在',
-    408: '无法连接服务器'
+    500: '无法连接服务器'
   };
   ElMessage[status === 200 ? 'success' : 'info'](messages[status]);
 
@@ -88,16 +91,17 @@ const sendEmCode = async () => {
 
 // 邮箱登录逻辑
 const handleCodeLogin = async () => {
-  console.log('邮箱地址:', email.value);
-  console.log('验证码:', code.value);
-  const status = await verifyLoginCode(email.value, code.value)
+  const status = await verifyLoginCode(code.value)
   const messages: { [key: number]: string } = {
     200: '登录成功',
     400: '请输入正确的验证码和邮箱格式',
     401: '验证失败',
-    408: '无法连接服务器'
+    500: '无法连接服务器'
   };
   ElMessage[status === 200 ? 'success' : 'info'](messages[status]);
+  if (status === 200) {
+    await router.push("/user/main")
+  }
 };
 
 
