@@ -15,7 +15,6 @@ async function login(username: string, password: string) {
             }
         );
         const status = response.data.status;
-        console.log("status:"+status);
 
         if (status === 200) {
             logIDStore().setLogID(response.data.data);

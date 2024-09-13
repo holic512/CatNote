@@ -11,6 +11,9 @@ public class ApiResponse<T> {
     private String message;
     private T data;
 
+    public ApiResponse() {
+    }
+
     public ApiResponse(int status, String message) {
         this.status = status;
         this.message = message;
@@ -22,6 +25,24 @@ public class ApiResponse<T> {
         this.data = data;
     }
 
+    // 链式函数
+    public ApiResponse<T> status(int status) {
+        this.status = status;
+        return this;
+    }
+
+    public ApiResponse<T> message(String message) {
+        this.message = message;
+        return this;
+    }
+
+    public ApiResponse<T> data(T data) {
+        this.data = data;
+        return this;
+    }
+
+
+    // get or set
     public int getStatus() {
         return status;
     }

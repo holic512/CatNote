@@ -22,8 +22,8 @@ import org.example.backend.common.enums.MailCodePurpose;
 import org.example.backend.user.enums.AuthServiceEnum;
 import org.example.backend.user.dto.AuthDto;
 import org.example.backend.user.enums.StatusEnum;
-import org.example.backend.user.repository.UserRepository;
-import org.example.backend.user.entity.User;
+import org.example.backend.common.repository.UserRepository;
+import org.example.backend.common.entity.User;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -66,27 +66,27 @@ public class UserAuthService {
      * @return 由 uid 用户权限组成 token
      */
     public Pair<AuthServiceEnum, String> PLogin(String username, String password) {
-        final AuthDto authDto = userRepository.findAuthDtoByUsername(username);
+        final User user = userRepository.findAuthDtoByUsername(username);
 
-        if (authDto == null) {
+        if (user == null) {
             return new Pair<>(AuthServiceEnum.UserNotFound, null); // 用户未找到
         }
 
         // 判断用户状态
-        if (authDto.getStatus().equals(StatusEnum.DISABLED)) {
+        if (user.getStatus().equals(StatusEnum.DISABLED)) {
             return new Pair<>(AuthServiceEnum.AccountDisabled, null);
         }
 
-        if (authDto.getStatus().equals(StatusEnum.BANNED)) {
+        if (user.getStatus().equals(StatusEnum.BANNED)) {
             return new Pair<>(AuthServiceEnum.AccountBanned, null);
         }
 
 
-        if (!SCryptUtil.verifyPassword(password, authDto.getPassword())) {
+        if (!SCryptUtil.verifyPassword(password, user.getPassword())) {
             return new Pair<>(AuthServiceEnum.INCORRECT, null); // 密码不匹配
         }
 
-        String token = JwtUtil.generateToken(authDto.getUid(), UserRole.USER);
+        String token = JwtUtil.generateToken(user.getUid(), UserRole.USER);
         return new Pair<>(AuthServiceEnum.Success, token);
     }
 
@@ -108,22 +108,23 @@ public class UserAuthService {
             return new Pair<>(AuthServiceEnum.EmailNotFound, null);
         }
 
-        // 获取用户数据
-        final AuthDto authDto = userRepository.findAuthDtoByEmail(email);
+        // 获取用户数据 uid status
+        final User user = userRepository.findAuthDtoByEmail(email);
 
         // 判断用户状态
-        if (authDto.getStatus().equals(StatusEnum.DISABLED)) {
+        if (user.getStatus().equals(StatusEnum.DISABLED)) {
             return new Pair<>(AuthServiceEnum.AccountDisabled, null);
         }
 
-        if (authDto.getStatus().equals(StatusEnum.BANNED)) {
+        if (user.getStatus().equals(StatusEnum.BANNED)) {
             return new Pair<>(AuthServiceEnum.AccountBanned, null);
         }
 
         // 获取logID,验证码
         String logID = UuidUtil.getUuid();
         String code = VerificationCodeUtil.generateVerificationCode();
-        authDto.setCode(code);
+
+        AuthDto authDto = new AuthDto(user.getUid(), user.getStatus(), code);
 
         // 序列化
         String userInfo = objectMapper.writeValueAsString(authDto);
@@ -280,7 +281,7 @@ public class UserAuthService {
         // 执行注册逻辑
         String uid;      // 获取uid
         do {
-            uid = UuidUtil.getUuid();
+            uid = UuidUtil.generateUid();
         } while (userRepository.existsByUid(uid));
 
         User user = new User();

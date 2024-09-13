@@ -7,6 +7,7 @@ import userRouters from '../views/User/router.ts'
 import {tokenStore} from "../pinia/token.ts";
 import axios from "../axios";
 import {routerStore} from "../pinia/routerStore.ts";
+import {ElMessage} from "element-plus";
 
 
 const router = createRouter({
@@ -25,6 +26,7 @@ router.beforeEach(async (to, from, next) => {
     if (to.meta.requiresAuth) {
         if (!token) {
             // 没有 token，重定向到登录页面
+            ElMessage["warning"]('您还未登录,请登录')
             if (to.path.startsWith('/admin')) {
                 next('/admin/auth/login'); // Admin 登录页面
             } else {
@@ -58,20 +60,29 @@ router.beforeEach(async (to, from, next) => {
             }
         } catch (error) {
             // token已失效或其他错误
+
+
             if (error.response?.status === 401) {
+                //清理错误的或失效的 token
                 tokenStore().clearToken();
+
+                ElMessage["warning"]('您还未登录或登录权限已过期,请重新登录')
                 if (to.path.startsWith('/admin')) {
-                    tokenStore().clearToken();
                     next('/admin/auth/login'); // Admin 登录页面
                 } else {
-                    tokenStore().clearToken();
                     next('/user/auth/login'); // User 登录页面
                 }
-            } else {
+            } else if (error.response?.status === 403) {
+                //清理错误的或失效的 token
+                tokenStore().clearToken();
+
+                ElMessage["warning"]('此权限不正确,请重新登录')
                 // 其他错误处理 403
                 next('/pd'); // 权限错误页面
+            } else {
+                ElMessage["warning"]('请检查网络是否连接')
+                next('/'); // 权限错误页面
             }
-
         }
 
         // 关闭路由守卫 阻止响应拦截器操作页面

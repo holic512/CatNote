@@ -1,42 +1,45 @@
-package org.example.backend.user.entity;
+/**
+ * File Name: Admin.java
+ * Description: 管理员信息类
+ * Author: holic512
+ * Created Date: 2024-09-04
+ * Version: 1.0
+ * Usage:
+ * 用于存储管理员的 授权信息
+ */
+package org.example.backend.common.entity;
 
 import jakarta.persistence.*;
-import org.example.backend.user.enums.StatusEnum;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "users") // 指定该类映射到数据库表
-public class User {
+@Table(name = "admins")  // 指定该类映射到数据库表 "admins"
+public class Admin {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, updatable = false)
-    private Long id;
+    private Long id;  // 主键 ID
 
-    @Column(unique = true, nullable = false, length = 50)
-    private String uid;
+    @Column(name = "uid", unique = true, nullable = false, length = 50)
+    private String uid;  // 用户 ID
 
-    @Column(unique = true, nullable = false, length = 50)
-    private String username;
+    @Column(name = "username", unique = true, nullable = false, length = 50)
+    private String username;  // 用户名
 
-    @Column(nullable = false, length = 255)
-    private String password;
+    @Column(name = "password", nullable = false, length = 255)
+    private String password;  // 密码
 
-    @Column(unique = true, nullable = false, length = 100)
-    private String email;
-
-    @Enumerated(EnumType.STRING)  // 状态使用枚举类型存储
-    @Column(nullable = false, length = 100)
-    private StatusEnum status;
+    @Column(name = "email", unique = true, nullable = false, length = 100)
+    private String email;  // 邮箱
 
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt;  // 账户创建时间
 
     @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
+    private LocalDateTime updatedAt;  // 信息更新时间
 
-    // 可以在实体类中添加 @PrePersist 和 @PreUpdate 方法来自动处理创建时间和更新时间
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
@@ -48,6 +51,11 @@ public class User {
         this.updatedAt = LocalDateTime.now();
     }
 
+    public Admin(String uid, String email, String password) {
+        this.uid = uid;
+        this.email = email;
+        this.password = password;
+    }
 
     // Getters and Setters
     public Long getId() {
@@ -104,13 +112,5 @@ public class User {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    public StatusEnum getStatus() {
-        return status;
-    }
-
-    public void setStatus(StatusEnum status) {
-        this.status = status;
     }
 }

@@ -21,5 +21,4 @@ export const routerStore = defineStore('route', {
             this.guard = false;
         }
     },
-    persist: true,
 })

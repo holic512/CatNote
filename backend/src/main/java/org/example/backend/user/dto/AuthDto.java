@@ -14,18 +14,11 @@ public class AuthDto {
     StatusEnum status;
     String code;
 
-    public AuthDto() {
-    }
 
-    public AuthDto(String uid, StatusEnum status) {
+    public AuthDto(String uid, StatusEnum status, String code) {
         this.uid = uid;
         this.status = status;
-    }
-
-    public AuthDto(String uid, String password, StatusEnum status) {
-        this.uid = uid;
-        this.password = password;
-        this.status = status;
+        this.code = code;
     }
 
     public String getCode() {

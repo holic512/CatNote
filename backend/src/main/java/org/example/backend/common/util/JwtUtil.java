@@ -24,8 +24,8 @@ public class JwtUtil {
     private static final Dotenv dotenv = Dotenv.configure().directory("backend/.env").load();
     private static final String SECRET_KEY = dotenv.get("JWT_SECRET");
 
-    // 过期时间(单位:秒)
-    public static final int ACCESS_EXPIRE = 3600;
+    // 过期时间(单位:秒)  -  开发环境 避免时间过长
+    public static final int ACCESS_EXPIRE = 360000;
 
     // 私有构造函数，防止外部实例化
     private JwtUtil() {
@@ -44,7 +44,7 @@ public class JwtUtil {
                 .issuedAt(new Date()) // 签发时间
                 .expiration(new Date(System.currentTimeMillis() + ACCESS_EXPIRE * 1000)) // 过期时间
                 .subject(uid) // 用户ID作为主题
-                .claim("role", role) // 用户角色作为自定义声明
+                .claim("role", "ROLE_" + role) // 用户角色作为自定义声明
                 .compact();
     }
 

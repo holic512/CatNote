@@ -7,10 +7,9 @@
  * Usage:
  * 管理员 的 持久层接口
  */
-package org.example.backend.admin.repository;
+package org.example.backend.common.repository;
 
-import org.example.backend.admin.dto.AuthDto;
-import org.example.backend.admin.entity.Admin;
+import org.example.backend.common.entity.Admin;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -18,8 +17,8 @@ import org.springframework.data.repository.query.Param;
 public interface AdminRepository extends CrudRepository<Admin, Long> {
 
     // 通过用户名查询管理员信息
-    @Query("select new org.example.backend.admin.dto.AuthDto(u.uid,u.email,u.password) from Admin u where u.username = :username")
-    AuthDto findByUsername(@Param("username") String username);
+    @Query("select new org.example.backend.common.entity.Admin(u.uid,u.email,u.password) from Admin u where u.username = :username")
+    Admin findByUsername(@Param("username") String username);
 
 
 }
