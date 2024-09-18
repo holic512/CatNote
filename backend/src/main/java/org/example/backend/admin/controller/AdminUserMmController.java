@@ -63,6 +63,13 @@ public class AdminUserMmController {
                 .data(userData));
     }
 
+    /**
+     * 获取 指定范围的 用户数据
+     *
+     * @param pageNum 页数
+     * @param pageSize 行数大小
+     * @return 返回对应的 list
+     */
     @GetMapping("/fetchPageData")
     public ResponseEntity<Object> fetchPageData(@RequestParam int pageNum, @RequestParam int pageSize) {
         // 计算偏移量和结束位置

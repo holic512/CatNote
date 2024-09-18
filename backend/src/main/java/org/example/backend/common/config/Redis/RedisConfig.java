@@ -9,6 +9,7 @@ package org.example.backend.common.config.Redis;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -27,19 +28,9 @@ public class RedisConfig {
 
     // Bean redis 用来调用
     @Bean
-    public RedisTemplate<String, Object> redisTemplate() {
+    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
 
         // 配置 redis 配置
-        RedisStandaloneConfiguration redisConfig = new RedisStandaloneConfiguration();
-
-        Dotenv dotenv = Dotenv.configure().directory("backend/.env").load(); // 加载 .env 文件
-        redisConfig.setHostName(dotenv.get("REDIS_HOST"));
-        redisConfig.setPort(Integer.parseInt(dotenv.get("REDIS_PORT")));
-        redisConfig.setPassword(dotenv.get("REDIS_PASSWORD"));
-
-        LettuceConnectionFactory connectionFactory = new LettuceConnectionFactory(redisConfig);
-        connectionFactory.afterPropertiesSet();
-
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
 

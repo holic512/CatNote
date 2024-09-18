@@ -37,9 +37,10 @@ async function verCode(code: UnwrapRef<string>) {
                 logID: logID,
             }
         )
+
         const status = response.data.status;
         if (status === 200) {
-            tokenStore().setToken(response.data.data);
+            tokenStore().setAdminToken(response.data.data);
             logIDStore().clearLogID();
         }
         return status;

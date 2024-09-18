@@ -22,10 +22,7 @@ import org.example.backend.common.enums.MQRoutingKey;
 import org.example.backend.common.enums.UserRole;
 import org.example.backend.common.enums.MailCodePurpose;
 import org.example.backend.admin.enums.AuthServiceEnum;
-import org.example.backend.common.util.JwtUtil;
-import org.example.backend.common.util.SCryptUtil;
-import org.example.backend.common.util.UuidUtil;
-import org.example.backend.common.util.VerificationCodeUtil;
+import org.example.backend.common.util.*;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -117,9 +114,9 @@ public class AdminAuthService {
 
         // 生成并返回token
         String uid = map.get("uid");
-        String token = JwtUtil.generateToken(uid, UserRole.ADMIN);
-
-        return new Pair<>(AuthServiceEnum.Success, token);
+        // String token = JwtUtil.generateToken(uid, UserRole.ADMIN);
+        StpKit.ADMIN.login(uid);
+        return new Pair<>(AuthServiceEnum.Success, StpKit.ADMIN.getTokenValue());
     }
 }
 

@@ -17,14 +17,18 @@ import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
 
 @Configuration
 public class RabbitMQConfig {
 
-    private final Dotenv dotenv = Dotenv.configure().directory("backend/.env").load();
 
+    private final ConnectionFactory rabbitConnectionFactory;
+    private final RabbitProperties properties;
 
     // 定义交换机
     @Bean
@@ -32,21 +36,17 @@ public class RabbitMQConfig {
         return new DirectExchange(MQExchangeType.DIRECT_EXCHANGE.getValue());
     }
 
-    // 配置连接工厂，使用 .env 中的配置
-    @Bean
-    public ConnectionFactory connectionFactory() {
-        CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
-        connectionFactory.setHost(dotenv.get("RABBITMQ_HOST"));
-        connectionFactory.setPort(Integer.parseInt(dotenv.get("RABBITMQ_PORT")));
-        connectionFactory.setUsername(dotenv.get("RABBITMQ_USERNAME"));
-        connectionFactory.setPassword(dotenv.get("RABBITMQ_PASSWORD"));
-        return connectionFactory;
+    @Autowired
+    RabbitMQConfig(ConnectionFactory connectionFactory, RabbitProperties properties) {
+        this.rabbitConnectionFactory = connectionFactory;
+        this.properties = properties;
     }
 
+
     @Bean
-    public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(ConnectionFactory connectionFactory) {
+    public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory() {
         SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
-        factory.setConnectionFactory(connectionFactory);
+        factory.setConnectionFactory(rabbitConnectionFactory);
         factory.setAcknowledgeMode(AcknowledgeMode.MANUAL); // 启用手动应答
         // 如果需要，还可以设置其他属性，如并发消费者数等
         return factory;

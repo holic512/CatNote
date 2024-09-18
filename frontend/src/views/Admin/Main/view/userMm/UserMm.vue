@@ -5,6 +5,8 @@ import IconField from 'primevue/iconfield';
 import InputIcon from 'primevue/inputicon';
 import InputText from "primevue/inputtext";
 import Tag from 'primevue/tag'
+import Dialog from 'primevue/dialog';
+
 
 import {computed, onBeforeUnmount, onMounted, ref} from "vue";
 // 表格组件
@@ -15,6 +17,7 @@ import fetchInitialPageData from "./fetchInitialPageData.ts";
 import {fetchPageData} from "./fetchPageData.ts";
 import {calculateRows} from "./calculateRows.ts";
 import {getSeverity} from "./getSeverity.ts";
+import AddUser from "./components/addUser.vue";
 
 // 搜素框数据
 const value1 = ref(null);
@@ -45,7 +48,7 @@ onMounted(async () => {
 
   // 获取用户总数 并 计算最大页数
   await axios.get(
-      "admin/userMm/getUserCount"
+      "admin/userMm/getUserCount",
   ).then((response) => {
     userCount.value = response.data.data;
     maxPage.value = Math.ceil(userCount.value / nowRow.value);
@@ -121,6 +124,9 @@ const turnPage = async (turn: pageTurn) => {
 const selectedProduct = ref();
 
 
+// 控制添加用户页面
+const visible = ref<boolean>(false);
+
 </script>
 
 <template>
@@ -145,12 +151,17 @@ const selectedProduct = ref();
 
           <el-col :span="20">
             <div class="col-right-part">
+
               <Button icon="pi pi-plus" severity="secondary" outlined size="small"
-                      v-tooltip.bottom="{ value: '添加用户', showDelay: 1000, hideDelay: 300 }"/>
+                      v-tooltip.bottom="{ value: '添加用户', showDelay: 1000, hideDelay: 300 }"
+                      @click="visible = true"/>
+
               <Button icon="pi pi-trash" severity="secondary" outlined size="small"
                       v-tooltip.bottom="{ value: '删除选中用户', showDelay: 1000, hideDelay: 300 }"/>
+
               <Button icon="pi pi-spinner" severity="secondary" outlined size="small"
                       v-tooltip.bottom="{ value: '刷新', showDelay: 1000, hideDelay: 300 }"/>
+
               <el-divider direction="vertical"/>
               <Tag severity="info">用户数: {{ userCount }}</Tag>
               <Tag>页数: {{ nowPage }} of {{ maxPage }}</Tag>
@@ -193,6 +204,17 @@ const selectedProduct = ref();
 
     </div>
   </el-scrollbar>
+  <!--  添加用户页面  -->
+  <Dialog v-model:visible="visible" :draggable="false" modal header="添加用户" :style="{ width: '30rem'}"
+          :pt="{
+    header: { style: { paddingBottom:'10px'} },
+    content: { style: { borderTop: '1px solid #E2E8F0'} },
+  }">
+
+    <AddUser/>
+
+  </Dialog>
+
 </template>
 
 <style scoped>

@@ -35,7 +35,7 @@ async function verifyLoginCode(code: string): Promise<number> {
         const status = response.data.status;
         if (status === 200) {
             // 插入token
-            tokenStore().setToken(response.data.data);
+            tokenStore().setUserToken(response.data.data);
 
             // 清空 logID
             logIDStore().clearLogID()

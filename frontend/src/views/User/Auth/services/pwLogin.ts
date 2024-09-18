@@ -12,7 +12,7 @@ async function pwLogin(username: string, password: string): Promise<number> {
         );
         const status = response.data.status;
         if (status === 200) {
-            tokenStore().setToken(response.data.data);
+            tokenStore().setUserToken(response.data.data);
             return status;
         }
 

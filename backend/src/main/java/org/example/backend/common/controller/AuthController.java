@@ -9,8 +9,9 @@
  */
 package org.example.backend.common.controller;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.example.backend.common.dto.ApiResponse;
+import org.example.backend.common.util.StpKit;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,11 +21,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     @GetMapping("validate")
-    public String validate() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated()) {
-            return authentication.getAuthorities().toString();
+    public ResponseEntity<Object> validate() {
+        if (StpKit.USER.isLogin()) {
+            return ResponseEntity.ok(new ApiResponse<>().status(200).message("鉴权成功").data("USER"));
         }
-        return null;
+
+        if (StpKit.ADMIN.isLogin()) {
+            return ResponseEntity.ok(new ApiResponse<>().status(200).message("鉴权成功").data("ADMIN"));
+        }
+
+        return ResponseEntity.ok(new ApiResponse<>().status(500).message("鉴权失败"));
     }
+
 }

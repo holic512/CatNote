@@ -6,20 +6,35 @@ export const tokenStore = defineStore('token', {
     // 定义变量 存储状态数据
     state() {
         return {
-            token: undefined as string | undefined
+            UserToken: undefined as string | undefined,
+            AdminToken: undefined as string | undefined
         }
     },
     // 定义 行为方法
     actions: {
-        getToken(): string | undefined {
-            return this.token;
+        // 操作用户token
+        getUserToken(): string | undefined {
+            return this.UserToken;
         },
-        setToken(token: string | undefined) {
-            this.token = token;
+        setUserToken(UserToken: string | undefined) {
+            this.UserToken = UserToken;
         },
-        clearToken(): void {
-            this.token = undefined;
+        clearUserToken(): void {
+            this.UserToken = undefined;
+        },
+
+        // 操作管理员token
+        getAdminToken(): string | undefined {
+            return this.AdminToken;
+        },
+        setAdminToken(AdminToken: string | undefined) {
+            this.AdminToken = AdminToken;
+        },
+        clearAdminToken(): void {
+            this.AdminToken = undefined;
         }
+
+
     },
     persist: true,
 })

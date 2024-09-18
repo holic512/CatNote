@@ -11,10 +11,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.antlr.v4.runtime.misc.Pair;
 import org.example.backend.common.dto.MailCodeMessage;
-import org.example.backend.common.util.JwtUtil;
-import org.example.backend.common.util.SCryptUtil;
-import org.example.backend.common.util.UuidUtil;
-import org.example.backend.common.util.VerificationCodeUtil;
+import org.example.backend.common.util.*;
 import org.example.backend.common.enums.MQExchangeType;
 import org.example.backend.common.enums.MQRoutingKey;
 import org.example.backend.common.enums.UserRole;
@@ -86,8 +83,8 @@ public class UserAuthService {
             return new Pair<>(AuthServiceEnum.INCORRECT, null); // 密码不匹配
         }
 
-        String token = JwtUtil.generateToken(user.getUid(), UserRole.USER);
-        return new Pair<>(AuthServiceEnum.Success, token);
+        StpKit.USER.login(user.getUid());
+        return new Pair<>(AuthServiceEnum.Success, StpKit.USER.getTokenValue());
     }
 
 
@@ -171,10 +168,8 @@ public class UserAuthService {
         // 移除已验证的验证码,确定用户uid并返回token
         redisTemplate.delete(keyName + logID);
 
-        // success
-        String token = JwtUtil.generateToken(authDto.getUid(), UserRole.USER);
-        return new Pair<>(AuthServiceEnum.Success, token);
-
+        StpKit.USER.login(authDto.getUid());
+        return new Pair<>(AuthServiceEnum.Success, StpKit.USER.getTokenValue());
     }
 
     /**
