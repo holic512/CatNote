@@ -42,12 +42,12 @@ export default [
                     {
                         path: '',
                         name: 'admin-main-home',
-                        component: () => import('./Main/components/Home.vue'),
+                        component: () => import('./Main/view/Home/Home.vue'),
                     },
                     {
                         path: 'home',
                         name: 'admin-main-home1',
-                        component: () => import('./Main/components/Home.vue'),
+                        component: () => import('./Main/view/Home/Home.vue'),
                     },
                     {
                         path: 'userMm',
@@ -57,12 +57,12 @@ export default [
                     {
                         path: 'noteMm',
                         name: 'admin-main-noteMm',
-                        component: () => import('./Main/components/NoteMm.vue'),
+                        component: () => import('./Main/view/NoteMm/NoteMm.vue'),
                     },
                     {
                         path: 'setting',
                         name: 'admin-main-setting',
-                        component: () => import('./Main/components/Setting.vue'),
+                        component: () => import('./Main/view/Setting/Setting.vue'),
                     },
                 ],
             },

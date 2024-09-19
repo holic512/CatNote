@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import org.example.backend.common.dto.ApiResponse;
+import org.example.backend.common.response.ApiResponse;
 import org.example.backend.user.enums.AuthServiceEnum;
 import org.example.backend.user.service.UserAuthService;
 

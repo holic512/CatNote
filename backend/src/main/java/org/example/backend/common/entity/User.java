@@ -1,14 +1,19 @@
 package org.example.backend.common.entity;
 
 import jakarta.persistence.*;
-import org.example.backend.user.enums.StatusEnum;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import org.example.backend.common.enums.UserStatusEnum;
 
 import java.time.LocalDateTime;
 
+@Data
 @Entity
 @Table(name = "users") // 指定该类映射到数据库表
 public class User {
 
+    // Getters and Setters
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, updatable = false)
@@ -28,7 +33,7 @@ public class User {
 
     @Enumerated(EnumType.STRING)  // 状态使用枚举类型存储
     @Column(nullable = false, length = 100)
-    private StatusEnum status;
+    private UserStatusEnum status;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -51,88 +56,55 @@ public class User {
     public User() {
     }
 
-    public User(String uid, String password, StatusEnum status) {
-        this.uid = uid;
-        this.password = password;
-        this.status = status;
+    // 内部静态类 Builder
+    public static class Builder {
+        private Long id;
+        private String uid;
+        private String username;
+        private String password;
+        private String email;
+        private UserStatusEnum status;
+
+        public Builder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder uid(String uid) {
+            this.uid = uid;
+            return this;
+        }
+
+        public Builder username(String username) {
+            this.username = username;
+            return this;
+        }
+
+        public Builder password(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public Builder email(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public Builder status(UserStatusEnum status) {
+            this.status = status;
+            return this;
+        }
+
+        public User build() {
+            User user = new User();
+            user.id = this.id;
+            user.uid = this.uid;
+            user.username = this.username;
+            user.password = this.password;
+            user.email = this.email;
+            user.status = this.status;
+            return user;
+        }
     }
 
-    public User(String uid, StatusEnum status) {
-        this.uid = uid;
-        this.status = status;
-    }
-
-    // 被用于 查询管理员后台-用户管理-用户数据
-    public User(Long id, String uid, String username, String email, StatusEnum status) {
-        this.id = id;
-        this.uid = uid;
-        this.username = username;
-        this.email = email;
-        this.status = status;
-    }
-
-    // Getters and Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUid() {
-        return uid;
-    }
-
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public StatusEnum getStatus() {
-        return status;
-    }
-
-    public void setStatus(StatusEnum status) {
-        this.status = status;
-    }
 }

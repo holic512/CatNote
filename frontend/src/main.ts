@@ -12,6 +12,7 @@ const app = createApp(App)
 
 // 配置 图标
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
 }
@@ -77,7 +78,6 @@ const Noir = definePreset(Aura, {
         }
     }
 });
-
 
 
 app.use(PrimeVue, {

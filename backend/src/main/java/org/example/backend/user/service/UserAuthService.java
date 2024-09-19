@@ -11,14 +11,14 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.antlr.v4.runtime.misc.Pair;
 import org.example.backend.common.dto.MailCodeMessage;
+import org.example.backend.common.dto.user.UserAuthDto;
 import org.example.backend.common.util.*;
 import org.example.backend.common.enums.MQExchangeType;
 import org.example.backend.common.enums.MQRoutingKey;
-import org.example.backend.common.enums.UserRole;
 import org.example.backend.common.enums.MailCodePurpose;
 import org.example.backend.user.enums.AuthServiceEnum;
 import org.example.backend.user.dto.AuthDto;
-import org.example.backend.user.enums.StatusEnum;
+import org.example.backend.common.enums.UserStatusEnum;
 import org.example.backend.common.repository.UserRepository;
 import org.example.backend.common.entity.User;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -63,18 +63,18 @@ public class UserAuthService {
      * @return 由 uid 用户权限组成 token
      */
     public Pair<AuthServiceEnum, String> PLogin(String username, String password) {
-        final User user = userRepository.findAuthDtoByUsername(username);
+        final UserAuthDto user = userRepository.findAuthDtoByUsername(username);
 
         if (user == null) {
             return new Pair<>(AuthServiceEnum.UserNotFound, null); // 用户未找到
         }
 
         // 判断用户状态
-        if (user.getStatus().equals(StatusEnum.DISABLED)) {
+        if (user.getStatus().equals(UserStatusEnum.DISABLED)) {
             return new Pair<>(AuthServiceEnum.AccountDisabled, null);
         }
 
-        if (user.getStatus().equals(StatusEnum.BANNED)) {
+        if (user.getStatus().equals(UserStatusEnum.BANNED)) {
             return new Pair<>(AuthServiceEnum.AccountBanned, null);
         }
 
@@ -106,14 +106,14 @@ public class UserAuthService {
         }
 
         // 获取用户数据 uid status
-        final User user = userRepository.findAuthDtoByEmail(email);
+        final UserAuthDto user = userRepository.findAuthDtoByEmail(email);
 
         // 判断用户状态
-        if (user.getStatus().equals(StatusEnum.DISABLED)) {
+        if (user.getStatus().equals(UserStatusEnum.DISABLED)) {
             return new Pair<>(AuthServiceEnum.AccountDisabled, null);
         }
 
-        if (user.getStatus().equals(StatusEnum.BANNED)) {
+        if (user.getStatus().equals(UserStatusEnum.BANNED)) {
             return new Pair<>(AuthServiceEnum.AccountBanned, null);
         }
 
@@ -276,14 +276,14 @@ public class UserAuthService {
         // 执行注册逻辑
         String uid;      // 获取uid
         do {
-            uid = UuidUtil.generateUid();
+            uid = UuidUtil.getUid();
         } while (userRepository.existsByUid(uid));
 
         User user = new User();
         user.setUid(uid);
         user.setUsername(map.get("username"));
         user.setPassword(map.get("password"));
-        user.setStatus(StatusEnum.ACTIVE);
+        user.setStatus(UserStatusEnum.ACTIVE);
         user.setEmail(map.get("email"));
         user.setCreatedAt(LocalDateTime.now());
         user.setUpdatedAt(LocalDateTime.now());

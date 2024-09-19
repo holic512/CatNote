@@ -26,7 +26,7 @@ public class UuidUtil {
      *
      * @return uid
      */
-    public static String generateUid() {
+    public static String getUid() {
         StringBuilder sb = new StringBuilder(8);
         for (int i = 0; i < 8; i++) {
             sb.append(random.nextInt(10)); // 生成0到9之间的数字
@@ -35,7 +35,7 @@ public class UuidUtil {
     }
 
     public static void main(String[] args) {
-        String uid = generateUid(); // 生成8位数字UID
+        String uid = getUid(); // 生成8位数字UID
         System.out.println(uid);
     }
 }

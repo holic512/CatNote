@@ -9,7 +9,7 @@
  */
 package org.example.backend.common.controller;
 
-import org.example.backend.common.dto.ApiResponse;
+import org.example.backend.common.response.ApiResponse;
 import org.example.backend.common.util.StpKit;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,14 +23,26 @@ public class AuthController {
     @GetMapping("validate")
     public ResponseEntity<Object> validate() {
         if (StpKit.USER.isLogin()) {
-            return ResponseEntity.ok(new ApiResponse<>().status(200).message("鉴权成功").data("USER"));
+            return ResponseEntity.ok(new ApiResponse.Builder<>()
+                    .status(200)
+                    .message("鉴权成功")
+                    .data("USER")
+                    .build());
         }
 
         if (StpKit.ADMIN.isLogin()) {
-            return ResponseEntity.ok(new ApiResponse<>().status(200).message("鉴权成功").data("ADMIN"));
+            return ResponseEntity.ok(new ApiResponse.Builder<>()
+                    .status(200)
+                    .message("鉴权成功")
+                    .data("ADMIN")
+                    .build());
         }
 
-        return ResponseEntity.ok(new ApiResponse<>().status(500).message("鉴权失败"));
+
+        return ResponseEntity.ok(new ApiResponse.Builder<>()
+                .status(200)
+                .message("鉴权失败")
+                .build());
     }
 
 }

@@ -6,16 +6,16 @@
  */
 package org.example.backend.user.dto;
 
-import org.example.backend.user.enums.StatusEnum;
+import org.example.backend.common.enums.UserStatusEnum;
 
 public class AuthDto {
     private String uid;
     private String password;
-    StatusEnum status;
+    UserStatusEnum status;
     String code;
 
 
-    public AuthDto(String uid, StatusEnum status, String code) {
+    public AuthDto(String uid, UserStatusEnum status, String code) {
         this.uid = uid;
         this.status = status;
         this.code = code;
@@ -34,11 +34,11 @@ public class AuthDto {
         this.password = password;
     }
 
-    public StatusEnum getStatus() {
+    public UserStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(StatusEnum status) {
+    public void setStatus(UserStatusEnum status) {
         this.status = status;
     }
 

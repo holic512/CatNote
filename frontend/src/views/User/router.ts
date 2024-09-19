@@ -9,7 +9,7 @@ export default [
                 path: '',
                 name: 'user-home',
                 meta: { requiresAuth: false },
-                component: () => import('./Auth/components/login.vue'),
+                component: () => import('./Auth/login/login.vue'),
             },
             // 授权页面
             {
@@ -21,22 +21,22 @@ export default [
                     {
                         path: '',
                         name: 'user-auth-home',
-                        component: () => import('./Auth/components/login.vue'),
+                        component: () => import('./Auth/login/login.vue'),
                     },
                     {
                         path: 'login',
                         name: 'user-login',
-                        component: () => import('./Auth/components/login.vue'),
+                        component: () => import('./Auth/login/login.vue'),
                     },
                     {
                         path: 'register',
                         name: 'user-register',
-                        component: () => import('./Auth/components/register.vue'),
+                        component: () => import('./Auth/register/register.vue'),
                     },
                     {
                         path: 'forgetPassword',
                         name: 'user-forgetPassword',
-                        component: () => import('./Auth/components/forgetPassword.vue'),
+                        component: () => import('./Auth/forgetPw/forgetPassword.vue'),
                     }
                 ],
             },

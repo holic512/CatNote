@@ -5,7 +5,6 @@ import IconField from 'primevue/iconfield';
 import InputIcon from 'primevue/inputicon';
 import InputText from "primevue/inputtext";
 import Tag from 'primevue/tag'
-import Dialog from 'primevue/dialog';
 
 
 import {computed, onBeforeUnmount, onMounted, ref} from "vue";
@@ -13,11 +12,14 @@ import {computed, onBeforeUnmount, onMounted, ref} from "vue";
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import axios from "../../../../../axios";
-import fetchInitialPageData from "./fetchInitialPageData.ts";
-import {fetchPageData} from "./fetchPageData.ts";
-import {calculateRows} from "./calculateRows.ts";
-import {getSeverity} from "./getSeverity.ts";
-import AddUser from "./components/addUser.vue";
+import fetchInitialPageData from "./components/TableView/fetchInitialPageData.ts";
+import {fetchPageData} from "./components/TableView/fetchPageData.ts";
+import {calculateRows} from "./components/TableView/calculateRows.ts";
+import {getStatusType} from "./components/TableView/getStatusType.ts";
+import AddUser from "./components/AddUser/addUser.vue";
+import {debounceImmediate} from "../../../../../util/debounce.ts";
+import {ElMessage} from "element-plus";
+import {BatchDeleteUser} from "./components/TableView/batchDeleteUser.ts";
 
 // 搜素框数据
 const value1 = ref(null);
@@ -107,25 +109,67 @@ const turnPage = async (turn: pageTurn) => {
       if (nowPage.value < maxPage.value) {
         nowPage.value = nowPage.value + 1;
         products.value = await fetchPageData(nowRow.value, nowPage.value);
+      } else {
+        ElMessage.warning("已经是最后一页了")
       }
       break
     case pageTurn.DOWN:
       if (nowPage.value > 1) {
         nowPage.value = nowPage.value - 1;
         products.value = await fetchPageData(nowRow.value, nowPage.value);
+      } else {
+        ElMessage.warning("已经是第一页了")
       }
       break
     default:
       console.error(`Unknown turn: ${turn}`);
   }
 }
+const handleDebouncedTurnPage = debounceImmediate(turnPage, 200)
 
 // 选择逻辑
 const selectedProduct = ref();
 
 
 // 控制添加用户页面
-const visible = ref<boolean>(false);
+const addUserVisible = ref<boolean>(false);
+
+// 刷新逻辑
+const refresh = async () => {
+  await axios.get(
+      "admin/userMm/getUserCount",
+  ).then((response) => {
+    userCount.value = response.data.data;
+    maxPage.value = Math.ceil(userCount.value / nowRow.value);
+  });
+  // 当 重新获取后 最大页数 小于当前页数 则查询最后一页
+  if (maxPage.value < nowPage.value) {
+    products.value = await fetchPageData(nowRow.value, maxPage.value);
+  } else {
+    products.value = await fetchPageData(nowRow.value, nowPage.value);
+  }
+
+  ElMessage.success("刷新成功")
+}
+// 刷新逻辑 的 防抖函数
+const handleDebouncedRefresh = debounceImmediate(refresh, 1000);
+
+
+// 批量删除
+const batchDelete = async () => {
+  if (selectedProduct.value == null) {
+    ElMessage.warning("选择为空")
+    return;
+  }
+  const ids = selectedProduct.value.map(product => product.id);
+  const status = await BatchDeleteUser(ids);
+  if (status === 200) {
+    ElMessage.success("删除成功")
+  } else {
+    ElMessage.error("无法连接服务器");
+  }
+}
+const handleDebouncedBatchDelete = debounceImmediate(batchDelete, 1000);
 
 </script>
 
@@ -154,23 +198,25 @@ const visible = ref<boolean>(false);
 
               <Button icon="pi pi-plus" severity="secondary" outlined size="small"
                       v-tooltip.bottom="{ value: '添加用户', showDelay: 1000, hideDelay: 300 }"
-                      @click="visible = true"/>
+                      @click="addUserVisible = true"/>
 
               <Button icon="pi pi-trash" severity="secondary" outlined size="small"
+                      @click="handleDebouncedBatchDelete"
                       v-tooltip.bottom="{ value: '删除选中用户', showDelay: 1000, hideDelay: 300 }"/>
 
               <Button icon="pi pi-spinner" severity="secondary" outlined size="small"
+                      @click="handleDebouncedRefresh"
                       v-tooltip.bottom="{ value: '刷新', showDelay: 1000, hideDelay: 300 }"/>
 
               <el-divider direction="vertical"/>
               <Tag severity="info">用户数: {{ userCount }}</Tag>
-              <Tag>页数: {{ nowPage }} of {{ maxPage }}</Tag>
+              <Tag style="width: 110px">页数: {{ nowPage }} of {{ maxPage }}</Tag>
 
               <!--翻页按键-->
               <Button icon="pi pi-angle-left" severity="secondary" outlined size="small"
-                      @click="turnPage(pageTurn.DOWN)"/>
+                      @click="handleDebouncedTurnPage(pageTurn.DOWN)"/>
               <Button icon="pi pi-angle-right" severity="secondary" outlined size="small"
-                      @click="turnPage(pageTurn.UP)"/>
+                      @click="handleDebouncedTurnPage(pageTurn.UP)"/>
             </div>
           </el-col>
         </el-row>
@@ -180,19 +226,32 @@ const visible = ref<boolean>(false);
       <div class="table-container">
 
         <DataTable v-model:selection="selectedProduct" :value="products" stripedRows dataKey="uid"
-                   tableStyle="min-width: 50rem;" size="small" :style="{ minHeight: dynamicHeight }">
-          <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
-          <Column field="id" header="id" headerStyle="width: 3rem"></Column>
-          <Column field="uid" header="Uid"></Column>
-          <Column field="username" header="用户名"></Column>
-          <Column field="email" header="邮箱地址"></Column>
-          <Column field="status" header="状态">
+                   tableStyle="min-width: 1000px;" size="small" :style="{ minHeight: dynamicHeight }">
+          <Column selectionMode="multiple" headerStyle="width: 4%" position="fixed"></Column>
+          <Column field="id" header="id" headerStyle="width: 6%"></Column>
+          <Column field="uid" header="Uid" headerStyle="width: 10%"></Column>
+          <Column field="username" header="用户名" headerStyle="width: 15%"></Column>
+          <Column field="email" header="邮箱地址" headerStyle="width: 28%"></Column>
+          <Column field="status" header="状态" headerStyle="width: 10%">
             <template #body="{ data }">
-              <Tag :value="data.status" :severity="getSeverity(data.status)"/>
+              <Tag :value="data.status" :severity="getStatusType(data.status)"/>
             </template>
           </Column>
 
-          <Column header="更多">
+          <Column header="访问" headerStyle="width: 8%">
+            <template #body="{  }">
+              <Button label="访问" severity="info" size="small" outlined/>
+            </template>
+          </Column>
+
+          <Column header="封禁" headerStyle="width: 8%">
+            <template #body="{  }">
+              <Button label="封禁" severity="warn" size="small" outlined/>
+            </template>
+          </Column>
+
+
+          <Column header="更多" headerStyle="width: 8%">
             <template #body>
               <Button type="button" icon="pi pi-ellipsis-h" rounded outlined size="small"/>
             </template>
@@ -204,16 +263,9 @@ const visible = ref<boolean>(false);
 
     </div>
   </el-scrollbar>
+
   <!--  添加用户页面  -->
-  <Dialog v-model:visible="visible" :draggable="false" modal header="添加用户" :style="{ width: '30rem'}"
-          :pt="{
-    header: { style: { paddingBottom:'10px'} },
-    content: { style: { borderTop: '1px solid #E2E8F0'} },
-  }">
-
-    <AddUser/>
-
-  </Dialog>
+  <AddUser v-model="addUserVisible"/>
 
 </template>
 
