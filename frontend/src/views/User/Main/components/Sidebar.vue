@@ -1,111 +1,127 @@
-<script setup lang="ts">
-import Button from 'primevue/button';
-import PanelMenu from 'primevue/panelmenu';
-import {ref} from 'vue';
-
-const items = ref([
-  {
-    label: 'Files',
-    icon: 'pi pi-file',
-    items: [
-      {
-        label: 'Documents',
-        icon: 'pi pi-file',
-        items: [
-          {
-            label: 'Invoices',
-            icon: 'pi pi-file-pdf',
-            items: [
-              {
-                label: 'Pending',
-                icon: 'pi pi-stop'
-              },
-              {
-                label: 'Paid',
-                icon: 'pi pi-check-circle'
-              }
-            ]
-          },
-          {
-            label: 'Clients',
-            icon: 'pi pi-users'
-          }
-        ]
-      },
-      {
-        label: 'Images',
-        icon: 'pi pi-image',
-        items: [
-          {
-            label: 'Logos',
-            icon: 'pi pi-image'
-          }
-        ]
-      }
-    ]
-  },
-  {
-    label: 'Cloud',
-    icon: 'pi pi-cloud',
-    items: [
-      {
-        label: 'Upload',
-        icon: 'pi pi-cloud-upload'
-      },
-      {
-        label: 'Download',
-        icon: 'pi pi-cloud-download'
-      },
-      {
-        label: 'Sync',
-        icon: 'pi pi-refresh'
-      }
-    ]
-  },
-  {
-    label: 'Devices',
-    icon: 'pi pi-desktop',
-    items: [
-      {
-        label: 'Phone',
-        icon: 'pi pi-mobile'
-      },
-      {
-        label: 'Desktop',
-        icon: 'pi pi-desktop'
-      },
-      {
-        label: 'Tablet',
-        icon: 'pi pi-tablet'
-      }
-    ]
-  }
-]);
-</script>
-
-
 <template>
-  <el-divider/>
-
-  <div class="card flex justify-center flex-wrap gap-4 sidebar-buttons">
-    <Button type="button" label="主页" icon="pi pi-home" outlined text size="small"/>
-    <Button type="button" label="消息" icon="pi pi-envelope" badge="2" badgeSeverity="contrast" outlined text
-            size="small"/>
-    <Button type="button" label="搜索" icon="pi pi-search" outlined text size="small"/>
-    <Button type="button" label="设置" icon="pi pi-cog" outlined text size="small"/>
+  <div class="sidebar">
+    <TieredMenu ref="menu" :model="menuItems" :popup="true" :style="{ top: menuPosition.top, left: menuPosition.left }" />
+    <div class="card flex justify-center">
+      <Tree
+          :value="nodes"
+          :selectionKey="selectedKey"
+          @node-select="onNodeSelect"
+          @node-unselect="onNodeUnselect"
+          @contextmenu="onFileContextMenu"
+          @dragdrop="onDragDrop"
+      :draggable="true"
+      :dragdropScope="'tree'"
+      :filter="true"
+      :filterBy="'label'"
+      :scrollHeight="'flex'"
+      selectionMode="single"
+      >
+      <template #default="{ node }">
+        <span>{{ node.label }}</span>
+      </template>
+      </Tree>
+    </div>
   </div>
-
-  <el-divider/>
-
 </template>
 
+<script>
+import { ref } from 'vue';
+import Tree from 'primevue/tree';
+import TieredMenu from 'primevue/tieredmenu';
+import { NodeService } from '@/service/NodeService';
+
+export default {
+  components: { Tree, TieredMenu },
+  setup() {
+    const nodes = ref(null);
+    const selectedKey = ref(null);
+    const menu = ref(null);
+    const menuItems = ref([
+      {
+        label: '新建文件',
+        icon: 'pi pi-file',
+        command: () => createNewFile(),
+      },
+      {
+        label: '新建文件夹',
+        icon: 'pi pi-folder',
+        command: () => createNewFolder(),
+      },
+      {
+        label: '删除文件',
+        icon: 'pi pi-trash',
+        command: () => deleteSelectedFiles(),
+      },
+      {
+        label: '重命名',
+        icon: 'pi pi-pencil',
+        command: () => renameSelectedFile(),
+      },
+    ]);
+    const menuPosition = ref({ top: '0px', left: '0px' });
+
+    NodeService.getTreeNodes().then((data) => {
+      nodes.value = data;
+    });
+
+    const onFileContextMenu = (event) => {
+      event.preventDefault();
+      menuPosition.value.top = `${event.clientY}px`;
+      menuPosition.value.left = `${event.clientX}px`;
+      menu.value.toggle(event);
+    };
+
+    const onNodeSelect = (event) => {
+      selectedKey.value = event.node.key;
+    };
+
+    const onNodeUnselect = (event) => {
+      selectedKey.value = null;
+    };
+
+    const onDragDrop = (event) => {
+      const draggedNode = event.dragNode;
+      const targetNode = event.dropNode;
+
+      // 处理节点位置更改逻辑
+      if (targetNode) {
+        // 更新节点的位置，比如添加到目标节点的子节点中
+        targetNode.children = targetNode.children || [];
+        targetNode.children.push(draggedNode);
+
+        // 从原位置移除节点
+        const index = nodes.value.findIndex(node => node.key === draggedNode.key);
+        if (index !== -1) {
+          nodes.value.splice(index, 1);
+        }
+
+        // 更新树结构
+        nodes.value = [...nodes.value];
+      }
+    };
+
+    return {
+      nodes,
+      selectedKey,
+      menuItems,
+      menuPosition,
+      onFileContextMenu,
+      onNodeSelect,
+      onNodeUnselect,
+      onDragDrop,
+    };
+  },
+};
+</script>
+
 <style scoped>
-.sidebar-buttons Button {
-  width: 100%;
-  justify-content: flex-start; /* 将按钮内容左对齐 */
-  text-align: left;
-  padding-left: 16px; /* 根据需要调整内边距 */
+.sidebar {
+  width: 300px;
+  height: 100%;
+  background-color: #f9f9f9;
+  border-right: 1px solid #e0e0e0;
+  padding: 16px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
 }
-
-
 </style>

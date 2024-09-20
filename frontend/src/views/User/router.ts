@@ -44,6 +44,7 @@ export default [
             {
                 path: 'main',
                 name: 'user-main',
+                meta: { requiresAuth: false },
                 component: () => import("./Main/index.vue"),
                 children: [],
             },

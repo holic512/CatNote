@@ -26,9 +26,14 @@ import PrimeVue from 'primevue/config';
 import Aura from '@primevue/themes/aura';
 import {definePreset} from "@primevue/themes";
 import Tooltip from 'primevue/tooltip';
+import Tree from 'primevue/tree';
+import Card from 'primevue/card';
+import ListBox from 'primevue/listbox';
 
+app.component('Card', Card);
+app.component('ListBox', ListBox);
 app.directive('tooltip', Tooltip);
-
+app.component('Tree', Tree);
 import 'primeicons/primeicons.css'
 
 const Noir = definePreset(Aura, {
