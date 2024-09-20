@@ -1,24 +1,25 @@
 <template>
   <div class="sidebar">
+    <SidebarHeader :userName="userName" :userAvatar="userAvatar" />
     <TieredMenu ref="menu" :model="menuItems" :popup="true" :style="{ top: menuPosition.top, left: menuPosition.left }" />
     <div class="card flex justify-center">
       <Tree
           :value="nodes"
-          :selectionKey="selectedKey"
+          :selectionKeys="selectedKeys"
           @node-select="onNodeSelect"
           @node-unselect="onNodeUnselect"
           @contextmenu="onFileContextMenu"
           @dragdrop="onDragDrop"
-      :draggable="true"
-      :dragdropScope="'tree'"
-      :filter="true"
-      :filterBy="'label'"
-      :scrollHeight="'flex'"
-      selectionMode="single"
+          draggable
+          :dragdropScope="'tree'"
+          :filter="true"
+          :filterBy="'label'"
+          :scrollHeight="'flex'"
+          selectionMode="multiple"
       >
-      <template #default="{ node }">
-        <span>{{ node.label }}</span>
-      </template>
+        <template #default="{ node }">
+          <span>{{ node.label }}</span>
+        </template>
       </Tree>
     </div>
   </div>
@@ -29,14 +30,25 @@ import { ref } from 'vue';
 import Tree from 'primevue/tree';
 import TieredMenu from 'primevue/tieredmenu';
 import { NodeService } from '@/service/NodeService';
-
+import SidebarHeader from './SidebarHeader.vue';
+// import FileTree from "FileTree.vue";
+// import SearchDialog from "./SearchDialog.vue";
+// import FileContextMenu from "./FileContextMenu.vue";
 export default {
-  components: { Tree, TieredMenu },
+  components: { SidebarHeader ,Tree, TieredMenu },
   setup() {
+    const userName = '张三';
+    const userAvatar = 'https://example.com/avatar.jpg'; // 用户头像地址
+
     const nodes = ref(null);
-    const selectedKey = ref(null);
+    const selectedKeys = ref({});
     const menu = ref(null);
     const menuItems = ref([
+      {
+        label: '移动到...',
+        icon: 'pi pi-fw pi-external-link',
+        items: [],
+      },
       {
         label: '新建文件',
         icon: 'pi pi-file',
@@ -58,7 +70,7 @@ export default {
         command: () => renameSelectedFile(),
       },
     ]);
-    const menuPosition = ref({ top: '0px', left: '0px' });
+    const menuPosition = ref({top: '0px', left: '0px'});
 
     NodeService.getTreeNodes().then((data) => {
       nodes.value = data;
@@ -72,37 +84,68 @@ export default {
     };
 
     const onNodeSelect = (event) => {
-      selectedKey.value = event.node.key;
+      selectedKeys.value[event.node.key] = true;
     };
 
     const onNodeUnselect = (event) => {
-      selectedKey.value = null;
+      delete selectedKeys.value[event.node.key];
     };
 
     const onDragDrop = (event) => {
-      const draggedNode = event.dragNode;
+      const draggedNodes = Object.keys(selectedKeys.value).map(key => nodes.value.find(node => node.key === key));
       const targetNode = event.dropNode;
 
-      // 处理节点位置更改逻辑
-      if (targetNode) {
-        // 更新节点的位置，比如添加到目标节点的子节点中
-        targetNode.children = targetNode.children || [];
-        targetNode.children.push(draggedNode);
-
-        // 从原位置移除节点
-        const index = nodes.value.findIndex(node => node.key === draggedNode.key);
-        if (index !== -1) {
-          nodes.value.splice(index, 1);
+      if (targetNode && draggedNodes.length > 0) {
+        // 确保目标节点存在且是有效的父节点
+        if (!targetNode.children) {
+          targetNode.children = [];
         }
 
-        // 更新树结构
-        nodes.value = [...nodes.value];
+        // 将拖拽的节点添加到目标节点
+        draggedNodes.forEach(draggedNode => {
+          if (draggedNode) {
+            targetNode.children.push(draggedNode);
+
+            // 从原位置删除节点
+            const index = nodes.value.findIndex(node => node.key === draggedNode.key);
+            if (index !== -1) {
+              nodes.value.splice(index, 1);
+            }
+          }
+        });
+
+        nodes.value = [...nodes.value]; // 强制更新视图
       }
     };
 
+    const createNewFile = () => {
+      const newName = prompt('请输入新的文件名', '新文件');
+      if (newName) {
+        nodes.value.push({key: Date.now().toString(), label: newName});
+      }
+    };
+
+    const createNewFolder = () => {
+      const newFolderName = prompt('请输入新的文件夹名', '新文件夹');
+      if (newFolderName) {
+        nodes.value.push({key: Date.now().toString(), label: newFolderName, children: []});
+      }
+    };
+
+    const deleteSelectedFiles = () => {
+      // 删除选中的文件逻辑
+    };
+
+    const renameSelectedFile = () => {
+      // 重命名选中的文件逻辑
+    };
+
     return {
+      userName,
+      userAvatar,
       nodes,
-      selectedKey,
+      selectedKeys,
+      menu,
       menuItems,
       menuPosition,
       onFileContextMenu,
