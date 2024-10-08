@@ -4,7 +4,7 @@
  * Version: 1.0
  * Author: holic512
  */
-package org.example.backend.common.enums;
+package org.example.backend.common.enums.mail;
 
 public enum MailSecurityProtocol {
     NONE,       // 不使用加密

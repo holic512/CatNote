@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Button from 'primevue/button';
-import {onMounted, ref, watch} from "vue";
+import {onMounted, ref} from "vue";
 
 import {useRouter, useRoute} from "vue-router";
 
@@ -81,7 +81,7 @@ onMounted(() => {
 <template>
   <div class="common-layout">
     <el-container>
-      <el-aside width="90px" class="aside-layout">
+      <el-aside width="110px" class="aside-layout">
         <div class="aside-layout-div">
           <!--          &lt;!&ndash; 图像 &ndash;&gt;-->
           <!--          <div class="aside-item">-->
@@ -135,26 +135,31 @@ onMounted(() => {
 </template>
 
 <style>
+.common-layout {
+  background-color: white;
+}
+
 .aside-layout {
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 20px 10px 20px 20px;
-
+  margin-left: 5px;
 }
 
 .aside-layout-div {
   height: 94.5%;
-  width: 100%; /* 根据需要调整宽度 */
-
-  background-color: #F8FAFC;
+  width: 90%; /* 根据需要调整宽度 */
+  background-color: #F4F6F8;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+  /*
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+   */
 }
 
 .aside-item {
@@ -192,9 +197,12 @@ onMounted(() => {
 
   height: 94.5%;
   width: 100%;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  box-shadow: 0 0 0 1px #D9D9D9;
   border-radius: 10px;
-  padding: 15px; /* 内边距 */
+  padding: 20px; /* 内边距 */
+
+
 }
 
 </style>

@@ -10,7 +10,7 @@
 package org.example.backend.common.dto.user;
 
 import lombok.Data;
-import org.example.backend.common.enums.UserStatusEnum;
+import org.example.backend.common.enums.user.UserStatusEnum;
 
 @Data
 public class UserAuthDto {

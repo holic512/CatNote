@@ -6,7 +6,7 @@
  * Usage:
  * 通过枚举区分 验证码使用行为 来区分不同的 邮件模板
  */
-package org.example.backend.common.enums;
+package org.example.backend.common.enums.mail;
 
 public enum MailCodePurpose {
     // 用户登录

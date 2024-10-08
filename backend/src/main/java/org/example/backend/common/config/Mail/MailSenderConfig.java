@@ -7,7 +7,7 @@
 package org.example.backend.common.config.Mail;
 
 import org.example.backend.common.entity.EmailConfiguration;
-import org.example.backend.common.enums.MailSecurityProtocol;
+import org.example.backend.common.enums.mail.MailSecurityProtocol;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

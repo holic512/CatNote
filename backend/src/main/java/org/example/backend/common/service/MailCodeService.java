@@ -15,7 +15,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
-import org.example.backend.common.enums.MailCodePurpose;
+import org.example.backend.common.enums.mail.MailCodePurpose;
 
 @Component
 public class MailCodeService {

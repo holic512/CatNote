@@ -19,7 +19,7 @@ import org.example.backend.common.config.Redis.RedisConfig;
 import org.example.backend.common.entity.Admin;
 import org.example.backend.common.enums.MQExchangeType;
 import org.example.backend.common.enums.MQRoutingKey;
-import org.example.backend.common.enums.MailCodePurpose;
+import org.example.backend.common.enums.mail.MailCodePurpose;
 import org.example.backend.common.util.*;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;

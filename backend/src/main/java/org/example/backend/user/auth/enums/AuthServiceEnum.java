@@ -7,7 +7,7 @@
  * Usage:
  * 这个枚举用于区分于用户注册服务状态的行为,成功状态:AuthServiceEnum.success
  */
-package org.example.backend.user.enums;
+package org.example.backend.user.auth.enums;
 
 public enum AuthServiceEnum {
     Success,                // 成功

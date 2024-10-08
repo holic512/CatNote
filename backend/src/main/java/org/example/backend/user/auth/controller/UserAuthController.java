@@ -4,7 +4,7 @@
  * Version: 1.0
  * Author: holic512
  */
-package org.example.backend.user.controller;
+package org.example.backend.user.auth.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.micrometer.common.util.StringUtils;
@@ -14,8 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import org.example.backend.common.response.ApiResponse;
-import org.example.backend.user.enums.AuthServiceEnum;
-import org.example.backend.user.service.UserAuthService;
+import org.example.backend.user.auth.enums.AuthServiceEnum;
+import org.example.backend.user.auth.service.UserAuthService;
 
 import java.util.Map;
 import java.util.regex.Pattern;

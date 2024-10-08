@@ -4,9 +4,9 @@
  * Version: 1.0
  * Author: holic512
  */
-package org.example.backend.user.dto;
+package org.example.backend.user.auth.dto;
 
-import org.example.backend.common.enums.UserStatusEnum;
+import org.example.backend.common.enums.user.UserStatusEnum;
 
 public class AuthDto {
     private String uid;

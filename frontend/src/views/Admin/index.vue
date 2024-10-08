@@ -7,5 +7,4 @@
 </template>
 
 <style scoped>
-
 </style>

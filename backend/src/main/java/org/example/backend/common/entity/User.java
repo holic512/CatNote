@@ -2,9 +2,7 @@ package org.example.backend.common.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import org.example.backend.common.enums.UserStatusEnum;
+import org.example.backend.common.enums.user.UserStatusEnum;
 
 import java.time.LocalDateTime;
 

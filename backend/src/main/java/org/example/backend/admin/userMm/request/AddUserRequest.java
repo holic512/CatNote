@@ -10,7 +10,7 @@
 package org.example.backend.admin.userMm.request;
 
 import lombok.Data;
-import org.example.backend.common.enums.UserStatusEnum;
+import org.example.backend.common.enums.user.UserStatusEnum;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

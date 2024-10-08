@@ -1,6 +1,6 @@
 /**
  * CreateTime: 2024-08-27
- * Description: 邮箱配置存储库接口
+ * Description: 邮箱配置 持久层接口
  * Version: 1.0
  * Author: holic512
  */

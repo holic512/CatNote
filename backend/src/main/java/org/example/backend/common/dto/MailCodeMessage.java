@@ -9,7 +9,7 @@
  */
 package org.example.backend.common.dto;
 
-import org.example.backend.common.enums.MailCodePurpose;
+import org.example.backend.common.enums.mail.MailCodePurpose;
 
 public class MailCodeMessage {
     private String email;

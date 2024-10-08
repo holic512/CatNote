@@ -15,18 +15,19 @@ import axios from "../../../../../axios";
 import fetchInitialPageData from "./components/TableView/fetchInitialPageData.ts";
 import {fetchPageData} from "./components/TableView/fetchPageData.ts";
 import {calculateRows} from "./components/TableView/calculateRows.ts";
-import {getStatusType} from "./components/TableView/getStatusType.ts";
+import {getStatusMsg, getStatusType} from "./components/TableView/getStatusType.ts";
 import AddUser from "./components/AddUser/addUser.vue";
 import {debounceImmediate} from "../../../../../util/debounce.ts";
 import {ElMessage} from "element-plus";
 import {BatchDeleteUser} from "./components/TableView/batchDeleteUser.ts";
+import OnlineUser from "@/views/Admin/Main/view/userMm/components/OnlineUser/OnlineUser.vue";
 
 // 搜素框数据
 const value1 = ref(null);
 
 // 计算表格显示条数
-const minHeight = 795;  // 基准高度
-const stepHeight = 55;  // 每个高度增加的间隔
+const minHeight = 720;  // 基准高度
+const stepHeight = 45;  // 每个高度增加的间隔
 
 // 当前行数
 let nowRow = ref(10);
@@ -48,6 +49,7 @@ onMounted(async () => {
   // 获取当前尺寸 所能显示的 行数
   nowRow.value = calculateRows(minHeight, stepHeight);
 
+  console.log("nowRow.value", nowRow.value);
   // 获取用户总数 并 计算最大页数
   await axios.get(
       "admin/userMm/getUserCount",
@@ -93,27 +95,30 @@ const handleResize = async () => {
 
 // 计算 table 的动态高度 达到适配
 const dynamicHeight = computed(() => {
-  return `${550 + (nowRow.value - 10) * 50}px`;
+  return `${475 + (nowRow.value - 10) * 45}px`;
 });
 
 
 // 制定分页逻辑
 enum pageTurn { // 翻页行为枚举
-  UP,
-  DOWN
+  FirstPage,
+  PreviousPage,
+  NextPage,
+  LastPage
 }
 
 const turnPage = async (turn: pageTurn) => {
   switch (turn) {
-    case pageTurn.UP:
-      if (nowPage.value < maxPage.value) {
-        nowPage.value = nowPage.value + 1;
+    case pageTurn.FirstPage:
+      if (nowPage.value != 1) {
+        nowPage.value = 1;
         products.value = await fetchPageData(nowRow.value, nowPage.value);
       } else {
-        ElMessage.warning("已经是最后一页了")
+        ElMessage.warning("已经是第一页了")
       }
       break
-    case pageTurn.DOWN:
+
+    case pageTurn.PreviousPage:
       if (nowPage.value > 1) {
         nowPage.value = nowPage.value - 1;
         products.value = await fetchPageData(nowRow.value, nowPage.value);
@@ -121,18 +126,28 @@ const turnPage = async (turn: pageTurn) => {
         ElMessage.warning("已经是第一页了")
       }
       break
+
+    case pageTurn.NextPage:
+      if (nowPage.value < maxPage.value) {
+        nowPage.value = nowPage.value + 1;
+        products.value = await fetchPageData(nowRow.value, nowPage.value);
+      } else {
+        ElMessage.warning("已经是最后一页了")
+      }
+      break
+    case pageTurn.LastPage:
+      if (nowPage.value != maxPage.value) {
+        nowPage.value = maxPage.value;
+        products.value = await fetchPageData(nowRow.value, nowPage.value);
+      } else {
+        ElMessage.warning("已经是最后一页了")
+      }
+      break
     default:
       console.error(`Unknown turn: ${turn}`);
   }
 }
 const handleDebouncedTurnPage = debounceImmediate(turnPage, 200)
-
-// 选择逻辑
-const selectedProduct = ref();
-
-
-// 控制添加用户页面
-const addUserVisible = ref<boolean>(false);
 
 // 刷新逻辑
 const refresh = async () => {
@@ -154,8 +169,9 @@ const refresh = async () => {
 // 刷新逻辑 的 防抖函数
 const handleDebouncedRefresh = debounceImmediate(refresh, 1000);
 
-
-// 批量删除
+// 选择逻辑
+const selectedProduct = ref();
+// 批量删除/防抖
 const batchDelete = async () => {
   if (selectedProduct.value == null) {
     ElMessage.warning("选择为空")
@@ -171,6 +187,12 @@ const batchDelete = async () => {
 }
 const handleDebouncedBatchDelete = debounceImmediate(batchDelete, 1000);
 
+
+// 控制添加用户页面
+const addUserVisible = ref<boolean>(false);
+
+// 控制在线用户页面
+const onlineUserVisible = ref<boolean>(false);
 </script>
 
 <template>
@@ -178,9 +200,30 @@ const handleDebouncedBatchDelete = debounceImmediate(batchDelete, 1000);
     <div class="common-layout">
 
 
-      <div class="title">
-        <h1>所有用户</h1>
-        <p>这个列表可以对所有用户进行管理</p>
+      <div class="title-container">
+
+        <el-row justify="space-between">
+          <el-col :span="12" class="title">
+            <h1>所有用户</h1>
+            <p>这个列表可以对所有用户进行管理</p>
+          </el-col>
+          <el-col :span="4" style="display: flex;align-items: center; /* 垂直居中 */">
+            <Button type="button" badgeSeverity="contrast" outlined size="small"
+                    style="margin-left: 8px"
+                    @click="onlineUserVisible = true"
+            >
+              <i class="pi pi-circle-fill" style="color: #22C55E"></i>
+              <el-text tag="b">
+                1000
+              </el-text>
+              <el-text>
+                在线用户
+              </el-text>
+            </Button>
+          </el-col>
+
+        </el-row>
+
       </div>
 
       <!--  工具栏  -->
@@ -210,13 +253,22 @@ const handleDebouncedBatchDelete = debounceImmediate(batchDelete, 1000);
 
               <el-divider direction="vertical"/>
               <Tag severity="info">用户数: {{ userCount }}</Tag>
-              <Tag style="width: 110px">页数: {{ nowPage }} of {{ maxPage }}</Tag>
+              <Tag style="width: 140px">页数: {{ nowPage }} of {{ maxPage }}</Tag>
 
               <!--翻页按键-->
+              <Button icon="pi pi-angle-double-left" severity="secondary" outlined size="small"
+                      @click="handleDebouncedTurnPage(pageTurn.FirstPage)"
+                      v-tooltip.bottom="{ value: '跳转第一页', showDelay: 1000, hideDelay: 300 }"/>
               <Button icon="pi pi-angle-left" severity="secondary" outlined size="small"
-                      @click="handleDebouncedTurnPage(pageTurn.DOWN)"/>
+                      @click="handleDebouncedTurnPage(pageTurn.PreviousPage)"
+                      v-tooltip.bottom="{ value: '上一页', showDelay: 1000, hideDelay: 300 }"/>
               <Button icon="pi pi-angle-right" severity="secondary" outlined size="small"
-                      @click="handleDebouncedTurnPage(pageTurn.UP)"/>
+                      @click="handleDebouncedTurnPage(pageTurn.NextPage)"
+                      v-tooltip.bottom="{ value: '下一页', showDelay: 1000, hideDelay: 300 }"/>
+              <Button icon="pi pi-angle-double-right" severity="secondary" outlined size="small"
+                      @click="handleDebouncedTurnPage(pageTurn.LastPage)"
+                      v-tooltip.bottom="{ value: '跳转最后一页', showDelay: 1000, hideDelay: 300 }"/>
+
             </div>
           </el-col>
         </el-row>
@@ -226,34 +278,21 @@ const handleDebouncedBatchDelete = debounceImmediate(batchDelete, 1000);
       <div class="table-container">
 
         <DataTable v-model:selection="selectedProduct" :value="products" stripedRows dataKey="uid"
-                   tableStyle="min-width: 1000px;" size="small" :style="{ minHeight: dynamicHeight }">
+                   tableStyle="min-width: 850px;" size="small" :style="{ minHeight: dynamicHeight }">
           <Column selectionMode="multiple" headerStyle="width: 4%" position="fixed"></Column>
-          <Column field="id" header="id" headerStyle="width: 6%"></Column>
-          <Column field="uid" header="Uid" headerStyle="width: 10%"></Column>
-          <Column field="username" header="用户名" headerStyle="width: 15%"></Column>
-          <Column field="email" header="邮箱地址" headerStyle="width: 28%"></Column>
-          <Column field="status" header="状态" headerStyle="width: 10%">
+          <Column field="id" header="id" headerStyle="width: 8%"></Column>
+          <Column field="uid" header="Uid" headerStyle="width: 16%"></Column>
+          <Column field="username" header="用户名" headerStyle="width: 20%"></Column>
+          <Column field="email" header="邮箱地址" headerStyle="width: 32%"></Column>
+          <Column field="status" header="状态" headerStyle="width: 12%">
             <template #body="{ data }">
-              <Tag :value="data.status" :severity="getStatusType(data.status)"/>
+              <Tag :value="getStatusMsg(data.status)" :severity="getStatusType(data.status)"/>
             </template>
           </Column>
-
-          <Column header="访问" headerStyle="width: 8%">
-            <template #body="{  }">
-              <Button label="访问" severity="info" size="small" outlined/>
-            </template>
-          </Column>
-
-          <Column header="封禁" headerStyle="width: 8%">
-            <template #body="{  }">
-              <Button label="封禁" severity="warn" size="small" outlined/>
-            </template>
-          </Column>
-
 
           <Column header="更多" headerStyle="width: 8%">
             <template #body>
-              <Button type="button" icon="pi pi-ellipsis-h" rounded outlined size="small"/>
+              <Button type="button" icon="pi pi-ellipsis-h" rounded outlined style=" height: 32px;width: 32px"/>
             </template>
           </Column>
         </DataTable>
@@ -267,6 +306,12 @@ const handleDebouncedBatchDelete = debounceImmediate(batchDelete, 1000);
   <!--  添加用户页面  -->
   <AddUser v-model="addUserVisible"/>
 
+  <!--  用户信息编辑页面  -->
+
+
+  <!--  在线用户页面  -->
+  <OnlineUser v-model="onlineUserVisible"/>
+
 </template>
 
 <style scoped>
@@ -274,10 +319,12 @@ const handleDebouncedBatchDelete = debounceImmediate(batchDelete, 1000);
   height: 100%;
   padding-left: 1px;
   padding-right: 15px;
+  background-color: white;
 }
 
-.title {
+.title-container {
   margin: 0; /* 去掉默认外边距 */
+
 }
 
 .title h1 {
@@ -317,10 +364,11 @@ const handleDebouncedBatchDelete = debounceImmediate(batchDelete, 1000);
 }
 
 .table-container {
+  background-color: white;
   margin-top: 15px;
   width: 100%;
   border-radius: 10px;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 0 1px #D9D9D9;
   padding: 4px;
 }
 
