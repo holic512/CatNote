@@ -20,7 +20,8 @@ import AddUser from "./components/AddUser/addUser.vue";
 import {debounceImmediate} from "../../../../../util/debounce.ts";
 import {ElMessage} from "element-plus";
 import {BatchDeleteUser} from "./components/TableView/batchDeleteUser.ts";
-import OnlineUser from "@/views/Admin/Main/view/userMm/components/OnlineUser/OnlineUser.vue";
+import OnlineUser from "./components/OnlineUser/OnlineUser.vue";
+import {onlineUserCount} from "@/views/Admin/Main/view/userMm/components/OnlineUser/OnlineUserCount.ts";
 
 // 搜素框数据
 const value1 = ref(null);
@@ -49,7 +50,6 @@ onMounted(async () => {
   // 获取当前尺寸 所能显示的 行数
   nowRow.value = calculateRows(minHeight, stepHeight);
 
-  console.log("nowRow.value", nowRow.value);
   // 获取用户总数 并 计算最大页数
   await axios.get(
       "admin/userMm/getUserCount",
@@ -63,6 +63,9 @@ onMounted(async () => {
 
   // 挂载 页面尺寸监听器
   window.addEventListener('resize', handleResize);
+
+  // 获取在线用户数目
+  OUserCount.value = await onlineUserCount()
 })
 
 // 在组件销毁时移除监听器
@@ -193,6 +196,10 @@ const addUserVisible = ref<boolean>(false);
 
 // 控制在线用户页面
 const onlineUserVisible = ref<boolean>(false);
+
+// 在线用户数目变量
+const OUserCount = ref(0);
+
 </script>
 
 <template>
@@ -207,21 +214,22 @@ const onlineUserVisible = ref<boolean>(false);
             <h1>所有用户</h1>
             <p>这个列表可以对所有用户进行管理</p>
           </el-col>
-          <el-col :span="4" style="display: flex;align-items: center; /* 垂直居中 */">
+
+          <!--在线用户管理按钮-->
+          <el-col :span="6" style="display: flex;align-items: center; /* 垂直居中 */justify-content: right">
             <Button type="button" badgeSeverity="contrast" outlined size="small"
-                    style="margin-left: 8px"
+                    style="margin-left: 8px;width: 130px"
                     @click="onlineUserVisible = true"
             >
               <i class="pi pi-circle-fill" style="color: #22C55E"></i>
               <el-text tag="b">
-                1000
+                {{ OUserCount }}
               </el-text>
               <el-text>
                 在线用户
               </el-text>
             </Button>
           </el-col>
-
         </el-row>
 
       </div>

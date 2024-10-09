@@ -9,10 +9,13 @@
  */
 package org.example.backend.admin.userMm.Controller;
 
+import org.example.backend.admin.userMm.request.FetchPageData;
 import org.example.backend.admin.userMm.service.AdminOUserMmService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/admin/oUserMm")
@@ -26,13 +29,33 @@ public class AdminOUserMmController {
     }
 
     /**
+     * 获取在线用户数量 - redis 中存在 session
      *
-     * @return
+     * @return 在线数量
      */
     @GetMapping("OUserCount")
     public int fetchOUserCount() {
         return adminOUserMmService.fetchOUserCount();
     }
 
-    
+    /**
+     * 获取指定 页数的 用户数据
+     */
+    @PostMapping("fetchPageData")
+    public ResponseEntity<Object> fetchPageData(@RequestBody @Validated FetchPageData fetchPageData) {
+        return adminOUserMmService.fetchPageDate(fetchPageData);
+    }
+
+    @PostMapping("logout")
+    public ResponseEntity<Object> logout(@RequestBody Map<String, Object> request) {
+        String uid = request.get("uid").toString();
+        return adminOUserMmService.logout(uid);
+    }
+
+    @PostMapping("kickout")
+    public ResponseEntity<Object> kickout(@RequestBody Map<String, Object> request) {
+        String uid = request.get("uid").toString();
+        return adminOUserMmService.kickout(uid);
+    }
+
 }
