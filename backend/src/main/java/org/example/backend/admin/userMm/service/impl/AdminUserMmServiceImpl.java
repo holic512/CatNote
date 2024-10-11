@@ -12,6 +12,7 @@ package org.example.backend.admin.userMm.service.impl;
 import org.example.backend.admin.userMm.enums.AdminUserMmEnum;
 import org.example.backend.admin.userMm.service.AdminUserMmService;
 import org.example.backend.admin.userMm.request.AddUserRequest;
+import org.example.backend.common.UserAvatar.UserAvatarService;
 import org.example.backend.common.dto.user.UserDetailDto;
 import org.example.backend.common.entity.User;
 import org.example.backend.common.repository.UserRepository;
@@ -28,9 +29,13 @@ public class AdminUserMmServiceImpl implements AdminUserMmService {
 
     private final UserRepository userRepository;
 
+    // 头像服务
+    private final UserAvatarService userAvatarService;
+
     @Autowired
-    public AdminUserMmServiceImpl(UserRepository userRepository) {
+    public AdminUserMmServiceImpl(UserRepository userRepository, UserAvatarService userAvatarService) {
         this.userRepository = userRepository;
+        this.userAvatarService = userAvatarService;
     }
 
     @Override
@@ -40,14 +45,43 @@ public class AdminUserMmServiceImpl implements AdminUserMmService {
 
     @Override
     public List<UserDetailDto> fetchInitialUser(int count) {
+        // 判断 查询范围
         Pageable pageable = PageRequest.of(0, count);
-        return userRepository.findUserInRange(pageable);
+
+        // 查询数据库中用户信息
+        List<UserDetailDto> users = userRepository.findUserInRange(pageable);
+
+        // 查询用户头像
+        for (UserDetailDto user : users) {
+            try {
+                String avatarUrl = userAvatarService.getUserAvatarUrl(user.getId());
+                user.setAvatar(avatarUrl);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return users;
     }
 
     @Override
     public List<UserDetailDto> findUserInRange(int start, int end) {
+        // 判断 查询范围
         Pageable pageable = PageRequest.of(start, end);
-        return userRepository.findUserInRange(pageable);
+
+        // 查询数据库中用户信息
+        List<UserDetailDto> users = userRepository.findUserInRange(pageable);
+
+        // 查询用户头像
+        for (UserDetailDto user : users) {
+            try {
+                String avatarUrl = userAvatarService.getUserAvatarUrl(user.getId());
+                user.setAvatar(avatarUrl);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return users;
     }
 
     @Override

@@ -122,6 +122,12 @@ public class AdminUserMmController {
     }
 
 
+    /**
+     * 删除 用户
+     *
+     * @param userIds 存储了用户 id 的列表
+     * @return 状态响应体
+     */
     @PostMapping("/batchDeleteUser")
     public ResponseEntity<Object> batchDeleteUser(@RequestBody List<Long> userIds) {
         if (userIds == null || userIds.isEmpty()) {
@@ -136,5 +142,6 @@ public class AdminUserMmController {
             return ResponseEntity.ok(new ApiResponse.Builder<>().status(500).build());
 
     }
+
 
 }

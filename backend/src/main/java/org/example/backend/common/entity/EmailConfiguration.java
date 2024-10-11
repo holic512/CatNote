@@ -11,7 +11,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
-import org.example.backend.common.enums.mail.MailSecurityProtocol;
+import org.example.backend.common.Mail.enums.MailSecurityProtocol;
 import org.springframework.stereotype.Component;
 
 @Component

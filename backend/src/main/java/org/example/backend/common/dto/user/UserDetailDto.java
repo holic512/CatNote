@@ -20,6 +20,8 @@ public class UserDetailDto {
     private String email;
     private UserStatusEnum status;
 
+    private String avatar;
+
     public UserDetailDto(Long id, String uid, String username, String email, UserStatusEnum status) {
         this.id = id;
         this.uid = uid;

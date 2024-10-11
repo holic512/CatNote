@@ -5,7 +5,7 @@ import IconField from 'primevue/iconfield';
 import InputIcon from 'primevue/inputicon';
 import InputText from "primevue/inputtext";
 import Tag from 'primevue/tag'
-
+import Avatar from 'primevue/avatar';
 
 import {computed, onBeforeUnmount, onMounted, ref} from "vue";
 // 表格组件
@@ -287,10 +287,31 @@ const OUserCount = ref(0);
 
         <DataTable v-model:selection="selectedProduct" :value="products" stripedRows dataKey="uid"
                    tableStyle="min-width: 850px;" size="small" :style="{ minHeight: dynamicHeight }">
-          <Column selectionMode="multiple" headerStyle="width: 4%" position="fixed"></Column>
-          <Column field="id" header="id" headerStyle="width: 8%"></Column>
+          <Column selectionMode="multiple" headerStyle="width: 5%" position="fixed"></Column>
+          <Column field="id" header="id" headerStyle="width: 5%"></Column>
+
+          <Column field="username" header="用户名" headerStyle="width: 22%">
+            <template #body="{ data }">
+              <div style="display: flex; align-items: center;">
+                <el-avatar
+                    :size="28"
+                    :src="data.avatar"
+                    shape="square"
+                    style="margin-right: 8px"
+                >
+                  {{ data.username.charAt(0).toUpperCase() }}
+                </el-avatar>
+                <el-text tag="b">
+                  {{ data.username }}
+                </el-text>
+
+              </div>
+
+            </template>
+          </Column>
+
           <Column field="uid" header="Uid" headerStyle="width: 16%"></Column>
-          <Column field="username" header="用户名" headerStyle="width: 20%"></Column>
+
           <Column field="email" header="邮箱地址" headerStyle="width: 32%"></Column>
           <Column field="status" header="状态" headerStyle="width: 12%">
             <template #body="{ data }">
