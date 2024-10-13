@@ -18,11 +18,11 @@ public class UserDetailDto {
     private String uid;
     private String username;
     private String email;
-    private UserStatusEnum status;
+    private Integer status;
 
     private String avatar;
 
-    public UserDetailDto(Long id, String uid, String username, String email, UserStatusEnum status) {
+    public UserDetailDto(Long id, String uid, String username, String email, Integer status) {
         this.id = id;
         this.uid = uid;
         this.username = username;

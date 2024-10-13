@@ -13,13 +13,13 @@ import lombok.Getter;
 
 @Getter
 public enum UserStatusEnum {
-    ACTIVE("ACTIVE"),    // 对应数据库中的 ACTIVE
-    DISABLED("DISABLED"), // 对应数据库中的 DISABLED
-    BANNED("BANNED");    // 对应数据库中的 BANNED
+    ACTIVE(0),    // 对应数据库中的 ACTIVE
+    DISABLED(1), // 对应数据库中的 DISABLED
+    BANNED(2);    // 对应数据库中的 BANNED
 
-    private final String value;
+    private final Integer value;
 
-    UserStatusEnum(String value) {
+    UserStatusEnum(Integer value) {
         this.value = value;
     }
 

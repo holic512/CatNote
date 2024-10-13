@@ -4,7 +4,7 @@ export default [
         component: () => import('./index.vue'),
         meta: { requiresAuth: true },
         children: [
-            // 默认页面
+            // 默认页面 - 授权页面
             {
                 path: '',
                 name: 'user-home',
@@ -44,7 +44,7 @@ export default [
             {
                 path: 'main',
                 name: 'user-main',
-                meta: { requiresAuth: false },
+                meta: { requiresAuth: true },
                 component: () => import("./Main/index.vue"),
                 children: [],
             },

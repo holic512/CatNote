@@ -1,6 +1,6 @@
 /**
  * File Name: OUserInfoDto.java
- * Description: 用于获取在线玩家详细信息
+ * Description: 用于存储层 与 数据库进行查询交互 获取在线玩家详细信息
  * Author: holic512
  * Created Date: 2024-10-09
  * Version: 1.0

@@ -16,15 +16,15 @@ import org.example.backend.common.enums.user.UserStatusEnum;
 public class UserAuthDto {
     private String uid;
     private String password;
-    private UserStatusEnum status;
+    private Integer status;
 
-    public UserAuthDto(String uid, String password, UserStatusEnum status) {
+    public UserAuthDto(String uid, String password, Integer status) {
         this.uid = uid;
         this.password = password;
         this.status = status;
     }
 
-    public UserAuthDto(String uid, UserStatusEnum status) {
+    public UserAuthDto(String uid, Integer status) {
         this.uid = uid;
         this.status = status;
     }

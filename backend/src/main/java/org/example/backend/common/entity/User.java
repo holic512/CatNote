@@ -29,9 +29,8 @@ public class User {
     @Column(unique = true, nullable = false, length = 100)
     private String email;
 
-    @Enumerated(EnumType.STRING)  // 状态使用枚举类型存储
-    @Column(nullable = false, length = 100)
-    private UserStatusEnum status;
+    @Column(nullable = false)
+    private Integer status;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -61,7 +60,7 @@ public class User {
         private String username;
         private String password;
         private String email;
-        private UserStatusEnum status;
+        private Integer status;
 
         public Builder id(Long id) {
             this.id = id;
@@ -88,7 +87,7 @@ public class User {
             return this;
         }
 
-        public Builder status(UserStatusEnum status) {
+        public Builder status(Integer status) {
             this.status = status;
             return this;
         }

@@ -236,7 +236,7 @@ public class UserAuthServiceImpl implements UserAuthService {
                 .uid(uid)
                 .username(map.get("username"))
                 .password(map.get("password"))
-                .status(UserStatusEnum.ACTIVE)
+                .status(UserStatusEnum.ACTIVE.getValue())
                 .email(map.get("email"))
                 .build();
 
@@ -249,7 +249,7 @@ public class UserAuthServiceImpl implements UserAuthService {
         UserProfile userProfile = new UserProfile.Builder()
                 .uid(uid)
                 .nickname(nickName)
-                .gender(UserGenderEnum.OTHER)
+                .gender(UserGenderEnum.OTHER.getValue())
                 .build();
         // 保存用户详情信息
         profileRepository.save(userProfile);

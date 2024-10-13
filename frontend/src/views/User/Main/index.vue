@@ -1,10 +1,17 @@
 <script setup lang="ts">
 import Sidebar from "./components/Sidebar/Sidebar.vue"
 
+
 import {ref, onMounted, onBeforeUnmount} from 'vue';
+
+// 控制设置窗 弹出与关闭
+import Setting from "./components/Setting/index.vue"
+
+const SettingVisible = ref<boolean>(false);
 
 // 控制 Tooltip 显示与隐藏
 const showTooltip = ref(false);
+
 
 // 记录鼠标悬浮时的初始坐标
 const fixedMouseX = ref(0);
@@ -76,7 +83,7 @@ onBeforeUnmount(() => {
     <div class="panel1" :style="{ width: panel1Width + 'px' }">
       <div style="height: 100vh; background-color: #f7f7f5;">
 
-        <Sidebar/>
+        <Sidebar v-model="SettingVisible"/>
 
       </div>
     </div>
@@ -108,13 +115,17 @@ onBeforeUnmount(() => {
       </div>
     </div>
 
+
   </div>
+
+  <Setting v-model="SettingVisible"/>
+
 </template>
 
 <style scoped>
 .splitter-container {
   display: flex;
-  height: 100vh;
+  height: 99vh;
 }
 
 /* 左右面板的样式 */

@@ -109,7 +109,7 @@ public class AdminUserMmServiceImpl implements AdminUserMmService {
                 .username(addUserRequest.getUsername())
                 .password(addUserRequest.getPassword())
                 .email(addUserRequest.getEmail())
-                .status(addUserRequest.getStatus())
+                .status(addUserRequest.getStatus().getValue())
                 .build();
 
         // success

@@ -42,9 +42,7 @@ public class AliOssImageStorageService implements ImageStorageService {
             // 创建上传请求
             PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, id, inputStream);
             aliOss.putObject(putObjectRequest);
-            logger.info("成功保存图片: {}", id);
         } catch (Exception e) {
-            logger.error("保存图片到阿里云 OSS 失败: {}", e.getMessage());
             throw new RuntimeException("保存图片到阿里云 OSS 失败", e);
         }
     }
@@ -53,9 +51,7 @@ public class AliOssImageStorageService implements ImageStorageService {
     public void deleteImage(String id) {
         try {
             aliOss.deleteObject(bucketName, id);
-            logger.info("成功删除图片: {}", id);
         } catch (Exception e) {
-            logger.error("删除图片失败: {}", e.getMessage());
             throw new RuntimeException("删除图片失败", e);
         }
     }
@@ -66,10 +62,8 @@ public class AliOssImageStorageService implements ImageStorageService {
              InputStream inputStream = ossObject.getObjectContent()) {
 
             byte[] imageData = IOUtils.toByteArray(inputStream);
-            logger.info("成功获取图片: {}", id);
             return imageData;
         } catch (IOException e) {
-            logger.error("获取图片失败: {}", e.getMessage());
             throw new RuntimeException("获取图片失败", e);
         }
     }
@@ -79,10 +73,8 @@ public class AliOssImageStorageService implements ImageStorageService {
         try {
             Date expiration = new Date(new Date().getTime() + 3600 * 1000); // 设置 URL 过期时间为1小时
             URL url = aliOss.generatePresignedUrl(bucketName, id, expiration);
-            logger.info("生成图片访问 URL: {}", url);
             return url.toString();
         } catch (Exception e) {
-            logger.error("获取图片 URL 失败: {}", e.getMessage());
             throw new RuntimeException("获取图片 URL 失败", e);
         }
     }

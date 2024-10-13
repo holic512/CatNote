@@ -5,7 +5,6 @@ import IconField from 'primevue/iconfield';
 import InputIcon from 'primevue/inputicon';
 import InputText from "primevue/inputtext";
 import Tag from 'primevue/tag'
-import Avatar from 'primevue/avatar';
 
 import {computed, onBeforeUnmount, onMounted, ref} from "vue";
 // 表格组件

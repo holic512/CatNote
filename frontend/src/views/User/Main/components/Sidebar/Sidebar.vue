@@ -7,6 +7,8 @@ import {ref} from "vue";
 // 控制 noteTree 显示
 const noteTreeVisible = ref(true)
 
+const addUserVisible = defineModel()
+
 </script>
 
 <template>
@@ -41,6 +43,8 @@ const noteTreeVisible = ref(true)
 
 
     <el-divider style="margin: 4px"/>
+
+
     <!--    工具栏   -->
     <div class="sidebar-div" style="margin-bottom: 1px;">
       <div class="sidebar-icon">
@@ -105,17 +109,17 @@ const noteTreeVisible = ref(true)
     <!--    工具类    -->
 
     <!--  账号  -->
-    <div class="sidebar-div" style="margin-bottom: 1px;" @click="noteTreeVisible = !noteTreeVisible">
+    <div class="sidebar-div" style="margin-bottom: 1px;" @click="addUserVisible = true ">
       <div class="sidebar-icon">
         <i class="pi pi-user" style="font-size: 1rem;color: #708090"/>
       </div>
-      <div style="display: flex;  align-items: center;">
+      <div style="display: flex;  align-items: center;" >
         <el-text>账号</el-text>
       </div>
     </div>
 
     <!--  设置  -->
-    <div class="sidebar-div" style="margin-bottom: 1px;" @click="noteTreeVisible = !noteTreeVisible">
+    <div class="sidebar-div" style="margin-bottom: 1px;"  @click="addUserVisible = true ">
       <div class="sidebar-icon">
         <i class="pi pi-cog" style="font-size: 1rem;color: #708090"/>
       </div>

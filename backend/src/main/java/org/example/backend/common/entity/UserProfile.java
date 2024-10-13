@@ -30,9 +30,8 @@ public class UserProfile {
     @Column(name = "nickname", nullable = false)
     private String nickname;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "gender", nullable = false)
-    private UserGenderEnum gender;
+    private String gender;
 
     @Column(name = "age")
     private Integer age;
@@ -68,7 +67,7 @@ public class UserProfile {
         private Long id;
         private String uid;
         private String nickname;
-        private UserGenderEnum gender;
+        private String gender;
         private Integer age;
         private String bio;
         private String contactInfo;
@@ -88,7 +87,7 @@ public class UserProfile {
             return this;
         }
 
-        public Builder gender(UserGenderEnum gender) {
+        public Builder gender(String gender) {
             this.gender = gender;
             return this;
         }
