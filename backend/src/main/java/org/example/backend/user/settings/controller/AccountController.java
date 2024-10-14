@@ -9,15 +9,16 @@
 
 package org.example.backend.user.settings.controller;
 
+import jakarta.validation.Valid;
+import org.example.backend.common.entity.UserProfile;
 import org.example.backend.common.response.ApiResponse;
 import org.example.backend.common.util.StpKit;
 import org.example.backend.user.settings.dto.AccountInfo;
 import org.example.backend.user.settings.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user/settings/account")
@@ -37,13 +38,132 @@ public class AccountController {
 
         AccountInfo accountInfo = accountService.fetchAccountInfo(uid);
 
+
         return ResponseEntity.ok(new ApiResponse.Builder<AccountInfo>()
                 .status(200)
                 .message("查询成功")
                 .data(accountInfo)
                 .build()
         );
-
     }
 
+    @PutMapping("nickename")
+    public ResponseEntity<Object> EditUserNickName(@RequestBody UserProfile updateProfile) throws Exception {
+        // 获取uid
+        String uid = (String) StpKit.USER.getLoginId();
+
+        try{
+            AccountInfo updateAccountNickName = accountService.EditAccountNickName(uid, updateProfile);
+
+            return ResponseEntity.ok(new ApiResponse.Builder<AccountInfo>()
+                    .status(200)
+                    .message("用户信息更新成功")
+                    .data(updateAccountNickName)
+                    .build()
+            );
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse.Builder<String>()
+                            .status(500)
+                            .message("用户信息更新失败")
+                            .build()
+                    );
+        }
+    }
+
+    @PutMapping("gender")
+    public ResponseEntity<Object> EditUserGender(@RequestBody UserProfile updateProfile) throws Exception {
+        // 获取uid
+        String uid = (String) StpKit.USER.getLoginId();
+
+        try{
+            AccountInfo updateAccountGender = accountService.EditAccountGender(uid, updateProfile);
+
+            return ResponseEntity.ok(new ApiResponse.Builder<AccountInfo>()
+                    .status(200)
+                    .message("用户信息更新成功")
+                    .data(updateAccountGender)
+                    .build()
+            );
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse.Builder<String>()
+                            .status(500)
+                            .message("用户信息更新失败")
+                            .build()
+                    );
+        }
+    }
+
+    @PutMapping("age")
+    public ResponseEntity<Object> EditUserAge(@RequestBody UserProfile updateProfile) throws Exception {
+        // 获取uid
+        String uid = (String) StpKit.USER.getLoginId();
+
+        try{
+            AccountInfo updateAccountAge = accountService.EditAccountAge(uid, updateProfile);
+
+            return ResponseEntity.ok(new ApiResponse.Builder<AccountInfo>()
+                    .status(200)
+                    .message("用户信息更新成功")
+                    .data(updateAccountAge)
+                    .build()
+            );
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse.Builder<String>()
+                            .status(500)
+                            .message("用户信息更新失败")
+                            .build()
+                    );
+        }
+    }
+
+    @PutMapping("contactInfo")
+    public ResponseEntity<Object> EditUserContactInfo(@RequestBody UserProfile updateProfile) throws Exception {
+        // 获取uid
+        String uid = (String) StpKit.USER.getLoginId();
+
+        try{
+            AccountInfo updateAccountContact = accountService.EditAccountContact(uid, updateProfile);
+
+            return ResponseEntity.ok(new ApiResponse.Builder<AccountInfo>()
+                    .status(200)
+                    .message("用户信息更新成功")
+                    .data(updateAccountContact)
+                    .build()
+            );
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse.Builder<String>()
+                            .status(500)
+                            .message("用户信息更新失败")
+                            .build()
+                    );
+        }
+    }
+
+    @PutMapping("bio")
+    public ResponseEntity<Object> EditUserBio(@RequestBody UserProfile updateProfile) throws Exception {
+        // 获取uid
+        String uid = (String) StpKit.USER.getLoginId();
+
+        try{
+            AccountInfo updateAccountBio = accountService.EditAccountBio(uid, updateProfile);
+
+            return ResponseEntity.ok(new ApiResponse.Builder<AccountInfo>()
+                    .status(200)
+                    .message("用户信息更新成功")
+                    .data(updateAccountBio)
+                    .build()
+            );
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse.Builder<String>()
+                            .status(500)
+                            .message("用户信息更新失败")
+                            .build()
+                    );
+        }
+    }
 }

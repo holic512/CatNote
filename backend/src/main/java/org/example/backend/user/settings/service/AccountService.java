@@ -8,6 +8,7 @@
  */
 package org.example.backend.user.settings.service;
 
+import org.example.backend.common.entity.UserProfile;
 import org.example.backend.user.settings.dto.AccountInfo;
 
 public interface AccountService {
@@ -21,4 +22,21 @@ public interface AccountService {
      */
     AccountInfo fetchAccountInfo(String uid) throws Exception;
 
+    /**
+     * 修改用户昵称
+     *
+     * @param uid
+     * @param userProfile
+     * @return
+     * @throws Exception
+     */
+    AccountInfo EditAccountNickName(String uid, UserProfile userProfile) throws Exception;
+
+    AccountInfo EditAccountGender(String uid, UserProfile userProfile) throws Exception;
+
+    AccountInfo EditAccountAge(String uid, UserProfile userProfile) throws Exception;
+
+    AccountInfo EditAccountBio(String uid, UserProfile userProfile) throws Exception;
+
+    AccountInfo EditAccountContact(String uid, UserProfile userProfile) throws Exception;
 }
