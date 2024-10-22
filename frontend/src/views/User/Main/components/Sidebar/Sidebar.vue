@@ -9,6 +9,11 @@ const noteTreeVisible = ref(true)
 
 const addUserVisible = defineModel()
 
+import {
+  CirclePlusFilled,
+  Plus,
+} from '@element-plus/icons-vue'
+
 </script>
 
 <template>
@@ -85,23 +90,35 @@ const addUserVisible = defineModel()
     </div>
     <el-divider style="margin: 4px"/>
     <!--     笔记 控制按钮    -->
-    <div class="sidebar-div" style="margin-bottom: 1px;" @click="noteTreeVisible = !noteTreeVisible">
-      <div style="display: flex; justify-content: center; align-items: center; width: 50px">
+    <div class="sidebar-div" style="margin-bottom: 1px;">
+      <div style="display: flex; justify-content: center; align-items: center; width: 50px"
+      >
         <el-text size="small">笔记</el-text>
       </div>
-
+      <!--  隔断  -->
       <div style="flex: 1"></div>
-
       <div>
         <Button class="sidebar-button" text icon="pi pi-ellipsis-h" size="small" severity="secondary"/>
       </div>
       <div>
-        <Button class="sidebar-button" text icon="pi pi-plus" size="small" severity="secondary"/>
+
+        <el-dropdown trigger="click" size="small">
+        <span class="el-dropdown-link">
+          <Button class="sidebar-button" text icon="pi pi-plus" size="small" severity="secondary"/>
+        </span>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item :icon="Plus">新建文档</el-dropdown-item>
+              <el-dropdown-item :icon="CirclePlusFilled">新建文件夹</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+
       </div>
     </div>
 
     <!--  笔记文件树  -->
-    <note-tree v-if="noteTreeVisible" style="margin-bottom: 16px;"/>
+    <note-tree style="margin-bottom: 16px;"/>
 
 
     <el-divider style="margin: 4px"/>
@@ -113,13 +130,13 @@ const addUserVisible = defineModel()
       <div class="sidebar-icon">
         <i class="pi pi-user" style="font-size: 1rem;color: #708090"/>
       </div>
-      <div style="display: flex;  align-items: center;" >
+      <div style="display: flex;  align-items: center;">
         <el-text>账号</el-text>
       </div>
     </div>
 
     <!--  设置  -->
-    <div class="sidebar-div" style="margin-bottom: 1px;"  @click="addUserVisible = true ">
+    <div class="sidebar-div" style="margin-bottom: 1px;" @click="addUserVisible = true ">
       <div class="sidebar-icon">
         <i class="pi pi-cog" style="font-size: 1rem;color: #708090"/>
       </div>
@@ -137,6 +154,7 @@ const addUserVisible = defineModel()
   flex-direction: column;
   align-items: center;
   padding: 8px;
+  user-select: none;
 }
 
 .sidebar-div {

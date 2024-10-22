@@ -1,190 +1,61 @@
 <script setup lang="ts">
 import type Node from 'element-plus/es/components/tree/src/model/node'
-import type {DragEvents} from 'element-plus/es/components/tree/src/model/useDragNode'
-import type {
-  AllowDropType,
-  NodeDropType,
-} from 'element-plus/es/components/tree/src/tree.type'
+import {getNoteTree} from "@/views/User/Main/components/Sidebar/service/getNoteTree.ts";
 
-const handleDragStart = (node: Node, ev: DragEvents) => {
-  console.log('drag start', node)
+interface Tree {
+  id: number;
+  label: string;
+  leaf?: boolean;
 }
-const handleDragEnter = (
-    draggingNode: Node,
-    dropNode: Node,
-    ev: DragEvents
-) => {
-  console.log('tree drag enter:', dropNode.label)
+
+const props = {
+  label: 'label',
+  children: 'zones',
+  isLeaf: 'leaf',
 }
-const handleDragLeave = (
-    draggingNode: Node,
-    dropNode: Node,
-    ev: DragEvents
-) => {
-  console.log('tree drag leave:', dropNode.label)
-}
-const handleDragOver = (draggingNode: Node, dropNode: Node, ev: DragEvents) => {
-  console.log('tree drag over:', dropNode.label)
-}
-const handleDragEnd = (
-    draggingNode: Node,
-    dropNode: Node,
-    dropType: NodeDropType,
-    ev: DragEvents
-) => {
-  console.log('tree drag end:', dropNode && dropNode.label, dropType)
-}
-const handleDrop = (
-    draggingNode: Node,
-    dropNode: Node,
-    dropType: NodeDropType,
-    ev: DragEvents
-) => {
-  console.log('tree drop:', dropNode.label, dropType)
-}
-const allowDrop = (draggingNode: Node, dropNode: Node, type: AllowDropType) => {
-  if (dropNode.data.label === 'Level two 3-1') {
-    return type !== 'inner'
-  } else {
-    return true
+
+const loadNode = async (node: Node, resolve: (data: Tree[]) => void) => {
+  // 根目录 笔记目录加载
+  if (node.level === 0) {
+    const data = await getNoteTree(null)
+    return resolve(data)
   }
-}
-const allowDrag = (draggingNode: Node) => {
-  return !draggingNode.data.label.includes('Level three 3-1-1')
-}
 
-const data = [
-  {
-    label: '个人笔记',
-    children: [
-      {
-        label: '学习计划',
-        children: [
-          {
-            label: '编程学习',
-            children: [
-              { label: 'JavaScript 复习' },
-              { label: 'Vue 3 项目' },
-              { label: 'TypeScript 进阶' },
-            ],
-          },
-          {
-            label: '英语学习',
-            children: [
-              { label: '单词记忆' },
-              { label: '听力练习' },
-              { label: '口语提升' },
-            ],
-          },
-        ],
-      },
-      {
-        label: '生活日记',
-        children: [
-          {
-            label: '旅行计划',
-            children: [
-              { label: '日本旅行' },
-              { label: '欧洲之行' },
-            ],
-          },
-          {
-            label: '健康记录',
-            children: [
-              { label: '饮食计划' },
-              { label: '运动日志' },
-            ],
-          },
-        ],
-      },
-    ],
-  },
-  {
-    label: '工作笔记',
-    children: [
-      {
-        label: '项目记录',
-        children: [
-          {
-            label: '项目A',
-            children: [
-              { label: '需求分析' },
-              { label: '设计文档' },
-              { label: '开发进度' },
-            ],
-          },
-          {
-            label: '项目B',
-            children: [
-              { label: '市场调研' },
-              { label: '用户反馈' },
-            ],
-          },
-        ],
-      },
-      {
-        label: '会议纪要',
-        children: [
-          { label: '周会记录' },
-          { label: '项目讨论会' },
-        ],
-      },
-    ],
-  },
-  {
-    label: '其他笔记',
-    children: [
-      {
-        label: '读书笔记',
-        children: [
-          { label: '书名1' },
-          { label: '书名2' },
-        ],
-      },
-      {
-        label: '灵感收集',
-        children: [
-          { label: '创意构思' },
-          { label: '设计灵感' },
-        ],
-      },
-    ],
-  },
-];
+  // 非根目录 笔记目录加载
+  if (node.level > 1) return resolve([])
+  const data = await getNoteTree(node.data.id)
+  resolve(data)
+
+
+}
 
 </script>
 
 <template>
   <el-tree
       class="el-tree"
-      :allow-drop="allowDrop"
-      :allow-drag="allowDrag"
-      :data="data"
       draggable
+      lazy
       node-key="id"
-      @node-drag-start="handleDragStart"
-      @node-drag-enter="handleDragEnter"
-      @node-drag-leave="handleDragLeave"
-      @node-drag-over="handleDragOver"
-      @node-drag-end="handleDragEnd"
-      @node-drop="handleDrop"
-
+      :props="props"
+      :load="loadNode"
   >
     <template #default="{node,data }">
-      <div v-if="data.children == null">
+      <div v-if="data.leaf == true" style="padding: 0">
         <el-icon size="12">
-          <Document/>
+          <Notebook/>
         </el-icon>
-        <el-text style="margin-left: 6px;">
-          {{ node.label }}
-        </el-text>
       </div>
       <div v-else>
+        <el-icon size="12">
+          <Folder/>
 
-        <el-text>
-          {{ node.label }}
-        </el-text>
+        </el-icon>
       </div>
+      <el-text style="margin-left: 6px;">
+        {{ node.label }}
+      </el-text>
+
 
     </template>
   </el-tree>
@@ -201,11 +72,12 @@ const data = [
 :deep(.el-tree-node__content) {
   height: 28px;
 }
+
 :deep(.el-tree-node__content):hover {
   background-color: #EFEFED;
 }
 
-:deep(.el-tree-node__content):focus  {
+:deep(.el-tree-node__content):focus {
   background-color: #EFEFED;
 }
 
@@ -222,5 +94,8 @@ const data = [
   color: #333; /* 叶子节点选中时的文本颜色 */
 }
 
+:deep(.el-tree-node.is-expanded > .el-tree-node__content) {
+  background-color: #EFEFED !important; /* 保持相同的自定义背景色 */
+}
 
 </style>

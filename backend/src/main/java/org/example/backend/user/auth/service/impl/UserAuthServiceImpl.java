@@ -9,6 +9,7 @@
  */
 package org.example.backend.user.auth.service.impl;
 
+import cn.dev33.satoken.session.SaSession;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -88,7 +89,13 @@ public class UserAuthServiceImpl implements UserAuthService {
 
         // 登录成功
         StpKit.USER.login(user.getUid());
+
+        // 在session中插入id
+        SaSession session = StpKit.USER.getSession();
+        session.set("id", user.getId());
         return new Pair<>(AuthServiceEnum.Success, StpKit.USER.getTokenValue());
+
+
     }
 
     @Override

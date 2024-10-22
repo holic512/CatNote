@@ -35,7 +35,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     long count();
 
     // 查询 用于用户登录中 的所需的  密码,UID,状态
-    @Query("select new org.example.backend.common.dto.user.UserAuthDto(u.uid,u.password,u.status) from User u where u.username = :username")
+    @Query("select new org.example.backend.common.dto.user.UserAuthDto(u.id,u.uid,u.password,u.status) from User u where u.username = :username")
     UserAuthDto findAuthDtoByUsername(@Param("username") String username);
 
     // 查询 用于用户登录中 的所需的 UID,状态

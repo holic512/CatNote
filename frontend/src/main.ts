@@ -92,6 +92,12 @@ app.use(PrimeVue, {
     }
 });
 
+// 配置 vue3-context-menu
+import '@imengyu/vue3-context-menu/lib/vue3-context-menu.css'
+import ContextMenu from '@imengyu/vue3-context-menu'
+
+app.use(ContextMenu)
+
 app.use(pinia)
 app.use(router)
 app.use(ElementPlus)

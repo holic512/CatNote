@@ -47,7 +47,7 @@ public class AccountController {
         );
     }
 
-    @PutMapping("nickename")
+    @PutMapping("nickname")
     public ResponseEntity<Object> EditUserNickName(@RequestBody UserProfile updateProfile) throws Exception {
         // 获取uid
         String uid = (String) StpKit.USER.getLoginId();
