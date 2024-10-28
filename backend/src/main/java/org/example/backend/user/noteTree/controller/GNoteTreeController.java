@@ -13,6 +13,7 @@ package org.example.backend.user.noteTree.controller;
 
 import org.example.backend.common.response.ApiResponse;
 import org.example.backend.common.util.StpKit;
+import org.example.backend.user.noteTree.pojo.NoteFolderDto;
 import org.example.backend.user.noteTree.pojo.NoteTreeDto;
 import org.example.backend.user.noteTree.service.GNoteTreeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,4 +54,17 @@ public class GNoteTreeController {
                 .build()
         );
     }
-}
+
+    @GetMapping("/note")
+    public ResponseEntity<Object> getNotes(@RequestParam(required = false) Long folderId){
+        long id = (long) StpKit.USER.getSession().get("id");
+        List<NoteFolderDto> folder = gNoteTreeService.getFolderList(id, folderId);
+
+        return ResponseEntity.ok(new ApiResponse.Builder<List<NoteFolderDto>>() // 指定泛型
+                .status(200)
+                .message("查询成功")
+                .data(folder)
+                .build());
+        }
+    }
+

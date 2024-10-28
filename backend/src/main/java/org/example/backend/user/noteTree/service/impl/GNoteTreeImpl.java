@@ -11,6 +11,7 @@
  */
 package org.example.backend.user.noteTree.service.impl;
 
+import org.example.backend.user.noteTree.pojo.NoteFolderDto;
 import org.example.backend.user.noteTree.pojo.NoteTreeDto;
 import org.example.backend.user.noteTree.repository.NTFolderRep;
 import org.example.backend.user.noteTree.repository.NTNoteRep;
@@ -57,5 +58,10 @@ public class GNoteTreeImpl implements GNoteTreeService {
         combinedList.addAll(noteList); // 添加笔记
 
         return combinedList; // 返回合并后的列表
+    }
+
+    @Override
+    public List<NoteFolderDto> getFolderList(long id, Long folderId) {
+        return folderRep.findFolderByUserIdAndFolderId(id, folderId);
     }
 }

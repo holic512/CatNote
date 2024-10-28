@@ -11,6 +11,7 @@
  */
 package org.example.backend.user.noteTree.service;
 
+import org.example.backend.user.noteTree.pojo.NoteFolderDto;
 import org.example.backend.user.noteTree.pojo.NoteTreeDto;
 
 import java.util.List;
@@ -25,4 +26,13 @@ public interface GNoteTreeService {
      * @return 文件夹和笔记的列表，每个节点信息封装在 NoteTreeDto 对象中
      */
     List<NoteTreeDto> getNoteTreeList(long userId, Long parentId);
+
+    /**
+     * 查询用户指定文件夹下的笔记信息
+     *
+     * @param id       用户id
+     * @param folderId 文件夹id
+     * @return
+     */
+    List<NoteFolderDto> getFolderList(long id, Long folderId);
 }

@@ -14,6 +14,8 @@ package org.example.backend.user.noteTree.pojo;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 public class NoteTreeDto {
 
@@ -26,8 +28,17 @@ public class NoteTreeDto {
     // 代表节点是否为叶 也就是 是否为文件
     private boolean leaf;
 
+    private Long userId;
+    private Long folderId;
+    private String noteTitle;
+    private String summary;
+    private String notePassword;
+    private byte noteType;
+    private LocalDateTime createAt;
+    private LocalDateTime updateAt;
+
     // 用于存储文件夹的 构造函数
-    NoteTreeDto(Long id, String label, boolean leaf) {
+    public NoteTreeDto(Long id, String label, boolean leaf) {
         this.id = id;
         this.label = label;
         this.leaf = leaf;

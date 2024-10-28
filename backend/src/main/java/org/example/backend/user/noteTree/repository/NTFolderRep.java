@@ -12,6 +12,7 @@
 package org.example.backend.user.noteTree.repository;
 
 import org.example.backend.common.entity.FolderInfo;
+import org.example.backend.user.noteTree.pojo.NoteFolderDto;
 import org.example.backend.user.noteTree.pojo.NoteTreeDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -43,4 +44,18 @@ public interface NTFolderRep extends JpaRepository<FolderInfo, Long> {
             "FROM FolderInfo f " +
             "where f.userId = :userId and f.parentId = :parentId")
     List<NoteTreeDto> findSubFoldersByUserIdAndParentId(@Param("userId") Long userId, @Param("parentId") Long parentId);
+
+
+    /**
+     * 根据用户 ID 查询特定文件夹的信息。
+     *
+     * @param userId 用户 ID
+     * @param folderId 文件夹 ID
+     * @return 返回匹配的文件夹信息，封装在 NoteFolderDto 对象中
+     */
+    @Query("SELECT new org.example.backend.user.noteTree.pojo.NoteFolderDto(f.id, f.userId, f.folderName, f.parentId, f.description, f.createdAt, f.updatedAt) " +
+            "FROM FolderInfo f " +
+            "WHERE f.userId = :userId AND f.id = :folderId")
+    List<NoteFolderDto> findFolderByUserIdAndFolderId(@Param("userId") Long userId, @Param("folderId") Long folderId);
+
 }

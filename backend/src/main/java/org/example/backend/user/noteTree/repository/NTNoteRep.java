@@ -14,9 +14,11 @@ package org.example.backend.user.noteTree.repository;
 import org.example.backend.common.entity.NoteInfo;
 import org.example.backend.user.noteTree.pojo.NoteTreeDto;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface NTNoteRep extends JpaRepository<NoteInfo, Long> {
@@ -43,4 +45,32 @@ public interface NTNoteRep extends JpaRepository<NoteInfo, Long> {
             "FROM NoteInfo n " +
             "where n.userId = :userId and n.folderId = :folderId")
     List<NoteTreeDto> findNotesByUserIdAndFolderId(@Param("userId") Long userId, @Param("folderId") Long folderId);
+
+    @Modifying
+    @Query(value = "INSERT INTO note_info (note_title, note_summary, note_password, note_type, created_at, updated_at, user_id, folder_id) " +
+            "VALUES (:noteTitle,:summary, :notePassword, :noteType, :createAt, :updateAt, :userId, :folderId)",
+            nativeQuery = true)
+    void addNote(
+            @Param("noteTitle") String noteTitle,
+            @Param("summary") String summary,
+            @Param("notePassword") String notePassword,
+            @Param("noteType") String noteType,
+            @Param("createAt") LocalDateTime createAt,
+            @Param("updateAt") LocalDateTime updateAt,
+            @Param("userId") Long userId,
+            @Param("folderId") Long folderId
+    );
+
+    @Modifying
+    @Query(value = "INSERT INTO folder_info (id,user_id,folder_name,parent_id,description) " +
+            "VALUES (:id,:userId,:folderName,:parentId,:description)",
+            nativeQuery = true)
+    void addFolder(
+            @Param("id") Long id,
+            @Param("userId") Long userId,
+            @Param("folderName") String folderName,
+            @Param("parentId") String parentId,
+            @Param("description") String description
+    );
+
 }
