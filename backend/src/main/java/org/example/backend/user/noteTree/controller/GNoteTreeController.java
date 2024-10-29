@@ -5,9 +5,9 @@
  * Created Date: 2024-10-16
  * Version: 1.0
  * Usage:
- *      - 通过 `GNoteTreeController` 可以查询用户的文件夹和笔记树结构。
- *      - 主要用于前端展示用户的文件夹和笔记列表，支持按父文件夹 ID 进行查询。
- *      - 通常在用户界面中展示文件夹树、笔记列表等场景中使用。
+ * - 通过 `GNoteTreeController` 可以查询用户的文件夹和笔记树结构。
+ * - 主要用于前端展示用户的文件夹和笔记列表，支持按父文件夹 ID 进行查询。
+ * - 通常在用户界面中展示文件夹树、笔记列表等场景中使用。
  */
 package org.example.backend.user.noteTree.controller;
 
@@ -34,7 +34,7 @@ public class GNoteTreeController {
     }
 
     /**
-     * 查询 父级id 为parentID 的文件夹列表
+     * 查询 父级id 为parentID 的文件树列表
      *
      * @param parentId 父级id 为空证明 是父级文件夹
      * @return
@@ -55,16 +55,16 @@ public class GNoteTreeController {
         );
     }
 
-    @GetMapping("/note")
-    public ResponseEntity<Object> getNotes(@RequestParam(required = false) Long folderId){
-        long id = (long) StpKit.USER.getSession().get("id");
-        List<NoteFolderDto> folder = gNoteTreeService.getFolderList(id, folderId);
+    @GetMapping("/folderIdByNoteId")
+    public ResponseEntity<Object> getFolderIdByNoteId(@RequestParam Long noteId) {
 
-        return ResponseEntity.ok(new ApiResponse.Builder<List<NoteFolderDto>>() // 指定泛型
+        Long folderId = gNoteTreeService.getFolderIdByNoteId(noteId);
+
+        return ResponseEntity.ok(new ApiResponse.Builder<>()
                 .status(200)
                 .message("查询成功")
-                .data(folder)
+                .data(folderId)
                 .build());
-        }
     }
+}
 

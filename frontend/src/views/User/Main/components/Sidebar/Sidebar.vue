@@ -1,18 +1,10 @@
 <script setup lang="ts">
-
 import Button from 'primevue/button';
 import NoteTree from "./noteTree.vue";
-import {ref} from "vue";
 
-// 控制 noteTree 显示
-const noteTreeVisible = ref(true)
 
 const addUserVisible = defineModel()
 
-import {
-  CirclePlusFilled,
-  Plus,
-} from '@element-plus/icons-vue'
 
 </script>
 
@@ -89,39 +81,11 @@ import {
       </div>
     </div>
     <el-divider style="margin: 4px"/>
-    <!--     笔记 控制按钮    -->
-    <div class="sidebar-div" style="margin-bottom: 1px;">
-      <div style="display: flex; justify-content: center; align-items: center; width: 50px"
-      >
-        <el-text size="small">笔记</el-text>
-      </div>
-      <!--  隔断  -->
-      <div style="flex: 1"></div>
-      <div>
-        <Button class="sidebar-button" text icon="pi pi-ellipsis-h" size="small" severity="secondary"/>
-      </div>
-      <div>
-
-        <el-dropdown trigger="click" size="small">
-        <span class="el-dropdown-link">
-          <Button class="sidebar-button" text icon="pi pi-plus" size="small" severity="secondary"/>
-        </span>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item :icon="Plus">新建文档</el-dropdown-item>
-              <el-dropdown-item :icon="CirclePlusFilled">新建文件夹</el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
-
-      </div>
-    </div>
 
     <!--  笔记文件树  -->
-    <note-tree style="margin-bottom: 16px;"/>
+    <note-tree/>
 
-
-    <el-divider style="margin: 4px"/>
+    <el-divider style="margin: 16px 4px 4px;"/>
 
     <!--    工具类    -->
 

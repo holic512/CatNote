@@ -9,70 +9,48 @@
  */
 package org.example.backend.user.noteTree.service.impl;
 
-import jakarta.transaction.Transactional;
 import org.example.backend.common.entity.FolderInfo;
 import org.example.backend.common.entity.NoteInfo;
-import org.example.backend.user.noteTree.pojo.NoteFolderDto;
-import org.example.backend.user.noteTree.pojo.NoteTreeDto;
+import org.example.backend.common.enums.note.NoteType;
 import org.example.backend.user.noteTree.repository.NTFolderRep;
 import org.example.backend.user.noteTree.repository.NTNoteRep;
 import org.example.backend.user.noteTree.service.PNoteTreeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-
 @Service
 public class PNoteTreeServiceImpl implements PNoteTreeService {
 
-    @Autowired
-    private NTNoteRep ntNoteRep;
+
+    private final NTNoteRep ntNoteRep;
+    private final NTFolderRep ntFolderRep;
 
     @Autowired
-    private NTFolderRep ntFolderRep;
-
-    /**
-     * 添加笔记
-     * @param noteTreeDto 添加的笔记对象
-     */
-    @Transactional
-    @Override
-    public NoteInfo addNote(NoteTreeDto noteTreeDto) {
-
-        NoteInfo noteInfo = new NoteInfo();
-        noteInfo.setId(noteTreeDto.getId());
-        noteInfo.setUserId(noteTreeDto.getUserId());
-        noteInfo.setFolderId(noteTreeDto.getFolderId());
-        noteInfo.setNoteTitle(noteTreeDto.getNoteTitle());
-        noteInfo.setNoteSummary(noteTreeDto.getSummary());
-        noteInfo.setNotePassword(noteTreeDto.getNotePassword());
-        noteInfo.setNoteType(noteTreeDto.getNoteType());
-        noteInfo.setCreatedAt(LocalDateTime.now());
-        noteInfo.setUpdatedAt(LocalDateTime.now());
-
-
-        return ntNoteRep.save(noteInfo);
+    PNoteTreeServiceImpl(NTNoteRep ntNoteRep, NTFolderRep ntFolderRep) {
+        this.ntNoteRep = ntNoteRep;
+        this.ntFolderRep = ntFolderRep;
     }
 
-    @Transactional
     @Override
-    public FolderInfo addFolder(NoteFolderDto noteFolderDto) {
+    public void addNote(Long parentId, Long UserId) {
+        // 处理数据
+        NoteInfo noteInfo = new NoteInfo();
+        noteInfo.setNoteTitle("新建笔记");
+        noteInfo.setNoteType(NoteType.Normal.getValue());
+        noteInfo.setFolderId(parentId);
+        noteInfo.setUserId(UserId);
+
+        ntNoteRep.save(noteInfo);
+    }
+
+    @Override
+    public void addFolder(Long parentId, Long UserId) {
 
         FolderInfo folderInfo = new FolderInfo();
-        folderInfo.setUserId(noteFolderDto.getUserId());
-        folderInfo.setFolderName(noteFolderDto.getFolderName());
-        folderInfo.setDescription(noteFolderDto.getDescription());
-        folderInfo.setDescription(noteFolderDto.getDescription());
-        folderInfo.setCreatedAt(LocalDateTime.now());
-        folderInfo.setUpdatedAt(LocalDateTime.now());
+        folderInfo.setFolderName("新建文件夹");
+        folderInfo.setParentId(parentId);
+        folderInfo.setUserId(UserId);
 
-        // 处理parentId，若为null则不设置
-        if(folderInfo.getParentId() == null) {
-            folderInfo.setParentId(noteFolderDto.getParentId());
-        }else{
-            folderInfo.setParentId(null);
-        }
-
-        return ntFolderRep.save(folderInfo);
+        ntFolderRep.save(folderInfo);
     }
 }

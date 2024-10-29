@@ -73,6 +73,7 @@ public class AdminAuthController {
         // service
         Pair<AuthServiceEnum, String> result = adminAuthService.verLogin(logID, code);
 
+        // 验证状态
         switch (result.a) {
             case Success -> {
                 return ResponseEntity.ok(new ApiResponse<>(200, "管理员登陆成功", result.b));

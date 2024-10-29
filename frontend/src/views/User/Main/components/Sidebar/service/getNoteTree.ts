@@ -1,7 +1,7 @@
 import axios from "../../../../../../axios";
 
 
-const getNoteTree = async (parentId: number) => {
+const getNoteTree = async (parentId: number | null) => {
     try {
         const response = await axios.get(
             "user/noteTree/noteTree",

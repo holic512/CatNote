@@ -1,5 +1,4 @@
 <script setup lang="ts">
-// 控制添加用户页面
 import SetSidebar from "@/views/User/Main/components/Setting/SetSidebar.vue";
 import UserInfo from "@/views/User/Main/components/Setting/UserInfo.vue";
 

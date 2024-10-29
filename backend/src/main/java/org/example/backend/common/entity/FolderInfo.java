@@ -1,13 +1,13 @@
 /**
  * File Name: FolderInfo.java
  * Description: 该类用于表示系统中的文件夹信息，包括文件夹的基本属性如名称、所属用户、父文件夹等。
- *              通过 JPA 实体映射，该类与数据库中的 `folder_info` 表相对应。
+ * 通过 JPA 实体映射，该类与数据库中的 `folder_info` 表相对应。
  * Author: holic512
  * Created Date: 2024-10-14
  * Version: 1.0
  * Usage:
- *      - 通过 `FolderInfo` 对象可以创建、查询、更新和删除文件夹信息。
- *      - 通常在用户管理文件夹结构时使用，例如在用户界面中展示文件夹树、允许用户创建新文件夹等。
+ * - 通过 `FolderInfo` 对象可以创建、查询、更新和删除文件夹信息。
+ * - 通常在用户管理文件夹结构时使用，例如在用户界面中展示文件夹树、允许用户创建新文件夹等。
  */
 package org.example.backend.common.entity;
 
@@ -42,4 +42,16 @@ public class FolderInfo {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt; // 信息更新时间
+
+    // 可以在实体类中添加 @PrePersist 和 @PreUpdate 方法来自动处理创建时间和更新时间
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }

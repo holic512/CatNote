@@ -1,13 +1,13 @@
 /**
  * File Name: NTFolderRep.java
  * Description: 该接口用于定义与文件夹信息相关的数据访问方法，主要通过 JPA 查询从数据库中获取文件夹信息。
- *              特别是用于构建笔记树结构中的文件夹节点。
+ * 特别是用于构建笔记树结构中的文件夹节点。
  * Author: holic512
  * Created Date: 2024-10-16
  * Version: 1.0
  * Usage:
- *      - 通过 `NTFolderRep` 接口可以查询用户的顶级文件夹和子文件夹信息。
- *      - 通常在服务层中使用这些方法来获取文件夹信息，并将其转换为 `NoteTreeDto` 对象，以便在前端展示笔记树结构。
+ * - 通过 `NTFolderRep` 接口可以查询用户的顶级文件夹和子文件夹信息。
+ * - 通常在服务层中使用这些方法来获取文件夹信息，并将其转换为 `NoteTreeDto` 对象，以便在前端展示笔记树结构。
  */
 package org.example.backend.user.noteTree.repository;
 
@@ -28,7 +28,15 @@ public interface NTFolderRep extends JpaRepository<FolderInfo, Long> {
      * @param userId 用户 ID
      * @return 顶级文件夹的列表，每个文件夹信息封装在 NoteTreeDto 对象中
      */
-    @Query("select new org.example.backend.user.noteTree.pojo.NoteTreeDto(f.id, f.folderName, false) " +
+    @Query("select new org.example.backend.user.noteTree.pojo.NoteTreeDto(f.id, f.folderName," +
+            " org.example.backend.user.noteTree.enums.TreeType.FOLDER," +
+
+            // 检测 文件夹是否有子文件夹,子笔记
+            "CASE WHEN EXISTS (SELECT 1 FROM FolderInfo fi WHERE fi.parentId = f.id) OR " +
+            "            EXISTS (SELECT 1 FROM NoteInfo ni WHERE ni.folderId = f.id) " +
+            "     THEN false ELSE true END) " +
+
+
             "FROM FolderInfo f " +
             "where f.userId = :userId and f.parentId IS NULL")
     List<NoteTreeDto> findTopLevelFoldersByUserId(@Param("userId") Long userId);
@@ -36,11 +44,18 @@ public interface NTFolderRep extends JpaRepository<FolderInfo, Long> {
     /**
      * 查询用户指定父文件夹下的所有子文件夹信息。
      *
-     * @param userId 用户 ID
+     * @param userId   用户 ID
      * @param parentId 父文件夹 ID
      * @return 子文件夹的列表，每个文件夹信息封装在 NoteTreeDto 对象中
      */
-    @Query("select new org.example.backend.user.noteTree.pojo.NoteTreeDto(f.id, f.folderName, false) " +
+    @Query("select new org.example.backend.user.noteTree.pojo.NoteTreeDto(f.id, f.folderName," +
+            "org.example.backend.user.noteTree.enums.TreeType.FOLDER, " +
+
+            // 检测 文件夹是否有子文件夹,子笔记
+            "CASE WHEN EXISTS (SELECT 1 FROM FolderInfo fi WHERE fi.parentId = f.id) OR " +
+            "            EXISTS (SELECT 1 FROM NoteInfo ni WHERE ni.folderId = f.id) " +
+            "     THEN false ELSE true END) " +
+
             "FROM FolderInfo f " +
             "where f.userId = :userId and f.parentId = :parentId")
     List<NoteTreeDto> findSubFoldersByUserIdAndParentId(@Param("userId") Long userId, @Param("parentId") Long parentId);

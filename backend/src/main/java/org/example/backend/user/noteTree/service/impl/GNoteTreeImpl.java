@@ -5,9 +5,9 @@
  * Created Date: 2024-10-16
  * Version: 1.0
  * Usage:
- *      - 通过 `GNoteTreeImpl` 类可以查询用户的文件夹和笔记信息。
- *      - 通常在控制器层中调用 `getNoteTreeList` 方法，获取文件夹和笔记的层级结构，并返回给前端进行展示。
- *      - 前端可以根据返回的 `NoteTreeDto` 列表构建和展示笔记树结构。
+ * - 通过 `GNoteTreeImpl` 类可以查询用户的文件夹和笔记信息。
+ * - 通常在控制器层中调用 `getNoteTreeList` 方法，获取文件夹和笔记的层级结构，并返回给前端进行展示。
+ * - 前端可以根据返回的 `NoteTreeDto` 列表构建和展示笔记树结构。
  */
 package org.example.backend.user.noteTree.service.impl;
 
@@ -32,13 +32,11 @@ public class GNoteTreeImpl implements GNoteTreeService {
     GNoteTreeImpl(NTFolderRep ntFolderRep, NTNoteRep ntNoteRep) {
         this.folderRep = ntFolderRep;
         this.noteRep = ntNoteRep;
-
     }
 
 
     @Override
     public List<NoteTreeDto> getNoteTreeList(long userId, Long parentId) {
-
 
         // 根据 此id 和 此父文件夹id 的 文件夹列表 笔记列表
         List<NoteTreeDto> folderList;
@@ -61,7 +59,7 @@ public class GNoteTreeImpl implements GNoteTreeService {
     }
 
     @Override
-    public List<NoteFolderDto> getFolderList(long id, Long folderId) {
-        return folderRep.findFolderByUserIdAndFolderId(id, folderId);
+    public Long getFolderIdByNoteId(long NoteId) {
+        return noteRep.findFolderIdById(NoteId);
     }
 }

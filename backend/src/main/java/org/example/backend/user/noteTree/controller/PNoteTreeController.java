@@ -13,6 +13,7 @@ import org.apache.coyote.Response;
 import org.example.backend.common.entity.FolderInfo;
 import org.example.backend.common.entity.NoteInfo;
 import org.example.backend.common.response.ApiResponse;
+import org.example.backend.common.util.StpKit;
 import org.example.backend.user.noteTree.pojo.NoteFolderDto;
 import org.example.backend.user.noteTree.pojo.NoteTreeDto;
 import org.example.backend.user.noteTree.service.GNoteTreeService;
@@ -24,33 +25,67 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/user/noteTree")
 public class PNoteTreeController {
 
-    @Autowired
-    private PNoteTreeService pNoteTreeService;
 
+    private final PNoteTreeService pNoteTreeService;
+
+    @Autowired
+    public PNoteTreeController(PNoteTreeService pNoteTreeService) {
+        this.pNoteTreeService = pNoteTreeService;
+    }
 
     @PostMapping("/note")
-    public ResponseEntity<ApiResponse<NoteInfo>> addNotes(@RequestBody NoteTreeDto noteTreeDto) {
-        NoteInfo addNote = pNoteTreeService.addNote(noteTreeDto);
+    public ResponseEntity<Object> addNotes(@RequestBody Map<String, String> requestBody) {
 
-        return ResponseEntity.ok(new ApiResponse.Builder<NoteInfo>()
+        // 获取前端传来的文件夹ID
+        String folderIdStr = requestBody.get("FolderId");
+
+        // 验证文件夹ID是否为null或空
+        if (folderIdStr == null || folderIdStr.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("FolderId cannot be null or empty");
+        }
+
+        Long folderId = Long.parseLong(folderIdStr);
+
+        // 获取user id
+        long id = (long) StpKit.USER.getSession().get("id");
+
+        // 执行服务层
+        pNoteTreeService.addNote(folderId, id);
+
+        return ResponseEntity.ok(new ApiResponse.Builder<>()
                 .status(200)
                 .message("添加笔记成功")
-                .data(addNote)
                 .build());
     }
 
     @PostMapping("/folder")
-    public ResponseEntity<ApiResponse<FolderInfo>> addFolder(@RequestBody NoteFolderDto noteFolderDto) {
-        FolderInfo folder = pNoteTreeService.addFolder(noteFolderDto);
+    public ResponseEntity<Object> addFolder(@RequestBody Map<String, String> requestBody) {
 
-        return ResponseEntity.ok(new ApiResponse.Builder<FolderInfo>()
+        // 获取前端传来的文件夹ID
+        String folderIdStr = requestBody.get("FolderId");
+
+        // 验证文件夹ID是否为null或空
+        if (folderIdStr == null || folderIdStr.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("FolderId cannot be null or empty");
+        }
+
+        Long folderId = Long.parseLong(folderIdStr);
+
+        // 获取user id
+        long id = (long) StpKit.USER.getSession().get("id");
+
+        // 执行服务层
+        pNoteTreeService.addFolder(folderId, id);
+
+        return ResponseEntity.ok(new ApiResponse.Builder<>()
                 .status(200)
                 .message("添加文件夹成功")
-                .data(folder)
                 .build());
     }
 }
