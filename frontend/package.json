@@ -11,6 +11,9 @@
   "dependencies": {
     "@imengyu/vue3-context-menu": "^1.4.3",
     "@primevue/themes": "^4.0.5",
+    "@tiptap/pm": "^2.9.1",
+    "@tiptap/starter-kit": "^2.9.1",
+    "@tiptap/vue-3": "^2.9.1",
     "axios": "^1.7.3",
     "element-plus": "^2.8.0",
     "pinia": "^2.2.2",

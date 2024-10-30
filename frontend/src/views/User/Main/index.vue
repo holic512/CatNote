@@ -6,6 +6,7 @@ import {ref, onMounted, onBeforeUnmount} from 'vue';
 
 // 控制设置窗 弹出与关闭
 import Setting from "./components/Setting/index.vue"
+import Edit from "./components/Edit/index.vue";
 
 const SettingVisible = ref<boolean>(false);
 
@@ -22,6 +23,9 @@ const isDragging = ref(false);
 
 // 左侧面板的宽度
 const panel1Width = ref(250);
+
+// 右侧面板的宽度
+const panel2Width = ref(window.innerWidth - panel1Width.value - 2);
 
 // 记录是否锁定 Tooltip 位置
 const positionLocked = ref(false);
@@ -52,7 +56,12 @@ const onMouseMove = (event: MouseEvent) => {
   if (isDragging.value) {
     const newWidth = panel1Width.value + (event.pageX - fixedMouseX.value);
     if (newWidth >= 250 && newWidth <= 400) {
+      // 更新panel1位置
       panel1Width.value = newWidth;
+
+      // 更新 panel2位置
+      panel2Width.value = window.innerWidth - panel1Width.value - 2; // 减去分割线宽度
+
       fixedMouseX.value = event.pageX; // 更新鼠标位置
     }
   }
@@ -65,16 +74,25 @@ const onMouseUp = () => {
   document.body.style.cursor = 'default'; // 恢复光标样式
 };
 
+// 窗口大小变化时重新计算面板宽度
+const onWindowResize = () => {
+  panel2Width.value = window.innerWidth - panel1Width.value - 2; // 减去分割线宽度
+};
+
 // 绑定和移除事件监听
 onMounted(() => {
   window.addEventListener('mousemove', onMouseMove);
   window.addEventListener('mouseup', onMouseUp);
+  window.addEventListener('resize', onWindowResize);
 });
 
 onBeforeUnmount(() => {
   window.removeEventListener('mousemove', onMouseMove);
   window.removeEventListener('mouseup', onMouseUp);
+  window.removeEventListener('resize', onWindowResize);
 });
+
+
 </script>
 
 <template>
@@ -96,8 +114,8 @@ onBeforeUnmount(() => {
     ></div>
 
     <!-- 右侧面板 -->
-    <div class="panel2">
-      <div style="height: 100vh; background-color: #fff;">Panel 2</div>
+    <div class="panel2" :style="{ width: panel2Width + 'px' }">
+      <edit/>
     </div>
 
     <!-- Tooltip，位置锁定在鼠标初次进入的位置 -->
