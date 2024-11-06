@@ -1,0 +1,10 @@
+@font-face {
+    font-family: 'alibabaFy';
+    src:
+    url('NotoSansSC-VariableFont_wght.ttf') format('truetype');
+
+    font-weight: normal; /* 字体粗细 */
+    font-style: normal; /* 字体样式 */
+    font-display: swap;
+
+}
