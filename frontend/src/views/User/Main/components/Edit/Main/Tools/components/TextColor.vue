@@ -180,7 +180,7 @@ const setHighlightColor = (color: string) => {
 .button-div {
   display: flex;
   align-items: center;
-  padding: 6px;
+  padding: 5px;
   border-radius: 6px;
 }
 

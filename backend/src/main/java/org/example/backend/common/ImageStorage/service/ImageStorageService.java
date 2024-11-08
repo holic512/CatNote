@@ -13,31 +13,31 @@ public interface ImageStorageService {
     /**
      * 保存图片
      *
-     * @param id    图片的唯一标识符
-     * @param image 图片的字节数组
+     * @param imageName 图片的唯一标识符 带类型 类似于 image.jpg
+     * @param image     图片的字节数组
      */
-    public void saveImage(String id, byte[] image);
+    public void saveImage(String imageName, byte[] image);
 
     /**
      * 删除图片
      *
-     * @param id 图片的唯一标识符
+     * @param imageName 图片的唯一标识符
      */
-    public void deleteImage(String id);
+    public void deleteImage(String imageName);
 
     /**
      * 获取图片
      *
-     * @param id 图片的唯一标识符
+     * @param imageName 图片的唯一标识符
      * @return 图片的字节数组
      */
-    public byte[] getImage(String id);
+    public byte[] getImage(String imageName);
 
     /**
      * 获取图片的 URL
      *
-     * @param id 图片的唯一标识符
+     * @param imageName 图片的唯一标识符
      * @return 图片的访问 URL 字符串
      */
-    public String getImageUrl(String id);
+    public String getImageUrl(String imageName);
 }

@@ -11,9 +11,13 @@
   "dependencies": {
     "@imengyu/vue3-context-menu": "^1.4.3",
     "@primevue/themes": "^4.0.5",
+    "@tiptap-pro/extension-drag-handle": "^2.13.0",
+    "@tiptap-pro/extension-file-handler": "^2.13.0",
     "@tiptap-pro/extension-table-of-contents": "^2.13.0",
     "@tiptap/extension-color": "^2.9.1",
     "@tiptap/extension-highlight": "^2.9.1",
+    "@tiptap/extension-image": "^2.9.1",
+    "@tiptap/extension-placeholder": "^2.9.1",
     "@tiptap/extension-text-style": "^2.9.1",
     "@tiptap/extension-underline": "^2.9.1",
     "@tiptap/pm": "^2.9.1",
@@ -32,6 +36,9 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.1.2",
+    "sass": "^1.80.6",
+    "sass-embedded": "^1.80.6",
+    "sass-loader": "^16.0.3",
     "typescript": "^5.5.3",
     "vite": "^5.4.0",
     "vue-tsc": "^2.0.29"

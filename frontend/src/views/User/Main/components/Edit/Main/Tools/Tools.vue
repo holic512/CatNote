@@ -6,7 +6,7 @@ import Underline from "./components/Underline.vue";
 import Strikethrough from "./components/Strikethrough.vue";
 import UnorderedList from "./components/UnorderedList.vue";
 import OrderedList from "./components/OrderedList.vue";
-import PlusMore from "./components/PlusMore.vue";
+import PlusMore from "./Plus/PlusMore.vue";
 import Undo from "./components/Undo.vue";
 import Redo from "./components/Redo.vue";
 import HighlightText from "./components/TextColor.vue";
@@ -25,11 +25,14 @@ const editor = defineModel()
     <!--  重做  -->
     <Redo v-model="editor"/>
 
-    <!--   插入   -->
-    <PlusMore/>
 
     <el-divider direction="vertical"/>
 
+    <!--   插入   -->
+    <PlusMore v-model="editor"/>
+
+
+    <el-divider direction="vertical"/>
     <!--    加粗文本    -->
     <BoldText v-model="editor"/>
 

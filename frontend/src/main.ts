@@ -84,7 +84,6 @@ const Noir = definePreset(Aura, {
     }
 });
 
-
 app.use(PrimeVue, {
     // Default theme configuration
     theme: {
@@ -92,7 +91,7 @@ app.use(PrimeVue, {
     }
 });
 
-// 配置 vue3-context-menu
+// 配置 vue3-context-menu 右键菜单
 import '@imengyu/vue3-context-menu/lib/vue3-context-menu.css'
 import ContextMenu from '@imengyu/vue3-context-menu'
 

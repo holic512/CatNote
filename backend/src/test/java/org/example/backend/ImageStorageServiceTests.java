@@ -14,6 +14,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.file.Paths;
+
 @SpringBootTest
 public class ImageStorageServiceTests {
 
@@ -25,13 +31,30 @@ public class ImageStorageServiceTests {
     }
 
     @Test
-    void contextLoads() {
+    void contextLoads() throws IOException {
+        // 保存图片
+        String imagePath = "C:\\Users\\holic\\Desktop\\13034c2f48035a9ad529a5c4ad008949.jpg";
+        byte[] imageBytes = convertImageToBinary(imagePath);
+        imageStorageService.saveImage("ceshi", imageBytes);
+
         // 测试读取图片 URL
         String imageUrl = imageStorageService.getImageUrl("ceshi.png");
         System.out.println("Image URL: " + imageUrl);
 
-        // 可以根据需要添加断言，确保返回的URL是有效的
-        // Assert.notNull(imageUrl, "Image URL should not be null");
-        // Assert.isTrue(imageUrl.startsWith("http"), "Image URL should start with http");
+    }
+
+    public static byte[] convertImageToBinary(String imagePath) throws IOException {
+        File file = new File(imagePath);
+        try (FileInputStream fis = new FileInputStream(file);
+             ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
+
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = fis.read(buffer)) != -1) {
+                bos.write(buffer, 0, bytesRead);
+            }
+
+            return bos.toByteArray();
+        }
     }
 }

@@ -1,11 +1,13 @@
 <template>
   <div>
+    <el-button @click="console.log(editor.getJSON())">模拟保存</el-button>
     <!-- 如果没有目录项，则显示空状态 -->
     <div class="empty-state" v-if="items.length === 0">
       <p>开始编辑文档以查看大纲。</p>
     </div>
 
     <div v-else>
+
       <!-- 遍历并渲染目录项 -->
       <div
           v-for="(item, i) in items"
