@@ -6,7 +6,6 @@ import {ref, onMounted, onBeforeUnmount} from 'vue';
 
 // 控制设置窗 弹出与关闭
 import Setting from "./components/Setting/index.vue"
-import Edit from "./components/Edit/index.vue";
 
 const SettingVisible = ref<boolean>(false);
 
@@ -115,7 +114,7 @@ onBeforeUnmount(() => {
 
     <!-- 右侧面板 -->
     <div class="panel2" :style="{ width: panel2Width + 'px' }">
-      <edit/>
+      <router-view/>
     </div>
 
     <!-- Tooltip，位置锁定在鼠标初次进入的位置 -->

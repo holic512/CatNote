@@ -1,6 +1,6 @@
 import {Tree} from "./treeInterface.ts";
 import {getFolderIdByNoteId} from "./GetFolderIdByNoteId.ts";
-import axios from "../../../../../../axios";
+import axios from "../../../../../../../axios";
 
 const AddFolder = async (data: Tree) => {
     // 获取 新建笔记的位置

@@ -4,11 +4,17 @@ import type Node from 'element-plus/es/components/tree/src/model/node'
 import Button from 'primevue/button';
 import {getNoteTree} from "./service/getNoteTree.ts";
 import {Tree} from "./service/treeInterface.ts";
-import {AddNote} from "@/views/User/Main/components/Sidebar/service/AddNote.ts";
+import {AddNote} from "@/views/User/Main/components/Sidebar/NoteTree/service/AddNote.js";
 import {ElMessage} from "element-plus";
-import {getFolderIdByNoteId} from "@/views/User/Main/components/Sidebar/service/GetFolderIdByNoteId.ts";
+import {getFolderIdByNoteId} from "@/views/User/Main/components/Sidebar/NoteTree/service/GetFolderIdByNoteId.js";
 import {CirclePlusFilled, Plus} from "@element-plus/icons-vue";
-import {AddFolder} from "@/views/User/Main/components/Sidebar/service/AddFolder.ts";
+import {AddFolder} from "@/views/User/Main/components/Sidebar/NoteTree/service/AddFolder.js";
+import {useCurrentNoteInfoStore} from "@/views/User/Main/components/Edit/Pinia/currentNoteInfo.ts";
+import {getNoteInfo} from "@/views/User/Main/components/Sidebar/NoteTree/service/GetNoteInfo.ts";
+import {useRouter} from "vue-router";
+
+// 获取 router 实例
+const router = useRouter();
 
 const props = {
   label: 'label',
@@ -31,8 +37,16 @@ const loadNode = async (node: Node, resolve: (data: Tree[]) => void) => {
 const clickData = ref<Tree>();
 
 // 点击选项的 data
-const handleNodeClick = (data: Tree) => {
+const handleNodeClick = (data: Tree, node: Node) => {
+  // 存储点击信息 用于处理添加操作
   clickData.value = data
+
+  // 当目标是笔记时 获取笔记信息 并 跳转到笔记路由 - 异步
+  if (data.type == 'NOTE') {
+    getNoteInfo(node);
+    router.push('/user/main/edit')
+  }
+
 }
 
 const {proxy} = getCurrentInstance();
@@ -48,6 +62,7 @@ const proxyAddNote = async () => {
     node.expand();
   }
 }
+
 // 代理 添加文件夹操作
 const proxyAddFolder = async () => {
   const status = await AddFolder(clickData.value);

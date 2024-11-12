@@ -3,7 +3,7 @@
 // 主要支持图片类型文件的插入。
 
 // 定义配置
-import {saveCompressedNoteImage} from "../Service/saveCompressedNoteImage.ts";
+import {saveCompressedNoteImage} from "../Main/Service/saveCompressedNoteImage.ts";
 
 const fileHandlerConfig = {
 

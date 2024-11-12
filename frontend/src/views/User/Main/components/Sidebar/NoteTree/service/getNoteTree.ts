@@ -1,4 +1,4 @@
-import axios from "../../../../../../axios";
+import axios from "../../../../../../../axios";
 
 
 const getNoteTree = async (parentId: number | null) => {

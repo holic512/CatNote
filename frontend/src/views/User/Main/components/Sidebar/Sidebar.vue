@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import Button from 'primevue/button';
-import NoteTree from "./noteTree.vue";
+import NoteTree from "./NoteTree/noteTree.vue";
+import {useRouter} from "vue-router";
 
+// 控制用户设置 显示
+const UserSettingVisible = defineModel()
 
-const addUserVisible = defineModel()
+// 获取路由实例
+const router = useRouter();
 
 
 </script>
@@ -43,7 +47,7 @@ const addUserVisible = defineModel()
 
 
     <!--    工具栏   -->
-    <div class="sidebar-div" style="margin-bottom: 1px;">
+    <div class="sidebar-div" style="margin-bottom: 1px;" @click="router.push('home')">
       <div class="sidebar-icon">
         <i class="pi pi-home" style="font-size: 1rem;color: #708090"/>
       </div>
@@ -90,7 +94,7 @@ const addUserVisible = defineModel()
     <!--    工具类    -->
 
     <!--  账号  -->
-    <div class="sidebar-div" style="margin-bottom: 1px;" @click="addUserVisible = true ">
+    <div class="sidebar-div" style="margin-bottom: 1px;" @click="UserSettingVisible = true ">
       <div class="sidebar-icon">
         <i class="pi pi-user" style="font-size: 1rem;color: #708090"/>
       </div>
@@ -100,7 +104,7 @@ const addUserVisible = defineModel()
     </div>
 
     <!--  设置  -->
-    <div class="sidebar-div" style="margin-bottom: 1px;" @click="addUserVisible = true ">
+    <div class="sidebar-div" style="margin-bottom: 1px;" @click="UserSettingVisible = true ">
       <div class="sidebar-icon">
         <i class="pi pi-cog" style="font-size: 1rem;color: #708090"/>
       </div>

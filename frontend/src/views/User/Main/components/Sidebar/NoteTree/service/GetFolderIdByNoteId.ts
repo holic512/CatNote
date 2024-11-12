@@ -1,6 +1,6 @@
 // 获取 此 data的类型 并溯源到 目录文件夹
 import {Tree} from "./treeInterface.ts";
-import axios from "../../../../../../axios";
+import axios from "../../../../../../../axios";
 
 const getFolderIdByNoteId = async (data: Tree) => {
     // 当为空的时候 直接返回 null

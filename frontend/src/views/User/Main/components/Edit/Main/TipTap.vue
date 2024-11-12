@@ -4,114 +4,17 @@ import '/src/fonts/alibabaFy.css'
 import Tools from "./Tools/Tools.vue";
 import ToCItem from "./ToCltem/ToCItem.vue";
 
+import {Editor, EditorContent} from '@tiptap/vue-3'
+import {ShallowRef} from "vue";
 
-import StarterKit from '@tiptap/starter-kit'
-import {BubbleMenu, EditorContent, useEditor} from '@tiptap/vue-3'
-import DragHandle from '@tiptap-pro/extension-drag-handle'
-import NodeRange from '@tiptap-pro/extension-node-range'
-import {onBeforeUnmount, ref} from "vue";
-import Underline from '@tiptap/extension-underline'
-import {getHierarchicalIndexes, TableOfContents} from "@tiptap-pro/extension-table-of-contents";
-import TextStyle from '@tiptap/extension-text-style'
-import {Color} from "@tiptap/extension-color";
-import Highlight from '@tiptap/extension-highlight'
-import Placeholder from '@tiptap/extension-placeholder'
-import Image from '@tiptap/extension-image'
-import FileHandler from '@tiptap-pro/extension-file-handler'
-import fileHandlerConfig from "./Config/FileHandler.ts";
+const editor: ShallowRef<Editor | undefined> = defineModel()
 
-const editor = useEditor({
-  extensions: [
-
-    StarterKit,
-
-    // 启用下划线扩展
-    Underline,
-
-    // 文本样式
-    TextStyle,
-
-    Placeholder.configure({
-      placeholder: '创造你的无限可能',
-    }),
-
-    // 颜色
-    Color,
-
-    // 高亮
-    Highlight.configure({
-      multicolor: true,
-    }),
-
-    // 目录
-    TableOfContents.configure({
-      getIndex: getHierarchicalIndexes,
-      onUpdate(content) {
-        // 在这里更新目录项
-        items.value = content;
-      },
-    }),
-
-    // 图片
-    Image,
-
-    // 推拽 粘贴
-    FileHandler.configure(fileHandlerConfig),
-
-    // node
-    NodeRange.configure({
-      // allow to select only on depth 0
-      // depth: 0,
-      key: null,
-    }),
-
-    // 拖拽区块
-    DragHandle.configure({
-      render() {
-        const element = document.createElement('div')
-
-        element.classList.add('custom-drag-handle')
-
-        return element
-      },
-    }),
-  ],
-
-  content: "",
-
-// 监听粘贴事件
-  onPaste: (e, slice) => {
-    // 获取剪贴板中的纯文本内容
-    const text = slice.content.textBetween(0, slice.content.size, '\n', '\n')
-
-    // 通过正则去掉文本中的 HTML 标签
-    const cleanText = text.replace(/<\/?[^>]+(>|$)/g, "") // 去除所有HTML标签
-
-    // 用纯文本替换当前选区
-    const tr = editor.value?.view.state.tr.replaceSelectionWith(
-        editor.value?.view.state.schema.text(cleanText) // 用清除样式的文本替换
-    )
-
-    editor.value?.view.dispatch(tr)
-
-    // 如果希望取消默认的粘贴行为（即不插入原样内容）
-    e.preventDefault()
-  },
-
-})
-
-// 销毁编辑器实例
-onBeforeUnmount(() => {
-  editor.value?.destroy()
-})
 
 // 焦点恢复到编译器
 const focusOnParagraph = () => {
   editor.value?.commands.focus(); // 将焦点设置到编辑器
 }
 
-// 定义目录项
-const items = ref([]);
 
 </script>
 
@@ -119,23 +22,23 @@ const items = ref([]);
   <!--编辑器 工具-->
   <Tools v-model="editor"/>
 
-  <bubble-menu
-      :editor="editor"
-      :tippy-options="{ duration: 100 }"
-      v-if="editor"
-  >
-    <div class="bubble-menu">
-      <button @click="editor.chain().focus().toggleBold().run()" :class="{ 'is-active': editor.isActive('bold') }">
-        Bold
-      </button>
-      <button @click="editor.chain().focus().toggleItalic().run()" :class="{ 'is-active': editor.isActive('italic') }">
-        Italic
-      </button>
-      <button @click="editor.chain().focus().toggleStrike().run()" :class="{ 'is-active': editor.isActive('strike') }">
-        Strike
-      </button>
-    </div>
-  </bubble-menu>
+  <!--  <bubble-menu-->
+  <!--      :editor="editor"-->
+  <!--      :tippy-options="{ duration: 100 }"-->
+  <!--      v-if="editor"-->
+  <!--  >-->
+  <!--    <div class="bubble-menu">-->
+  <!--      <button @click="editor.chain().focus().toggleBold().run()" :class="{ 'is-active': editor.isActive('bold') }">-->
+  <!--        Bold-->
+  <!--      </button>-->
+  <!--      <button @click="editor.chain().focus().toggleItalic().run()" :class="{ 'is-active': editor.isActive('italic') }">-->
+  <!--        Italic-->
+  <!--      </button>-->
+  <!--      <button @click="editor.chain().focus().toggleStrike().run()" :class="{ 'is-active': editor.isActive('strike') }">-->
+  <!--        Strike-->
+  <!--      </button>-->
+  <!--    </div>-->
+  <!--  </bubble-menu>-->
 
   <el-scrollbar style="height: calc(100% - 44px)" @click="focusOnParagraph">
     <div class="editor-content">
@@ -143,22 +46,22 @@ const items = ref([]);
     </div>
   </el-scrollbar>
 
-  <div style="position: absolute; right: 18px; top: 164px; text-align: right;">
-    <el-popover
-        placement="left"
-        title="目录"
-        :width="250"
-        trigger="hover"
-    >
-      <template #reference>
-        <el-button class="m-2">H</el-button>
-      </template>
+<!--  <div style="position: absolute; right: 18px; top: 164px; text-align: right;">-->
+<!--    <el-popover-->
+<!--        placement="left"-->
+<!--        title="目录"-->
+<!--        :width="250"-->
+<!--        trigger="hover"-->
+<!--    >-->
+<!--      <template #reference>-->
+<!--        <el-button class="m-2">H</el-button>-->
+<!--      </template>-->
 
-      <template #default>
-        <ToCItem v-if="editor" :editor="editor" :items="items"/>
-      </template>
-    </el-popover>
-  </div>
+<!--      <template #default>-->
+<!--        <ToCItem v-if="editor" :editor="editor" :items="items"/>-->
+<!--      </template>-->
+<!--    </el-popover>-->
+<!--  </div>-->
 
 
 </template>
@@ -221,7 +124,8 @@ const items = ref([]);
     font-size: 23px; /* 设置字体大小 */
     margin-bottom: 8px;
   }
-  img{
+
+  img {
     max-width: 100%;
   }
 }

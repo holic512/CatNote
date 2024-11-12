@@ -2,20 +2,20 @@ export default [
     {
         path: '/user',
         component: () => import('./index.vue'),
-        meta: { requiresAuth: true },
+        meta: {requiresAuth: true},
         children: [
             // 默认页面 - 授权页面
             {
                 path: '',
                 name: 'user-home',
-                meta: { requiresAuth: false },
+                meta: {requiresAuth: false},
                 component: () => import('./Auth/login/login.vue'),
             },
             // 授权页面
             {
                 path: 'auth',
                 name: 'user-auth',
-                meta: { requiresAuth: false },
+                meta: {requiresAuth: false},
                 component: () => import("./Auth/index.vue"),
                 children: [
                     {
@@ -44,9 +44,25 @@ export default [
             {
                 path: 'main',
                 name: 'user-main',
-                meta: { requiresAuth: true },
+                meta: {requiresAuth: true},
                 component: () => import("./Main/index.vue"),
-                children: [],
+                children: [
+                    {
+                        path: '',
+                        name: 'user-main-home',
+                        component: () => import('./Main/components/Home/index.vue'),
+                    },
+                    {
+                        path: 'home',
+                        name: 'user-home',
+                        component: () => import('./Main/components/Home/index.vue'),
+                    },
+                    {
+                        path: 'edit',
+                        name: 'user-edit',
+                        component: () => import('./Main/components/Edit/index.vue'),
+                    },
+                ],
             },
         ]
     }

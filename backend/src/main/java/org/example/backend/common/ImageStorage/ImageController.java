@@ -1,12 +1,14 @@
 /**
- * File Name: ImageController.java
- * Description: Todo
- * Author: holic512
- * Created Date: 2024-11-08
- * Version: 1.0
- * Usage:
- * Todo
+ * 文件名: ImageController.java
+ * 描述: 处理图片存储和检索请求的控制器。
+ * 作者: holic512
+ * 创建日期: 2024-11-08
+ * 版本: 1.0
+ * 用法: 该控制器用于检索存储在指定目录中的图片。
+ * 它暴露了一个端点 `/images/{id}`，通过图片的 ID（即文件名）来检索图片。
+ * 图片作为响应返回，并设置了适当的内容类型。
  */
+
 package org.example.backend.common.ImageStorage;
 
 import org.springframework.beans.factory.annotation.Value;

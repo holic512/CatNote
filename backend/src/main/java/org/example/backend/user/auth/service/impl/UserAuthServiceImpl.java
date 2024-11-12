@@ -93,9 +93,8 @@ public class UserAuthServiceImpl implements UserAuthService {
         // 在session中插入id
         SaSession session = StpKit.USER.getSession();
         session.set("id", user.getId());
+
         return new Pair<>(AuthServiceEnum.Success, StpKit.USER.getTokenValue());
-
-
     }
 
     @Override
