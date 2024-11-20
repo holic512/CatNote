@@ -33,6 +33,7 @@ public class PNoteTreeController {
         this.pNoteTreeService = pNoteTreeService;
     }
 
+    // 新建 笔记
     @PostMapping("/note")
     public ResponseEntity<Object> addNotes(@RequestBody Map<String, String> requestBody) {
 
@@ -58,6 +59,7 @@ public class PNoteTreeController {
                 .build());
     }
 
+    // 新建文件夹
     @PostMapping("/folder")
     public ResponseEntity<Object> addFolder(@RequestBody Map<String, String> requestBody) {
 
@@ -82,4 +84,5 @@ public class PNoteTreeController {
                 .message("添加文件夹成功")
                 .build());
     }
+
 }

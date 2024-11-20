@@ -96,27 +96,27 @@ const focusOnParagraph = () => {
   font-size: 20px; /* 设置字体大小 */
 
   h1 {
-    font-size: 38px; /* 设置字体大小 */
+    font-size: 33px; /* 设置字体大小 */
     margin-bottom: 8px;
   }
 
   h2 {
-    font-size: 35px; /* 设置字体大小 */
+    font-size: 31px; /* 设置字体大小 */
     margin-bottom: 8px;
   }
 
   h3 {
-    font-size: 32px; /* 设置字体大小 */
-    margin-bottom: 8px;
-  }
-
-  h4 {
     font-size: 29px; /* 设置字体大小 */
     margin-bottom: 8px;
   }
 
+  h4 {
+    font-size: 27px; /* 设置字体大小 */
+    margin-bottom: 8px;
+  }
+
   h5 {
-    font-size: 26px; /* 设置字体大小 */
+    font-size: 25px; /* 设置字体大小 */
     margin-bottom: 8px;
   }
 
@@ -144,7 +144,8 @@ const focusOnParagraph = () => {
   }
 
   > * {
-    //margin-left: 3rem; /* 设置直接子元素的左边距 */
+    margin-left: 1rem; /* 设置直接子元素的左边距 */
+    margin-right: 1rem; /* 设置直接子元素的右边距 */
   }
 
   .ProseMirror-widget * {

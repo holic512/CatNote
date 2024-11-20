@@ -96,6 +96,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="splitter-container">
+
     <!-- 左侧面板 -->
     <div class="panel1" :style="{ width: panel1Width + 'px' }">
       <div style="height: 100vh; background-color: #f7f7f5;">

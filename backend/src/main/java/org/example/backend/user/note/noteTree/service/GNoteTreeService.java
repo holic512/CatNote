@@ -17,15 +17,19 @@ import java.util.List;
 
 public interface GNoteTreeService {
 
-    /**
-     * 查询用户指定父文件夹下的文件夹和笔记信息。
-     *
-     * @param userId   用户 ID
-     * @param parentId 父文件夹 ID，如果为空则查询顶级文件夹
-     * @return 文件夹和笔记的列表，每个节点信息封装在 NoteTreeDto 对象中
-     */
-    List<NoteTreeDto> getNoteTreeList(long userId, Long parentId);
+    // /**
+    //  * 查询用户指定父文件夹下的文件夹和笔记信息。
+    //  *
+    //  * @param userId   用户 ID
+    //  * @param parentId 父文件夹 ID，如果为空则查询顶级文件夹
+    //  * @return 文件夹和笔记的列表，每个节点信息封装在 NoteTreeDto 对象中
+    //  */
+    // List<NoteTreeDto> getNoteTreeList(long userId, Long parentId);
 
 
+    // 根据 笔记文件夹 查询 父文件夹id
     Long getFolderIdByNoteId(long NoteId);
+
+    // 根据 用户id  查询 该用户的 完整笔记树
+    List<NoteTreeDto> getNoteTreeListByNoteId(long NoteId,long FolderId);
 }

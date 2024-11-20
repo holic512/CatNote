@@ -116,7 +116,7 @@ const blocks2 = [
                     @click="click1(block.label)"
                 >
                   <!-- 图标 -->
-                  <el-icon size="30" style="margin-right: 8px">
+                  <el-icon size="28" style="margin-right: 8px">
                     <component :is="block.icon"/>
                   </el-icon>
 
@@ -141,7 +141,7 @@ const blocks2 = [
                     class="button-div"
                 >
                   <!-- 图标 -->
-                  <el-icon size="30" style="margin-right: 8px">
+                  <el-icon size="28" style="margin-right: 8px">
                     <component :is="block.icon"/>
                   </el-icon>
 

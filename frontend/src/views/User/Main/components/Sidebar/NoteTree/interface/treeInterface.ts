@@ -2,5 +2,6 @@ export interface Tree {
     id: number;
     label: string;
     type: string;
-    leaf?: boolean;
+    children?: Tree[] | null;
+    avatar?: string;
 }

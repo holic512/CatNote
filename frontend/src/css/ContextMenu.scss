@@ -1,0 +1,205 @@
+:root {
+  /* 背景色 */
+  --mx-menu-bg: #fff;
+  --mx-menu-hover-bg: #f1f1f1;
+  --mx-menu-active-bg: #dfdfdf;
+  --mx-menu-divider: #f0f0f0;
+
+  /* 文字颜色 */
+  --mx-menu-text: rgb(115.2, 117.6, 122.4);
+  --mx-menu-hover-text: #2e2e2e;
+  --mx-menu-active-text: #2e2e2e;
+  --mx-menu-disabled-text: #c9c8c8;
+
+  /* 图标大小 */
+  --mx-menu-icon-size: 8px;
+
+  /* 阴影 */
+  --mx-menu-shadow: rgba(0, 0, 0, 0.1);
+  --mx-menu-radius: 8px;
+
+  /* 快捷键标签 */
+  --mx-menu-shortcut-bg: #ebebeb;
+  --mx-menu-shortcut-text: #424242;
+
+  /* 聚焦边框颜色 */
+  --mx-menu-focus-color: #0085f1;
+}
+
+/* 基本样式 */
+.mx-context-menu {
+  pointer-events: all;
+  display: inline-block;
+  position: absolute;
+  background-color: var(--mx-menu-bg);
+  border-radius: var(--mx-menu-radius);
+  box-shadow: 0 10px 40px 10px var(--mx-menu-shadow);
+  padding: 2px;
+  opacity: 1;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.mx-context-menu-items {
+  position: relative;
+}
+
+.mx-context-menu-updown {
+  pointer-events: all;
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 15px;
+  border-radius: 10px;
+  background-color: var(--mx-menu-bg);
+  user-select: none;
+  cursor: pointer;
+
+  &.disabled {
+    color: var(--mx-menu-disabled-text);
+    cursor: default;
+  }
+
+  &:hover:not(.disabled) {
+    background-color: var(--mx-menu-hover-bg);
+  }
+
+  &:active {
+    background-color: var(--mx-menu-active-bg);
+  }
+
+  .mx-right-arrow {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+/* 菜单项样式 */
+.mx-context-menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px;
+  color: var(--mx-menu-text);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  cursor: pointer;
+
+
+
+  &:hover {
+    background-color: var(--mx-menu-hover-bg);
+    color: var(--mx-menu-hover-text);
+  }
+
+  &:active {
+    background-color: var(--mx-menu-active-bg);
+    color: var(--mx-menu-active-text);
+  }
+
+  &.disabled {
+    color: var(--mx-menu-disabled-text);
+    cursor: not-allowed;
+
+    &:hover, &:active {
+      background-color: transparent;
+    }
+  }
+
+  .mx-shortcut {
+    background-color: var(--mx-menu-shortcut-bg);
+    color: var(--mx-menu-shortcut-text);
+    font-size: 11.5px;
+    padding: 2px 4px;
+
+  }
+
+  .mx-item-row {
+    display: flex;
+    align-items: center;
+  }
+
+  .mx-icon-placeholder {
+    display: flex;
+    align-items: center;
+  }
+
+  .icon {
+    font-size: var(--mx-menu-icon-size);
+  }
+
+  .label {
+    font-size: 14px;
+    padding-inline-end: 16px;
+    letter-spacing: 0.5px;
+  }
+}
+
+/* 分隔线 */
+.mx-context-menu-item-separator {
+  display: block;
+  background-color: var(--mx-menu-divider);
+  height: 1px;
+}
+
+/* 主题：暗色 */
+.mx-context-menu.dark {
+  --mx-menu-bg: #303031;
+  --mx-menu-hover-bg: #636363;
+  --mx-menu-active-bg: #555555;
+  --mx-menu-divider: #464646;
+  --mx-menu-text: #fff;
+  --mx-menu-hover-text: #fff;
+  --mx-menu-active-text: #fff;
+
+  .mx-context-menu-item {
+    padding: 6px 12px;
+  }
+}
+
+/* 主题：扁平化 */
+.mx-context-menu.flat {
+  border-radius: 0;
+  padding: 7px 0;
+  box-shadow: 0px 1px 2px 1px var(--mx-menu-shadow);
+
+  .mx-context-menu-item {
+    padding: 3px 12px;
+  }
+}
+
+/* 主题：Win10风格 */
+.mx-context-menu.win10 {
+  --mx-menu-bg: #eeeeee;
+  --mx-menu-hover-bg: #d8d8d8;
+  --mx-menu-active-bg: #dfdfdf;
+  --mx-menu-divider: #aaaaaa;
+
+  .mx-context-menu-item {
+    padding: 2px 4px;
+    margin: 0 4px;
+  }
+
+  .mx-context-menu-item-separator {
+    margin: 0 4px;
+  }
+}
+
+/* 主题：Mac风格 */
+.mx-context-menu.mac {
+  --mx-menu-bg: #ececec;
+  --mx-menu-hover-bg: #0165e1;
+  --mx-menu-active-bg: #0165e1;
+  --mx-menu-divider: #d2d2d2;
+  --mx-menu-text: #232323;
+  --mx-menu-hover-text: #fff;
+  --mx-menu-active-text: #fff;
+
+  .mx-context-menu-item {
+    border-radius: 5px;
+    padding: 3px 6px;
+  }
+
+  .mx-context-menu-item-separator {
+    margin: 0 12px;
+  }
+}

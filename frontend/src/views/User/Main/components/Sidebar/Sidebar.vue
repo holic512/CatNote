@@ -2,6 +2,7 @@
 import Button from 'primevue/button';
 import NoteTree from "./NoteTree/noteTree.vue";
 import {useRouter} from "vue-router";
+import Rename from "@/views/User/Main/components/Sidebar/components/Rename/Rename.vue";
 
 // 控制用户设置 显示
 const UserSettingVisible = defineModel()
@@ -32,6 +33,7 @@ const router = useRouter();
         </div>
       </div>
 
+      <!--      收缩侧边栏 箭头  -->
       <div>
         <Button class="sidebar-button" text icon="pi pi-angle-double-left" size="small"/>
       </div>
@@ -47,7 +49,7 @@ const router = useRouter();
 
 
     <!--    工具栏   -->
-    <div class="sidebar-div" style="margin-bottom: 1px;" @click="router.push('home')">
+    <div class="sidebar-div" style="margin-bottom: 1px;" @click="router.push('/user/main/home')">
       <div class="sidebar-icon">
         <i class="pi pi-home" style="font-size: 1rem;color: #708090"/>
       </div>
@@ -113,6 +115,9 @@ const router = useRouter();
       </div>
     </div>
   </div>
+
+
+  <Rename/>
 
 </template>
 

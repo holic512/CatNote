@@ -32,27 +32,43 @@ public class GNoteTreeController {
         this.gNoteTreeService = gNoteTreeService;
     }
 
-    /**
-     * 查询 父级id 为parentID 的文件树列表
-     *
-     * @param parentId 父级id 为空证明 是父级文件夹
-     * @return
-     */
-    @GetMapping("/noteTree")
-    public ResponseEntity<Object> getFolders(@RequestParam(required = false) Long parentId) {
-        // 获取用户id
-        long id = (long) StpKit.USER.getSession().get("id");
 
-        // 调用服务层
-        List<NoteTreeDto> noteTree = gNoteTreeService.getNoteTreeList(id, parentId);
+    @GetMapping("/UserAll")
+    public ResponseEntity<Object> GetUserAllNoteTree() {
+        // 获取用户id
+        Long user_id = (Long) StpKit.USER.getSession().get("id");
+
+        List<NoteTreeDto> result = gNoteTreeService.getNoteTreeListByNoteId(user_id, 0);
 
         return ResponseEntity.ok(new ApiResponse.Builder<>()
                 .status(200)
                 .message("OK")
-                .data(noteTree)
+                .data(result)
                 .build()
         );
     }
+
+    // /**
+    //  * 查询 父级id 为parentID 的文件树列表
+    //  *
+    //  * @param parentId 父级id 为空证明 是父级文件夹
+    //  * @return
+    //  */
+    // @GetMapping("/noteTree")
+    // public ResponseEntity<Object> getFolders(@RequestParam(required = false) Long parentId) {
+    //     // 获取用户id
+    //     long id = (long) StpKit.USER.getSession().get("id");
+    //
+    //     // 调用服务层
+    //     List<NoteTreeDto> noteTree = gNoteTreeService.getNoteTreeList(id, parentId);
+    //
+    //     return ResponseEntity.ok(new ApiResponse.Builder<>()
+    //             .status(200)
+    //             .message("OK")
+    //             .data(noteTree)
+    //             .build()
+    //     );
+    // }
 
     @GetMapping("/folderIdByNoteId")
     public ResponseEntity<Object> getFolderIdByNoteId(@RequestParam Long noteId) {

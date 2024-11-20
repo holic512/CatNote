@@ -4,7 +4,7 @@
  * 主要用于前端展示文件夹和笔记的层级结构。
  * Author: holic512
  * Created Date: 2024-10-21
- * Version: 1.0
+ * Version: 1.1
  * Usage:
  * - 通过 `NoteTreeDto` 对象可以构建和传递笔记树的节点信息。
  * - 通常在后端服务中将文件夹和笔记信息转换为 `NoteTreeDto` 对象，然后传递给前端进行展示。
@@ -14,6 +14,8 @@ package org.example.backend.user.note.noteTree.pojo;
 
 import lombok.Data;
 import org.example.backend.user.note.noteTree.enums.TreeType;
+
+import java.util.List;
 
 @Data
 public class NoteTreeDto {
@@ -27,15 +29,20 @@ public class NoteTreeDto {
     // type 此 note代表的 状态 0 文件夹 1 笔记
     private TreeType type;
 
-    // 代表节点是否为叶 也就是是否可展开,存在与文件夹没有根页,则不可展开,文件也不可以展开
-    private boolean leaf;
+    // 用于存储文件夹的  子节点
+    private List<NoteTreeDto> children;
+
+    // 自定义头像
+    private char[] Avatar;
+
 
     // 用于存储文件夹的 构造函数
-    NoteTreeDto(Long id, String label, TreeType type, boolean leaf) {
+    NoteTreeDto(Long id, String label, TreeType type, char[] Avatar) {
         this.id = id;
         this.label = label;
         this.type = type;
-        this.leaf = leaf;
+        this.Avatar = Avatar;
+
     }
 
 

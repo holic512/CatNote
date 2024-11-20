@@ -14,6 +14,7 @@ import {useSaveNoteState} from "../Pinia/SaveNoteState.ts";
 
 export function createEditorInstance() {
     const editorSaveState = useSaveNoteState();
+
     const editor = useEditor({
         extensions: [
 
@@ -75,22 +76,24 @@ export function createEditorInstance() {
 
 // 监听粘贴事件
         onPaste: (e, slice) => {
+            // 取消默认粘贴行为
+            e.preventDefault();
+
             // 获取剪贴板中的纯文本内容
-            const text = slice.content.textBetween(0, slice.content.size, '\n', '\n')
+            const text = slice.content.textBetween(0, slice.content.size, '\n', '\n');
+
+            console.log(text);
 
             // 通过正则去掉文本中的 HTML 标签
-            const cleanText = text.replace(/<\/?[^>]+(>|$)/g, "") // 去除所有HTML标签
+            const cleanText = text.replace(/<\/?[^>]+(>|$)/g, ""); // 去除所有HTML标签
 
-            // 用纯文本替换当前选区
-            const tr = editor.value?.view.state.tr.replaceSelectionWith(
+            // 创建一个新的事务，替换选区中的内容
+            editor.value?.view.state.tr.replaceSelectionWith(
                 editor.value?.view.state.schema.text(cleanText) // 用清除样式的文本替换
-            )
+            );
 
-            editor.value?.view.dispatch(tr)
-
-            // 如果希望取消默认的粘贴行为（即不插入原样内容）
-            e.preventDefault()
         },
+
 
 // 监听 editorContent 的变化
         onUpdate: ({}) => {

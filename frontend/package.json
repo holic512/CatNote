@@ -32,7 +32,8 @@
     "primevue": "^4.0.5",
     "routed": "^0.0.1",
     "vue": "^3.4.35",
-    "vue-router": "^4.4.3"
+    "vue-router": "^4.4.3",
+    "vue3-emoji-picker": "^1.1.8"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.1.2",

@@ -1,146 +1,230 @@
 <script setup lang="ts">
-import {getCurrentInstance, ref} from "vue";
+import {onMounted, ref, watch} from "vue";
 import type Node from 'element-plus/es/components/tree/src/model/node'
 import Button from 'primevue/button';
-import {getNoteTree} from "./service/getNoteTree.ts";
-import {Tree} from "./service/treeInterface.ts";
-import {AddNote} from "@/views/User/Main/components/Sidebar/NoteTree/service/AddNote.js";
-import {ElMessage} from "element-plus";
-import {getFolderIdByNoteId} from "@/views/User/Main/components/Sidebar/NoteTree/service/GetFolderIdByNoteId.js";
-import {CirclePlusFilled, Plus} from "@element-plus/icons-vue";
-import {AddFolder} from "@/views/User/Main/components/Sidebar/NoteTree/service/AddFolder.js";
-import {useCurrentNoteInfoStore} from "@/views/User/Main/components/Edit/Pinia/currentNoteInfo.ts";
-import {getNoteInfo} from "@/views/User/Main/components/Sidebar/NoteTree/service/GetNoteInfo.ts";
+import {Tree} from "./interface/treeInterface.ts";
+import {getCurrentNoteInfo} from "@/views/User/Main/components/Sidebar/NoteTree/service/GetCurrentNoteInfo.js";
 import {useRouter} from "vue-router";
+import TopDivRightMenu from "@/views/User/Main/components/Sidebar/RightMenu/TopDivRightMenu.vue";
+import NodeRightMenu from "@/views/User/Main/components/Sidebar/RightMenu/NodeRightMenu.vue";
+import FolderRightMenu from "@/views/User/Main/components/Sidebar/RightMenu/FolderRightMenu.vue";
+import {getUserAllTreeData} from "@/views/User/Main/components/Sidebar/NoteTree/service/GetUserAllTreeData.ts";
+import {useNoteTreeUpdate} from "@/views/User/Main/components/Sidebar/Pinia/isNoteTreeUpdated.ts";
+import {useRightSelectNodeId} from "@/views/User/Main/components/Sidebar/Pinia/RightSelectNodeId.ts";
+import {getFolderIdByNoteId} from "@/views/User/Main/components/Sidebar/NoteTree/service/GetFolderIdByNoteId.ts";
+
 
 // 获取 router 实例
 const router = useRouter();
 
+// 约束笔记类型
 const props = {
   label: 'label',
-  children: 'zones',
-  isLeaf: 'leaf',
+  children: 'children',
 }
 
-const loadNode = async (node: Node, resolve: (data: Tree[]) => void) => {
-  if (node.level === 0) {
-    const data = await getNoteTree(null);
-    return resolve(data);
+
+const NoteTreeData = ref<Tree[]>([]);
+
+// 钩子函数 自动获取 笔记树
+onMounted(async () => {
+  NoteTreeData.value = await getUserAllTreeData();
+});
+
+// 监控 笔记更新状态
+const isNoteTreeUpdated = useNoteTreeUpdate();
+watch(() => isNoteTreeUpdated.isNoteTreeUpdated, async (newState) => {
+  // 当 newState 为 true 时 需要更新
+  if (newState) {
+    NoteTreeData.value = await getUserAllTreeData();
+
+    isNoteTreeUpdated.UpdatedNoteTreeCompleted();
   }
-
-  const data = await getNoteTree(node.data.id);
-  resolve(data);
-};
+})
 
 
-// 用于存储 点击的选项内容
-const clickData = ref<Tree>();
-
-// 点击选项的 data
+// 左键点击
 const handleNodeClick = (data: Tree, node: Node) => {
-  // 存储点击信息 用于处理添加操作
-  clickData.value = data
-
   // 当目标是笔记时 获取笔记信息 并 跳转到笔记路由 - 异步
   if (data.type == 'NOTE') {
-    getNoteInfo(node);
+    getCurrentNoteInfo(node);
     router.push('/user/main/edit')
   }
-
 }
 
-const {proxy} = getCurrentInstance();
-// 代理 添加笔记操作
-const proxyAddNote = async () => {
-  const status = await AddNote(clickData.value);
-  if (status == 200) {
-    ElMessage.success("添加笔记成功")
-    // 获取新笔记的详细信息（假设 AddNote 返回新笔记的 ID）
-    const folderId = await getFolderIdByNoteId(clickData.value);
-    let node = proxy.$refs.treeRef.getNode(folderId)
-    node.loaded = false; // 标记为未加载
-    node.expand();
+// NoteTree  右键操作
+const NodeMenuOption = ref({
+  show: false,
+  optionsComponent: {
+    zIndex: 3,
+    minWidth: 140,
+    x: 500,
+    y: 200
   }
+})
+const FolderMenuOption = ref({
+  show: false,
+  optionsComponent: {
+    zIndex: 3,
+    minWidth: 140,
+    x: 500,
+    y: 200
+  }
+})
+
+// 当前 右键选中节点Id
+const RightId = useRightSelectNodeId();
+
+// 节点 被右键点击的时候 触发
+const handleNodeRightClick = async (event: MouseEvent, data: Tree, node: Node) => {
+  // 判断右键的是笔记还是文件夹
+  if (data.type == "NOTE") {
+    // 启用右键菜单
+    NodeMenuOption.value.show = true;
+    // 设置右键菜单位置为鼠标点击的位置
+    NodeMenuOption.value.optionsComponent.x = event.clientX;
+    NodeMenuOption.value.optionsComponent.y = event.clientY;
+
+    // 存储 笔记 父 文件夹 的 Id
+    RightId.SetSelectNodeId(await getFolderIdByNoteId(data));
+  } else {
+    // 启用右键菜单s
+    FolderMenuOption.value.show = true;
+    // 设置右键菜单位置为鼠标点击的位置
+    FolderMenuOption.value.optionsComponent.x = event.clientX;
+    FolderMenuOption.value.optionsComponent.y = event.clientY;
+
+    // 存储 文件夹 的 Id
+    RightId.SetSelectNodeId(data.id);
+  }
+  // 存储 当前选中的 数据
+  RightId.setSelectData(data);
+
+  //存储选中位置
+  RightId.setSelectPos(event.clientX, event.clientY)
 }
 
-// 代理 添加文件夹操作
-const proxyAddFolder = async () => {
-  const status = await AddFolder(clickData.value);
-  if (status == 200) {
-    ElMessage.success("添加笔记成功")
-    // 获取新笔记的详细信息（假设 AddNote 返回新笔记的 ID）
-    const folderId = await getFolderIdByNoteId(clickData.value);
-    let node = proxy.$refs.treeRef.getNode(folderId)
-
-    console.log(node)
-
-    node.loaded = false; // 标记为未加载
-    node.expand();
+// TopDivRight  右键操作
+const TopDivMenuOption = ref({
+  show: false,
+  optionsComponent: {
+    zIndex: 3,
+    minWidth: 140,
+    x: 500,
+    y: 200
   }
+})
+
+function onTopDivMenuRightClick(e: MouseEvent) {
+  e.preventDefault();  // 阻止默认右键菜单
+
+  TopDivMenuOption.value.show = true;
+  // 设置右键菜单位置为鼠标点击的位置
+  TopDivMenuOption.value.optionsComponent.x = e.clientX;
+  TopDivMenuOption.value.optionsComponent.y = e.clientY;
+}
+
+
+// 用于 存储 树结构的 默认打开
+const expandedKey = []
+
+// 用于 操作 树节点展开操作
+const handleNodeExpand = (data) => {
+  // 插入 默认打开 表 用来解决更新数据后的 表结构重载
+  expandedKey.push(data.uniqueId);
 }
 
 </script>
 
 <template>
-  <!--     笔记 控制按钮    -->
-  <div class="sidebar-div" style="margin-bottom: 1px;">
-    <div style="display: flex; justify-content: center; align-items: center; width: 50px"
-    >
-      <el-text size="small">笔记</el-text>
+
+  <!--  引用 笔记 右键菜单组件-->
+  <NodeRightMenu v-model="NodeMenuOption"/>
+
+  <!--  引用 文件夹 右键菜单组件-->
+  <FolderRightMenu v-model="FolderMenuOption"/>
+
+  <!--  引用 TopDiv 右键菜单组件 -->
+  <TopDivRightMenu v-model="TopDivMenuOption"/>
+
+
+  <div style="width: 100%" @contextmenu="onTopDivMenuRightClick">
+
+    <!--     TopDiv    -->
+    <div class="sidebar-div" style="margin-bottom: 1px;">
+      <div style="display: flex; justify-content: left; align-items: center; width: 100px ;margin-left: 8px">
+        <el-text size="small">
+          我的文档
+        </el-text>
+      </div>
+      <!--  隔断  -->
+      <div style="flex: 1"></div>
+
+      <!--      <div>-->
+      <!--        <Button class="sidebar-button" text icon="pi pi-ellipsis-h" size="small" severity="secondary"/>-->
+      <!--      </div>-->
+
+      <div>
+        <Button class="sidebar-button" text icon="pi pi-plus" size="small" severity="secondary"
+                @click="onTopDivMenuRightClick"/>
+      </div>
     </div>
-    <!--  隔断  -->
-    <div style="flex: 1"></div>
-    <div>
-      <Button class="sidebar-button" text icon="pi pi-ellipsis-h" size="small" severity="secondary"/>
+
+    <!--    NoteTree   -->
+    <div style="height: 40vh;width: 100%;">
+      <el-scrollbar style="width: 100%;">
+        <el-tree
+            class="el-tree"
+            :props="props"
+            :data="NoteTreeData"
+
+            :default-expanded-keys="expandedKey"
+            node-key="uniqueId"
+
+            @node-click="handleNodeClick"
+            @node-contextmenu="handleNodeRightClick"
+            @node-expand="handleNodeExpand"
+        >
+
+          <template #default="{node,data}">
+            <div class="NoteTree"
+                 style="display: flex; justify-content: space-between; align-items: center;width: 100%">
+              <div style="display: flex; justify-content: left; align-items: center;width: 100%">
+                <!--  判断是否使用自定义图标 -->
+                <div v-if="data.avatar == null">
+                  <div v-if='data.type == "NOTE" ' style="margin-top: 4px">
+                    <el-icon size="14">
+                      <Notebook/>
+                    </el-icon>
+                  </div>
+                  <div v-else-if='data.type == "FOLDER" ' style="margin-top: 4px">
+                    <el-icon size="14">
+                      <Folder/>
+                    </el-icon>
+                  </div>
+                </div>
+                <div v-else>
+                  <el-icon size="13">
+                    {{ data.avatar }}
+                  </el-icon>
+                </div>
+
+
+                <el-text style="margin-left: 4px;">
+                  {{ data.label }}
+                </el-text>
+              </div>
+
+              <div class="NoteTreeButton">
+                <Button class="sidebar-button" text icon="pi pi-ellipsis-h" size="small" severity="secondary"/>
+              </div>
+
+
+            </div>
+          </template>
+        </el-tree>
+      </el-scrollbar>
     </div>
-    <div>
-
-      <el-dropdown trigger="click" size="small">
-        <span class="el-dropdown-link">
-          <Button class="sidebar-button" text icon="pi pi-plus" size="small" severity="secondary"/>
-        </span>
-        <template #dropdown>
-          <el-dropdown-menu>
-            <el-dropdown-item :icon="Plus" @click="proxyAddNote">新建文档</el-dropdown-item>
-            <el-dropdown-item :icon="CirclePlusFilled" @click="proxyAddFolder">新建文件夹</el-dropdown-item>
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
-
-    </div>
-  </div>
-
-  <div style="height: 40vh;width: 100%;">
-    <el-scrollbar style="width: 100%;">
-      <el-tree
-          class="el-tree"
-          lazy
-          node-key="id"
-          :props="props"
-          :load="loadNode"
-          :expand-on-click-node="false"
-          @node-click="handleNodeClick"
-          ref="treeRef"
-      >
-        <template #default="{node,data }">
-          <div v-if='data.type == "NOTE" ' style="padding: 0">
-            <el-icon size="12">
-              <Notebook/>
-            </el-icon>
-          </div>
-          <div v-else-if='data.type == "FOLDER" '>
-            <el-icon size="12">
-              <Folder/>
-            </el-icon>
-          </div>
-          <el-text style="margin-left: 6px;">
-            {{ node.label }}
-          </el-text>
-
-
-        </template>
-      </el-tree>
-    </el-scrollbar>
   </div>
 
 </template>
@@ -179,7 +263,7 @@ const proxyAddFolder = async () => {
 }
 
 :deep(.el-tree-node__content) {
-  height: 28px;
+  height: 30px;
 }
 
 :deep(.el-tree-node__content):hover {
@@ -205,6 +289,17 @@ const proxyAddFolder = async () => {
 
 :deep(.el-tree-node.is-expanded > .el-tree-node__content) {
   background-color: #EFEFED !important; /* 保持相同的自定义背景色 */
+}
+
+.NoteTreeButton {
+  margin-right: 8px;
+
+  display: none;
+
+}
+
+.NoteTree:hover .NoteTreeButton {
+  display: block; /* 当父元素 hover 时显示子元素 */
 }
 
 </style>

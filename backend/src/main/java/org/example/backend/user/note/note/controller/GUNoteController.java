@@ -45,6 +45,7 @@ public class GUNoteController {
         // 调用服务类
         Pair<GContextEnum, Optional<Note>> result = guNoteService.GetContext(UserId, noteId);
 
+        // 判断状态
         switch (result.a) {
             case Success -> {
                 return ResponseEntity.ok(new ApiResponse.Builder<>()

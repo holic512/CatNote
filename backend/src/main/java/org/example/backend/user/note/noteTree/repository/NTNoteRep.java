@@ -21,34 +21,45 @@ import java.util.List;
 
 public interface NTNoteRep extends JpaRepository<NoteInfo, Long> {
 
-    /**
-     * 查询用户的所有顶级笔记信息。
-     *
-     * @param userId 用户 ID
-     * @return 顶级笔记的列表，每个笔记信息封装在 NoteTreeDto 对象中
-     */
-    @Query("select new org.example.backend.user.note.noteTree.pojo.NoteTreeDto(n.id, n.noteTitle," +
-            "org.example.backend.user.note.noteTree.enums.TreeType.NOTE, true) " +
-            "FROM NoteInfo n " +
-            "where n.userId = :userId and n.folderId IS NULL")
-    List<NoteTreeDto> findTopLevelNotesByUserId(@Param("userId") Long userId);
+    // /**
+    //  * 查询用户的所有顶级笔记信息。
+    //  *
+    //  * @param userId 用户 ID
+    //  * @return 顶级笔记的列表，每个笔记信息封装在 NoteTreeDto 对象中
+    //  */
+    // @Query("select new org.example.backend.user.note.noteTree.pojo.NoteTreeDto(n.id, n.noteTitle," +
+    //         "org.example.backend.user.note.noteTree.enums.TreeType.NOTE, true) " +
+    //         "FROM NoteInfo n " +
+    //         "where n.userId = :userId and n.folderId IS NULL")
+    // List<NoteTreeDto> findTopLevelNotesByUserId(@Param("userId") Long userId);
+    //
+    // /**
+    //  * 查询用户指定文件夹下的所有笔记信息。
+    //  *
+    //  * @param userId   用户 ID
+    //  * @param folderId 文件夹 ID
+    //  * @return 指定文件夹下的笔记列表，每个笔记信息封装在 NoteTreeDto 对象中
+    //  */
+    // @Query("select new org.example.backend.user.note.noteTree.pojo.NoteTreeDto(n.id, n.noteTitle," +
+    //         "org.example.backend.user.note.noteTree.enums.TreeType.NOTE, true) " +
+    //         "FROM NoteInfo n " +
+    //         "where n.userId = :userId and n.folderId = :folderId")
+    // List<NoteTreeDto> findNotesByUserIdAndFolderId(@Param("userId") Long userId, @Param("folderId") Long folderId);
 
-    /**
-     * 查询用户指定文件夹下的所有笔记信息。
-     *
-     * @param userId   用户 ID
-     * @param folderId 文件夹 ID
-     * @return 指定文件夹下的笔记列表，每个笔记信息封装在 NoteTreeDto 对象中
-     */
-    @Query("select new org.example.backend.user.note.noteTree.pojo.NoteTreeDto(n.id, n.noteTitle," +
-            "org.example.backend.user.note.noteTree.enums.TreeType.NOTE, true) " +
-            "FROM NoteInfo n " +
-            "where n.userId = :userId and n.folderId = :folderId")
-    List<NoteTreeDto> findNotesByUserIdAndFolderId(@Param("userId") Long userId, @Param("folderId") Long folderId);
 
-
-    @Query("SELECT n.id FROM NoteInfo n WHERE n.id = :id")
+    @Query("SELECT n.folderId FROM NoteInfo n WHERE n.id = :id")
     Long findFolderIdById(@Param("id") Long id);
 
+
+    // 根据用户id 父文件夹 id 获取 未被 拟删除的 笔记 的( id 名称 类别)
+    @Query("SELECT new org.example.backend.user.note.noteTree.pojo.NoteTreeDto(n.id,n.noteTitle," +
+            "org.example.backend.user.note.noteTree.enums.TreeType.NOTE" +
+            ",n.noteAvatar)" +
+            "FROM NoteInfo n " +
+            "where n.userId = :userId And n.folderId = :folderId AND n.isDeleted = 0 ")
+    List<NoteTreeDto> findFolderByUserIdAndFolderId(@Param("userId") Long userId, @Param("folderId") Long folderId);
+
+    @Query("SELECT n.userId FROM NoteInfo n WHERE n.id = :id")
+    Long findUserIdById(@Param("id") Long id);
 
 }

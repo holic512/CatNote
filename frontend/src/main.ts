@@ -7,6 +7,9 @@ import router from './router/index.ts'
 import {createPinia} from "pinia";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 
+// context-menu-scss
+import '@imengyu/vue3-context-menu/lib/vue3-context-menu.css'
+import './css/ContextMenu.scss'
 
 const app = createApp(App)
 
