@@ -12,12 +12,13 @@ export const useSaveNoteState = defineStore('SaveNoteState', {
 
     // Define actions (methods)
     actions: {
-        // Update content (mark as unsaved)
+
+        // 未保存
         updateContent(): void {
             this.isSaved = false
         },
 
-
+        // 已保存
         saveContent(): void {
             if (!this.isSaved) {
                 this.isSaved = true

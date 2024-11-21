@@ -6,6 +6,7 @@ import ToCItem from "./ToCltem/ToCItem.vue";
 
 import {Editor, EditorContent} from '@tiptap/vue-3'
 import {ShallowRef} from "vue";
+import BubbleMenu from "@/views/User/Main/components/Edit/Main/BubbleMenu/BubbleMenu.vue";
 
 const editor: ShallowRef<Editor | undefined> = defineModel()
 
@@ -22,23 +23,7 @@ const focusOnParagraph = () => {
   <!--编辑器 工具-->
   <Tools v-model="editor"/>
 
-  <!--  <bubble-menu-->
-  <!--      :editor="editor"-->
-  <!--      :tippy-options="{ duration: 100 }"-->
-  <!--      v-if="editor"-->
-  <!--  >-->
-  <!--    <div class="bubble-menu">-->
-  <!--      <button @click="editor.chain().focus().toggleBold().run()" :class="{ 'is-active': editor.isActive('bold') }">-->
-  <!--        Bold-->
-  <!--      </button>-->
-  <!--      <button @click="editor.chain().focus().toggleItalic().run()" :class="{ 'is-active': editor.isActive('italic') }">-->
-  <!--        Italic-->
-  <!--      </button>-->
-  <!--      <button @click="editor.chain().focus().toggleStrike().run()" :class="{ 'is-active': editor.isActive('strike') }">-->
-  <!--        Strike-->
-  <!--      </button>-->
-  <!--    </div>-->
-  <!--  </bubble-menu>-->
+  <BubbleMenu v-model="editor"/>
 
   <el-scrollbar style="height: calc(100% - 44px)" @click="focusOnParagraph">
     <div class="editor-content">
@@ -46,22 +31,22 @@ const focusOnParagraph = () => {
     </div>
   </el-scrollbar>
 
-<!--  <div style="position: absolute; right: 18px; top: 164px; text-align: right;">-->
-<!--    <el-popover-->
-<!--        placement="left"-->
-<!--        title="目录"-->
-<!--        :width="250"-->
-<!--        trigger="hover"-->
-<!--    >-->
-<!--      <template #reference>-->
-<!--        <el-button class="m-2">H</el-button>-->
-<!--      </template>-->
+  <!--  <div style="position: absolute; right: 18px; top: 164px; text-align: right;">-->
+  <!--    <el-popover-->
+  <!--        placement="left"-->
+  <!--        title="目录"-->
+  <!--        :width="250"-->
+  <!--        trigger="hover"-->
+  <!--    >-->
+  <!--      <template #reference>-->
+  <!--        <el-button class="m-2">H</el-button>-->
+  <!--      </template>-->
 
-<!--      <template #default>-->
-<!--        <ToCItem v-if="editor" :editor="editor" :items="items"/>-->
-<!--      </template>-->
-<!--    </el-popover>-->
-<!--  </div>-->
+  <!--      <template #default>-->
+  <!--        <ToCItem v-if="editor" :editor="editor" :items="items"/>-->
+  <!--      </template>-->
+  <!--    </el-popover>-->
+  <!--  </div>-->
 
 
 </template>
@@ -94,6 +79,28 @@ const focusOnParagraph = () => {
   width: 750px; /* 设置编辑区域的宽度 */
   font-family: 'alibabaFy', serif; /* 使用自定义字体 */
   font-size: 20px; /* 设置字体大小 */
+  line-height: 1; /* 确保文字与背景有良好对比 */
+
+  -webkit-font-smoothing: antialiased; /* 优化 Webkit 内核浏览器 */
+  -moz-osx-font-smoothing: grayscale; /* 优化 macOS */
+
+  hr {
+    border: none;
+    border-top: 2px solid #333; /* 更深的黑色线条 */
+    cursor: pointer;
+    padding: 0.2rem; /* 增加一些垂直空间 */
+    margin: 1rem; /* 增加上下外边距，使分隔更明显 */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* 添加过渡效果 */
+    height: 10px; /* 确保高度为0，只显示边框 */
+
+    &.ProseMirror-selectednode {
+      border-top-color: #007BFF; /* 当选中时，使用蓝色线条 */
+    }
+
+    &:hover {
+      border-top-color: #0056b3; /* 鼠标悬停时线条颜色变深 */
+    }
+  }
 
   h1 {
     font-size: 33px; /* 设置字体大小 */
@@ -128,6 +135,97 @@ const focusOnParagraph = () => {
   img {
     max-width: 100%;
   }
+
+  //引用块
+  blockquote {
+    border-left: 4px solid #555; /* 更粗的边框和更深的颜色 */
+
+    margin-left: 1rem; /* 增加外边距，使引用更突出 */
+    padding-left: 1rem; /* 增加内边距，使内容与边框有足够的空间 */
+    background-color: #f9f9f9; /* 浅灰色背景，增加层次感 */
+    margin-top: 0;
+    margin-bottom: 0;
+
+    p {
+      height: 28px;
+      display: flex;
+      align-items: center;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    span {
+      height: 28px;
+      display: flex;
+      align-items: center;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    &:hover {
+      border-left-color: #007BFF; /* 鼠标悬停时边框颜色变为蓝色 */
+    }
+  }
+
+  /* 单列样式 */
+  ul,
+  ol {
+    margin: 2px;
+
+    li p {
+
+      margin-top: 6px;
+      margin-bottom: 6px;
+    }
+
+    li div {
+      margin-top: 0;
+    }
+
+
+    li label {
+      margin: 0;
+    }
+
+
+    li {
+      height: 32px;
+      margin-top: 10px;
+
+    }
+  }
+
+
+  /* 任务选中框样式 */
+  ul[data-type="taskList"] {
+    list-style: none;
+    margin-left: 0;
+    padding: 0;
+
+    li {
+      align-items: flex-start;
+      display: flex;
+
+      > label {
+        flex: 0 0 auto;
+        margin-right: 0.5rem;
+        user-select: none;
+      }
+
+      > div {
+        flex: 1 1 auto;
+      }
+    }
+
+    input[type="checkbox"] {
+      cursor: pointer;
+    }
+
+    ul[data-type="taskList"] {
+      margin: 0;
+    }
+  }
+
 }
 
 /* 设置选中文本的背景颜色 */
@@ -154,8 +252,11 @@ const focusOnParagraph = () => {
 
   ul,
   ol {
-    padding: 0 1rem; /* 为无序列表和有序列表添加左右内边距 */
+    margin-left: 12px !important;
+    padding-left: 28px;
   }
+
+
 }
 
 /* 选区范围的样式 */
@@ -186,6 +287,7 @@ const focusOnParagraph = () => {
     background-color: #70CFF850; /* 设置背景颜色 */
     border-radius: 0.2rem; /* 圆角 */
   }
+
 }
 
 /* 自定义拖拽手柄样式 */
@@ -194,7 +296,7 @@ const focusOnParagraph = () => {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 1rem;
+    width: 1.25rem;
     height: 1.25rem;
     content: '⠿'; /* 显示拖拽手柄的内容 */
     font-weight: 700;

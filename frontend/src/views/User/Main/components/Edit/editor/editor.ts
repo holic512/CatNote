@@ -11,6 +11,13 @@ import fileHandlerConfig from "./fileHandlerConfig.ts";
 import NodeRange from "@tiptap-pro/extension-node-range";
 import DragHandle from "@tiptap-pro/extension-drag-handle";
 import {useSaveNoteState} from "../Pinia/SaveNoteState.ts";
+import {TaskItem} from "@tiptap/extension-task-item";
+import {TaskList} from "@tiptap/extension-task-list";
+import {Table} from "@tiptap/extension-table";
+import {TableRow} from "@tiptap/extension-table-row";
+import {TableHeader} from "@tiptap/extension-table-header";
+import {TableCell} from "@tiptap/extension-table-cell";
+import { BubbleMenu } from '@tiptap/vue-3'
 
 export function createEditorInstance() {
     const editorSaveState = useSaveNoteState();
@@ -70,6 +77,24 @@ export function createEditorInstance() {
                     return element
                 },
             }),
+
+            // 任务清单
+            TaskList,
+            TaskItem.configure({
+                nested: true,
+            }),
+
+            // 表格
+            Table.configure({
+                resizable: true,
+            }),
+            TableRow,
+            TableHeader,
+            TableCell,
+
+
+
+
         ],
 
         content: "",

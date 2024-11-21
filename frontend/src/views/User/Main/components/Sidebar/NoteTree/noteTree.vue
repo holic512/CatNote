@@ -12,6 +12,8 @@ import {getUserAllTreeData} from "@/views/User/Main/components/Sidebar/NoteTree/
 import {useNoteTreeUpdate} from "@/views/User/Main/components/Sidebar/Pinia/isNoteTreeUpdated.ts";
 import {useRightSelectNodeId} from "@/views/User/Main/components/Sidebar/Pinia/RightSelectNodeId.ts";
 import {getFolderIdByNoteId} from "@/views/User/Main/components/Sidebar/NoteTree/service/GetFolderIdByNoteId.ts";
+import {useSaveNoteState} from "@/views/User/Main/components/Edit/Pinia/SaveNoteState.ts";
+import {ElMessage, ElMessageBox} from "element-plus";
 
 
 // 获取 router 实例
@@ -42,12 +44,38 @@ watch(() => isNoteTreeUpdated.isNoteTreeUpdated, async (newState) => {
   }
 })
 
+const SaveNoteState = useSaveNoteState()
 
 // 左键点击
 const handleNodeClick = (data: Tree, node: Node) => {
-  // 当目标是笔记时 获取笔记信息 并 跳转到笔记路由 - 异步
-  if (data.type == 'NOTE') {
+  // 当目标是笔记时 - 判断当前是否保存 -> 发起需要保存的提示 -> 获取笔记信息 , 重置保存状态  ->跳转到笔记路由
+  if (data.type !== 'NOTE') return
+
+  if (!SaveNoteState.isSaved) {
+    // 消息提示框
+    ElMessageBox.confirm(
+        '当前笔记没有保存,确定要切换吗',
+        '笔记未保存',
+        {
+          confirmButtonText: '确认',
+          cancelButtonText: '取消',
+          type: 'warning',
+        }
+    )
+        .then(() => {
+          // 设置当前显示笔记信息
+          getCurrentNoteInfo(node);
+
+          // 重置保存状态
+          SaveNoteState.saveContent();
+
+          router.push('/user/main/edit')
+        })
+  }else {
+    // 设置当前显示笔记信息
     getCurrentNoteInfo(node);
+
+
     router.push('/user/main/edit')
   }
 }
@@ -126,12 +154,18 @@ function onTopDivMenuRightClick(e: MouseEvent) {
 
 
 // 用于 存储 树结构的 默认打开
-const expandedKey = []
+let expandedKey: any = []
 
 // 用于 操作 树节点展开操作
 const handleNodeExpand = (data) => {
   // 插入 默认打开 表 用来解决更新数据后的 表结构重载
   expandedKey.push(data.uniqueId);
+}
+
+// 用于操作 树节点关闭操作
+const handleNodeCollapse = (data) => {
+  // 当列存在 现在正在关闭的 数据 删除
+  expandedKey = expandedKey.filter(key => key !== data.uniqueId);
 }
 
 </script>
@@ -160,10 +194,6 @@ const handleNodeExpand = (data) => {
       <!--  隔断  -->
       <div style="flex: 1"></div>
 
-      <!--      <div>-->
-      <!--        <Button class="sidebar-button" text icon="pi pi-ellipsis-h" size="small" severity="secondary"/>-->
-      <!--      </div>-->
-
       <div>
         <Button class="sidebar-button" text icon="pi pi-plus" size="small" severity="secondary"
                 @click="onTopDivMenuRightClick"/>
@@ -184,6 +214,7 @@ const handleNodeExpand = (data) => {
             @node-click="handleNodeClick"
             @node-contextmenu="handleNodeRightClick"
             @node-expand="handleNodeExpand"
+            @node-collapse="handleNodeCollapse"
         >
 
           <template #default="{node,data}">

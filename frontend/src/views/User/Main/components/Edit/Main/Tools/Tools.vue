@@ -33,6 +33,7 @@ const editor = defineModel()
 
 
     <el-divider direction="vertical"/>
+
     <!--    加粗文本    -->
     <BoldText v-model="editor"/>
 

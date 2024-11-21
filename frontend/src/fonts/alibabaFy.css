@@ -3,7 +3,7 @@
     src:
             url('NotoSansSC-VariableFont_wght.ttf') format('truetype');
 
-    font-weight: 330; /* 字体粗细 */
+    font-weight: normal; /* 字体粗细 */
     font-style: normal; /* 字体样式 */
     font-display: swap;
 

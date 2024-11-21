@@ -23,6 +23,9 @@ import IconVideo from "./Icon/blocks2/IconVideo.vue";
 import {insertHeading} from "@/views/User/Main/components/Edit/Main/Tools/Plus/Service/insertHeading.ts";
 import {DropdownInstance} from "element-plus";
 import {ref} from "vue";
+import {InsertTaskList} from "@/views/User/Main/components/Edit/Main/Tools/Plus/Service/insertTaskList.ts";
+import {insertHorizontal} from "@/views/User/Main/components/Edit/Main/Tools/Plus/Service/insertHorizontal.ts";
+import {InsertBlockquote} from "@/views/User/Main/components/Edit/Main/Tools/Plus/Service/insertBlockquote.ts";
 
 
 const dropdown = ref<DropdownInstance>()
@@ -67,6 +70,16 @@ const click1 = (label: string) => {
     case '六级标题':
       insertHeading(editor.value, 6);
       break;
+    case '待办':
+      InsertTaskList(editor.value);
+      break;
+    case'分隔线':
+      insertHorizontal(editor.value);
+      break;
+    case '引用':
+      InsertBlockquote(editor.value);
+      break;
+
   }
 
   // 关闭下拉菜单

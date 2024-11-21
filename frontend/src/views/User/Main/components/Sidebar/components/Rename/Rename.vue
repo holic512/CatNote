@@ -104,6 +104,9 @@ const onSelectEmoji = async (emoji: EmojiExt) => {
 
 // 监听 重命名输入框 来进行无痕重命名
 watch(() => newName.value, async () => {
+
+  if (!RenameData.RenameIs) return;
+
   let status = null;
   let updateName = newName.value;
   if (newName.value == "") {
@@ -127,7 +130,7 @@ watch(() => newName.value, async () => {
 
 // 监听显示是否刷新 当显示刷新的 时候 重新复制 newName
 watch(() => RenameData.RenameIs, () => {
-  if (RenameData.RenameIs == true) {
+  if (!RenameData.RenameIs) {
     newName.value = "";
   }
 })
