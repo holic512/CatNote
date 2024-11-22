@@ -20,7 +20,7 @@ import {debounceImmediate} from "../../../../../util/debounce.ts";
 import {ElMessage} from "element-plus";
 import {BatchDeleteUser} from "./components/TableView/batchDeleteUser.ts";
 import OnlineUser from "./components/OnlineUser/OnlineUser.vue";
-import {onlineUserCount} from "@/views/Admin/Main/view/userMm/components/OnlineUser/OnlineUserCount.ts";
+import {onlineUserCount} from "./components/OnlineUser/OnlineUserCount.ts";
 
 // 搜素框数据
 const value1 = ref(null);
@@ -173,12 +173,20 @@ const handleDebouncedRefresh = debounceImmediate(refresh, 1000);
 
 // 选择逻辑
 const selectedProduct = ref();
+
 // 批量删除/防抖
 const batchDelete = async () => {
   if (selectedProduct.value == null) {
     ElMessage.warning("选择为空")
     return;
   }
+
+  // 定义产品接口
+  interface Product {
+    id: number;
+  }
+
+  // 读取当前的 id 插入到ids
   const ids = selectedProduct.value.map(product => product.id);
   const status = await BatchDeleteUser(ids);
   if (status === 200) {

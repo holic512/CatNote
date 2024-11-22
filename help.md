@@ -29,7 +29,7 @@ export const tokenStore = defineStore('toke', {
 ```
 
 ```ts
-import axios from "../../../../axios/index.ts";
+import axios from "../../../../axios/index.js";
 import {tokenStore} from "../../../../pinia/token";
 
 async function pwLogin(username: string, password: string): Promise<number> {

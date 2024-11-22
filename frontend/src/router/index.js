@@ -46,7 +46,7 @@ router.beforeEach(async (to, from, next) => {
 
         try {
 
-            let token: string | undefined;
+            let token;
 
             if (to.path.startsWith('/admin')) {
                 token = AdminToken;

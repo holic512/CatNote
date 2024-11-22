@@ -6,7 +6,7 @@ import { tokenStore } from "../pinia/token.ts";
 import { routerStore } from "../pinia/routerStore.ts";
 
 // 路由实例
-import router from "../router/index.ts";
+import router from "../router/index.js";
 
 // 创建一个 Axios 实例
 const instance = axios.create({
