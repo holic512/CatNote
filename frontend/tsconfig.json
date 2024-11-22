@@ -35,10 +35,10 @@
     // 是否移除注释
     "target": "esnext",
     // 指定 ECMAScript 目标版本
-    "module": "esnext",
     // "commonjs" 指定生成哪个模块系统代码
-    "strict": true,
+    "module": "esnext",
     // 启用所有严格类型检查选项
+    "strict": true,
     "jsx": "preserve",
     // 在 .tsx文件里支持JSX
     "importHelpers": true,

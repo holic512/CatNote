@@ -6,7 +6,7 @@ import {useRenameData} from "@/views/User/Main/components/Sidebar/Pinia/RenameDa
 // 状态变量
 const newName = ref("");
 const emojiPickerVis = ref(false);
-const rightSelect = useRightSelectNodeId();
+const rightSelect: any = useRightSelectNodeId();
 const RenameData = useRenameData();
 
 // 位置计算
@@ -63,7 +63,7 @@ onBeforeUnmount(() => {
 // 表情选择器相关配置
 import EmojiPicker, {EmojiExt} from "vue3-emoji-picker";
 import "vue3-emoji-picker/css";
-import {useNoteTreeUpdate} from "@/views/User/Main/components/Sidebar/Pinia/isNoteTreeUpdated.ts";
+import {useNoteTreeUpdate} from "@/views/User/Main/components/Sidebar/Pinia/isNoteTreeUpdated";
 
 
 const iln = {
@@ -77,10 +77,10 @@ const iln = {
   flags: "旗帜",
 };
 
-import {updateNoteAvatar} from "./Service/updateNoteAvatar.ts";
-import {updateNoteTitle} from "./Service/updateNoteTitle.ts";
-import {updateFolderTitle} from "@/views/User/Main/components/Sidebar/components/Rename/Service/updateFolderTitle.ts";
-import {updateFolderAvatar} from "@/views/User/Main/components/Sidebar/components/Rename/Service/updateFolderAvatar.ts";
+import {updateNoteAvatar} from "./Service/updateNoteAvatar";
+import {updateNoteTitle} from "./Service/updateNoteTitle";
+import {updateFolderTitle} from "@/views/User/Main/components/Sidebar/components/Rename/Service/updateFolderTitle";
+import {updateFolderAvatar} from "@/views/User/Main/components/Sidebar/components/Rename/Service/updateFolderAvatar";
 
 // 修改 笔记头像
 const onSelectEmoji = async (emoji: EmojiExt) => {

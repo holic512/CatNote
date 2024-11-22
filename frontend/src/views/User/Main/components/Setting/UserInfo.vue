@@ -3,14 +3,25 @@ import {onMounted, ref} from 'vue';
 import Button from 'primevue/button';
 import {Edit} from '@element-plus/icons-vue';
 import {AccountInfo, fetchAccountInfo} from "@/views/User/Main/components/Setting/service/getUserInfo.js";
-import {putNickname} from "@/views/User/Main/components/Setting/service/putNickname.ts";
+import {putNickname} from "@/views/User/Main/components/Setting/service/putNickname";
 import {ElMessage} from "element-plus";
-import {putGender} from "@/views/User/Main/components/Setting/service/putGender.ts";
-import {putAge} from "@/views/User/Main/components/Setting/service/putAge.ts";
-import {putContactInfo} from "@/views/User/Main/components/Setting/service/putContactInfo.ts";
-import {putBio} from "@/views/User/Main/components/Setting/service/putBio.ts";
+import {putGender} from "@/views/User/Main/components/Setting/service/putGender";
+import {putAge} from "@/views/User/Main/components/Setting/service/putAge";
+import {putContactInfo} from "@/views/User/Main/components/Setting/service/putContactInfo";
+import {putBio} from "@/views/User/Main/components/Setting/service/putBio";
 
-const Info = ref<AccountInfo>({});
+const Info = ref<AccountInfo>({
+  age: 0,
+  avatar: "",
+  bio: "",
+  contactInfo: "",
+  email: "",
+  gender: "",
+  id: 0,
+  nickname: "",
+  uid: "",
+  username: ""
+});
 
 onMounted(async () => {
   Info.value = await fetchAccountInfo();
@@ -25,7 +36,7 @@ const bioVis = ref(true);
 
 const nickname = ref("");
 const gender = ref("");
-const age = ref("");
+const age = ref<number>();
 const contactInfo = ref("");
 const bio = ref("");
 
@@ -52,7 +63,7 @@ const editVis = (n: number) => {
       break;
     case 3:
       ageVis.value = false;
-      age.value = Info.value.age ? Info.value.age.toString() : "";
+      age.value = Info.value.age ? Info.value.age : undefined;
       break;
     case 4:
       contactInfoVis.value = false;
@@ -91,9 +102,9 @@ const edit = async (n: number) => {
       break;
 
     case 3:
-      status = await putAge(age.value);
+      status = await putAge(<number>age.value);
       if (status == 200) {
-        Info.value.age = age.value;
+        Info.value.age = <number>age.value;
         ageVis.value = true;
         ElMessage.success("年龄修改成功");
       } else {
@@ -233,7 +244,7 @@ const edit = async (n: number) => {
     <div class="info-row">
       <el-text class="label" type="info">年龄</el-text>
       <div v-if="ageVis" class="field-view-1">
-        <el-text class="user-text">{{ Info.age == "" ? "暂无" : Info.age }}</el-text>
+        <el-text class="user-text">{{ Info.age == undefined ? "暂无" : Info.age }}</el-text>
         <el-link class="edit-link" :icon="Edit" type="primary" @click="editVis(3)">编辑</el-link>
       </div>
       <div v-else class="field-view-1">

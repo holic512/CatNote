@@ -2,7 +2,6 @@
 import '/src/fonts/alibabaFy.css'
 
 import Tools from "./Tools/Tools.vue";
-import ToCItem from "./ToCltem/ToCItem.vue";
 
 import {Editor, EditorContent} from '@tiptap/vue-3'
 import {ShallowRef} from "vue";

@@ -1,6 +1,6 @@
 // 获取 当前选中的笔记信息
 // 用于 根据当前选中的 笔记信息 显示编辑器等其他内容
-import {useCurrentNoteInfoStore} from "../../../Edit/Pinia/currentNoteInfo.ts";
+import {useCurrentNoteInfoStore} from "../../../Edit/Pinia/currentNoteInfo";
 import type Node from "element-plus/es/components/tree/src/model/node";
 
 export const getCurrentNoteInfo = async (node: Node) => {

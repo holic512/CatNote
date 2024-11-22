@@ -5,9 +5,9 @@ import Dialog from "primevue/dialog";
 import DataTable from "primevue/datatable"
 import Column from 'primevue/column';
 import {ref, watch} from "vue";
-import {fetchPageData} from "./fetchPageData.ts";
-import {logout} from "./logout.ts";
-import {kickout} from "./kickout.ts";
+import {fetchPageData} from "./fetchPageData";
+import {logout} from "./logout";
+import {kickout} from "./kickout";
 import {ElMessage} from "element-plus";
 
 
@@ -45,7 +45,7 @@ const kickoutR = async (uid: number) => {
 </script>
 
 <template>
-  <Dialog v-model:visible="onlineUserVisible" :draggable="false" modal header="在线用户页面" :style="{ width: '850px'}"
+  <Dialog v-model:visible:any="onlineUserVisible" :draggable="false" modal header="在线用户页面" :style="{ width: '850px'}"
           :pt="{
     header: { style: { paddingBottom:'10px',paddingTop:'10px'} },
     content: { style: { borderTop: '1px solid #E2E8F0'} },

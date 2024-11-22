@@ -2,7 +2,7 @@
 import Sidebar from "./components/Sidebar/Sidebar.vue"
 
 
-import {ref, onMounted, onBeforeUnmount} from 'vue';
+import {onBeforeUnmount, onMounted, ref} from 'vue';
 
 // 控制设置窗 弹出与关闭
 import Setting from "./components/Setting/index.vue"

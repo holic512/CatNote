@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 // 获取编辑器实例
-import {BubbleMenu, Editor} from '@tiptap/vue-3'
+import {BubbleMenu} from '@tiptap/vue-3'
 import Explanation from "../../../../../../../icon/Explanation.vue";
 import BoldText from "@/views/User/Main/components/Edit/Main/BubbleMenu/components/BoldText.vue";
 import ItalicText from "@/views/User/Main/components/Edit/Main/BubbleMenu/components/ItalicText.vue";
@@ -12,7 +12,7 @@ import AI from "@/icon/AI.vue";
 import Review from "@/icon/Review.vue";
 
 
-const editor: Editor = defineModel()
+const editor: any = defineModel()
 
 </script>
 

@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import Bold from "@/views/User/Main/components/Edit/Main/Tools/icon/IconBold.vue";
-import {bold, isBoldActive} from "@/views/User/Main/components/Edit/Main/Tools/Service/bold.ts";
+import {bold, isBoldActive} from "@/views/User/Main/components/Edit/Main/Tools/Service/bold";
 import '../css/editTool-button.css'
-const editor = defineModel()
+
+const editor:any = defineModel()
 
 </script>
 

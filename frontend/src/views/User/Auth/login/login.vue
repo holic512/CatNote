@@ -4,8 +4,8 @@ import {ElMessage} from "element-plus";
 
 
 // 导入登录函数
-import pwLogin from "./service/pwLogin.ts"
-import {sendMail, verifyLoginCode} from "./service/emLogin.ts";
+import pwLogin from "./service/pwLogin"
+import {sendMail, verifyLoginCode} from "./service/emLogin";
 import {useRouter} from "vue-router";
 import Dialog from "primevue/dialog";
 import UserAgreement from "../components/userAgreement.vue";

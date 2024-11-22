@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import '../css/editTool-button.css'
-import IconText from "@/views/User/Main/components/Edit/Main/Tools/icon/IconText.vue";
 
 // blocks1
 import IconHeading1 from "./Icon/blocks1/IconHeading-1.vue"
@@ -20,17 +19,17 @@ import IconDetails from "./Icon/blocks1/IconDetails.vue";
 import IconImage from "./Icon/blocks2/IconImage.vue";
 import IconCode from "./Icon/blocks2/IconCode.vue";
 import IconVideo from "./Icon/blocks2/IconVideo.vue";
-import {insertHeading} from "@/views/User/Main/components/Edit/Main/Tools/Plus/Service/insertHeading.ts";
+import {insertHeading} from "@/views/User/Main/components/Edit/Main/Tools/Plus/Service/insertHeading";
 import {DropdownInstance} from "element-plus";
 import {ref} from "vue";
-import {InsertTaskList} from "@/views/User/Main/components/Edit/Main/Tools/Plus/Service/insertTaskList.ts";
-import {insertHorizontal} from "@/views/User/Main/components/Edit/Main/Tools/Plus/Service/insertHorizontal.ts";
-import {InsertBlockquote} from "@/views/User/Main/components/Edit/Main/Tools/Plus/Service/insertBlockquote.ts";
+import {InsertTaskList} from "@/views/User/Main/components/Edit/Main/Tools/Plus/Service/insertTaskList";
+import {insertHorizontal} from "@/views/User/Main/components/Edit/Main/Tools/Plus/Service/insertHorizontal";
+import {InsertBlockquote} from "@/views/User/Main/components/Edit/Main/Tools/Plus/Service/insertBlockquote";
 
 
 const dropdown = ref<DropdownInstance>()
 
-const editor = defineModel();
+const editor:any = defineModel();
 
 // 数据结构，包含 label, tag 和 icon 字段
 const blocks1 = [

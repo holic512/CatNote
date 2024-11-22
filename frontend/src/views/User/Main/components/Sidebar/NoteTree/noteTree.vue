@@ -2,18 +2,18 @@
 import {onMounted, ref, watch} from "vue";
 import type Node from 'element-plus/es/components/tree/src/model/node'
 import Button from 'primevue/button';
-import {Tree} from "./interface/treeInterface.ts";
+import {Tree} from "./interface/treeInterface";
 import {getCurrentNoteInfo} from "@/views/User/Main/components/Sidebar/NoteTree/service/GetCurrentNoteInfo.js";
 import {useRouter} from "vue-router";
 import TopDivRightMenu from "@/views/User/Main/components/Sidebar/RightMenu/TopDivRightMenu.vue";
 import NodeRightMenu from "@/views/User/Main/components/Sidebar/RightMenu/NodeRightMenu.vue";
 import FolderRightMenu from "@/views/User/Main/components/Sidebar/RightMenu/FolderRightMenu.vue";
-import {getUserAllTreeData} from "@/views/User/Main/components/Sidebar/NoteTree/service/GetUserAllTreeData.ts";
-import {useNoteTreeUpdate} from "@/views/User/Main/components/Sidebar/Pinia/isNoteTreeUpdated.ts";
-import {useRightSelectNodeId} from "@/views/User/Main/components/Sidebar/Pinia/RightSelectNodeId.ts";
-import {getFolderIdByNoteId} from "@/views/User/Main/components/Sidebar/NoteTree/service/GetFolderIdByNoteId.ts";
-import {useSaveNoteState} from "@/views/User/Main/components/Edit/Pinia/SaveNoteState.ts";
-import {ElMessage, ElMessageBox} from "element-plus";
+import {getUserAllTreeData} from "@/views/User/Main/components/Sidebar/NoteTree/service/GetUserAllTreeData";
+import {useNoteTreeUpdate} from "@/views/User/Main/components/Sidebar/Pinia/isNoteTreeUpdated";
+import {useRightSelectNodeId} from "@/views/User/Main/components/Sidebar/Pinia/RightSelectNodeId";
+import {getFolderIdByNoteId} from "@/views/User/Main/components/Sidebar/NoteTree/service/GetFolderIdByNoteId";
+import {useSaveNoteState} from "@/views/User/Main/components/Edit/Pinia/SaveNoteState";
+import {ElMessageBox} from "element-plus";
 
 
 // 获取 router 实例

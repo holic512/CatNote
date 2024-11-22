@@ -1,6 +1,6 @@
 // register.ts
 import axios from "../../../../../axios";
-import {regIDStore} from "../../../../../pinia/regIDStore.ts";
+import {regIDStore} from "@/pinia/regIDStore";
 
 async function initiateReg(username: string, password: string, email: string) {
     try {

@@ -1,6 +1,6 @@
 //
-import {useRightSelectNodeId} from "../../Pinia/RightSelectNodeId.ts";
-import {AddNote} from "./AddNote.ts";
+import {useRightSelectNodeId} from "../../Pinia/RightSelectNodeId";
+import {AddNote} from "./AddNote";
 
 export const onRightNFAddNote = () => {
     const selectId = useRightSelectNodeId().GetSelectNodeId();

@@ -1,10 +1,10 @@
 <script setup lang="ts">
 
-import {toggleOrderedList} from "../Service/toggleOrderedList.ts";
+import {toggleOrderedList} from "../Service/toggleOrderedList";
 import IconOList from "../icon/IconOrderedList.vue"
 import '../css/editTool-button.css'
 
-const editor = defineModel()
+const editor:any = defineModel()
 </script>
 
 <template>

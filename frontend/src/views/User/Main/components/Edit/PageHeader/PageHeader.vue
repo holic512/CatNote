@@ -3,7 +3,7 @@
 
 import SaveNote from "@/views/User/Main/components/Edit/PageHeader/components/SaveNote/SaveNote.vue";
 import SaveNoteState from "@/views/User/Main/components/Edit/PageHeader/components/SaveNoteState/SaveNoteState.vue";
-import {useCurrentNoteInfoStore} from "@/views/User/Main/components/Edit/Pinia/currentNoteInfo.ts";
+import {useCurrentNoteInfoStore} from "@/views/User/Main/components/Edit/Pinia/currentNoteInfo";
 
 const editor = defineModel()
 

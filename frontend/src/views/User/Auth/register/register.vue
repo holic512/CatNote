@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import {ref, reactive} from "vue";
+import {reactive, ref} from "vue";
 import {ElMessage, FormInstance, FormRules} from "element-plus";
-import {initiateReg, VerReg} from "./services/register.ts";
+import {initiateReg, VerReg} from "./services/register";
 import InputOtp from "primevue/inputotp";
 import Dialog from "primevue/dialog";
 import UserAgreement from "../components/userAgreement.vue";

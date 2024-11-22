@@ -1,15 +1,12 @@
 <script setup lang="ts">
 
 import {ContextMenu, ContextMenuGroup, ContextMenuItem, ContextMenuSeparator} from "@imengyu/vue3-context-menu";
-import {
-  RightMenuOptionInterface
-} from "@/views/User/Main/components/Sidebar/RightMenu/interface/RightMenuOptionInterface.js";
-import {onRightNFAddNote} from "@/views/User/Main/components/Sidebar/RightMenu/Service/onRightNFAddNote.ts";
-import {onRightNFAddFolder} from "@/views/User/Main/components/Sidebar/RightMenu/Service/onRightNFAddFolder.ts";
-import {useRenameData} from "@/views/User/Main/components/Sidebar/Pinia/RenameData.ts";
+import {onRightNFAddNote} from "@/views/User/Main/components/Sidebar/RightMenu/Service/onRightNFAddNote";
+import {onRightNFAddFolder} from "@/views/User/Main/components/Sidebar/RightMenu/Service/onRightNFAddFolder";
+import {useRenameData} from "@/views/User/Main/components/Sidebar/Pinia/RenameData";
 
 
-const NodeMenuOption: RightMenuOptionInterface = defineModel();
+const NodeMenuOption: any = defineModel();
 
 const IsRename = useRenameData()
 

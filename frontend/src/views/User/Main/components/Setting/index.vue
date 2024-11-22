@@ -7,7 +7,7 @@ const addUserVisible = defineModel()
 
 <template>
   <el-dialog v-model="addUserVisible" class="dialog">
-    <template #header="{ close, titleId, titleClass }">
+    <template #header="{}">
 
     </template>
 

@@ -1,6 +1,6 @@
 import axios from "../../../../../axios";
-import {tokenStore} from "../../../../../pinia/token.ts";
-import {logIDStore} from "../../../../../pinia/logIDStore.ts";
+import {tokenStore} from "@/pinia/token";
+import {logIDStore} from "@/pinia/logIDStore";
 
 async function sendMail(email: string): Promise<number> {
     try {

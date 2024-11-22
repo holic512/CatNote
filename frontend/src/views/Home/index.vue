@@ -56,7 +56,7 @@
       </h1>
 
       <div class="button-container"  v-if="showButtons">
-        <el-button round plain :style="{ width: '200px', height: '50px', fontSize: '1.3rem' }" @click="navigateToLogin()">开始使用</el-button>
+        <el-button round plain :style="{ width: '200px', height: '50px', fontSize: '1.3rem' }">开始使用</el-button>
       </div>
     </div>
 
@@ -174,8 +174,8 @@
 </template>
 
 <script setup lang="ts">
-import { gsap } from "gsap";
-import { onMounted, ref } from "vue";
+import gsap from "gsap";
+import {onMounted, ref} from "vue";
 
 const introSection = ref<HTMLElement | null>(null);
 const brandName = ref("SlothNote"); // 品牌名称

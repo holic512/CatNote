@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import {isItalicActive, italic} from "@/views/User/Main/components/Edit/Main/Tools/Service/Italic.ts";
+import {isItalicActive, italic} from "@/views/User/Main/components/Edit/Main/Tools/Service/Italic";
 
 import '../css/editTool-button.css'
 import IconItalic from "@/views/User/Main/components/Edit/Main/Tools/icon/IconItalic.vue";
-const editor = defineModel()
+
+const editor:any = defineModel()
 
 </script>
 

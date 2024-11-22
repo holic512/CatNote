@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import {toggleBulletList} from "@/views/User/Main/components/Edit/Main/Tools/Service/toggleBulletList.ts";
+import {toggleBulletList} from "@/views/User/Main/components/Edit/Main/Tools/Service/toggleBulletList";
 import IconUList from "@/views/User/Main/components/Edit/Main/Tools/icon/IconUnorderedList.vue";
-const editor = defineModel()
+
+const editor:any = defineModel()
 </script>
 
 <template>

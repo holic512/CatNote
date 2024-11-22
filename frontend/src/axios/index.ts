@@ -2,8 +2,8 @@
 // * Version: 1.0
 
 import axios from 'axios';
-import { tokenStore } from "../pinia/token.ts";
-import { routerStore } from "../pinia/routerStore.ts";
+import {tokenStore} from "@/pinia/token";
+import {routerStore} from "@/pinia/routerStore";
 
 // 路由实例
 import router from "../router/index.js";

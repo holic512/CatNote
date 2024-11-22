@@ -2,14 +2,14 @@
 <script setup lang="ts">
 
 import IconSaveNote from "./IconSaveNote.vue";
-import {useSaveNoteState} from "@/views/User/Main/components/Edit/Pinia/SaveNoteState.ts";
-import {SaveNote} from "@/views/User/Main/components/Edit/PageHeader/components/SaveNote/SaveNote.ts";
+import {useSaveNoteState} from "@/views/User/Main/components/Edit/Pinia/SaveNoteState";
+import {SaveNote} from "@/views/User/Main/components/Edit/PageHeader/components/SaveNote/SaveNote";
 
 // 创建 存储 笔记保存状态 的Pinia
 const editorState = useSaveNoteState()
 
 // 获取父组件的 editor
-const editor = defineModel()
+const editor:any = defineModel()
 
 </script>
 

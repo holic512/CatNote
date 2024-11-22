@@ -1,10 +1,10 @@
 <script setup lang="ts">
 
-import {redo} from "@/views/User/Main/components/Edit/Main/Tools/Service/redo.ts";
+import {redo} from "@/views/User/Main/components/Edit/Main/Tools/Service/redo";
 import '../css/editTool-button.css'
 import IconRedo from "@/views/User/Main/components/Edit/Main/Tools/icon/IconRedo.vue";
 
-const editor = defineModel()
+const editor:any = defineModel()
 </script>
 
 <template>

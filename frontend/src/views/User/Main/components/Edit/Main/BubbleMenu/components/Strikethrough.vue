@@ -1,9 +1,10 @@
 <script setup lang="ts">
 
-import {isStrikeActive, strike} from "@/views/User/Main/components/Edit/Main/Tools/Service/strike.ts";
+import {isStrikeActive, strike} from "@/views/User/Main/components/Edit/Main/Tools/Service/strike";
 import '../css/editTool-button.css'
 import IconStrikethrough from "@/views/User/Main/components/Edit/Main/Tools/icon/IconStrikethrough.vue";
-const editor = defineModel()
+
+const editor:any = defineModel()
 
 </script>
 

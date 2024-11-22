@@ -11,16 +11,16 @@ import {computed, onBeforeUnmount, onMounted, ref} from "vue";
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import axios from "../../../../../axios";
-import fetchInitialPageData from "./components/TableView/fetchInitialPageData.ts";
-import {fetchPageData} from "./components/TableView/fetchPageData.ts";
-import {calculateRows} from "./components/TableView/calculateRows.ts";
-import {getStatusMsg, getStatusType} from "./components/TableView/getStatusType.ts";
+import fetchInitialPageData from "./components/TableView/fetchInitialPageData";
+import {fetchPageData} from "./components/TableView/fetchPageData";
+import {calculateRows} from "./components/TableView/calculateRows";
+import {getStatusMsg, getStatusType} from "./components/TableView/getStatusType";
 import AddUser from "./components/AddUser/addUser.vue";
-import {debounceImmediate} from "../../../../../util/debounce.ts";
+import {debounceImmediate} from "@/util/debounce";
 import {ElMessage} from "element-plus";
-import {BatchDeleteUser} from "./components/TableView/batchDeleteUser.ts";
+import {BatchDeleteUser} from "./components/TableView/batchDeleteUser";
 import OnlineUser from "./components/OnlineUser/OnlineUser.vue";
-import {onlineUserCount} from "./components/OnlineUser/OnlineUserCount.ts";
+import {onlineUserCount} from "./components/OnlineUser/OnlineUserCount";
 
 // 搜素框数据
 const value1 = ref(null);

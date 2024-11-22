@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {reactive, ref} from "vue";
 import {ElMessage, FormInstance, FormRules} from "element-plus";
-import {addUser, AddUserForm} from "./addUser.ts";
+import {addUser, AddUserForm} from "./addUser";
 import Dialog from "primevue/dialog";
 
 // 控制添加用户页面
@@ -136,7 +136,7 @@ const resetForm = () => {
 
 <template>
 
-  <Dialog v-model:visible="addUserVisible" :draggable="false" modal header="添加用户" :style="{ width: '450px'}"
+  <Dialog v-model:visible:any="addUserVisible" :draggable="false" modal header="添加用户" :style="{ width: '450px'}"
           :pt="{
     header: { style: { paddingBottom:'10px',paddingTop:'10px'} },
     content: { style: { borderTop: '1px solid #E2E8F0'} },

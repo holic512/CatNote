@@ -1,7 +1,7 @@
 // login.ts
 import axios from "../../../../axios";
-import {logIDStore} from "../../../../pinia/logIDStore.ts";
-import {tokenStore} from "../../../../pinia/token.ts";
+import {logIDStore} from "@/pinia/logIDStore";
+import {tokenStore} from "@/pinia/token";
 import {UnwrapRef} from "vue";
 
 

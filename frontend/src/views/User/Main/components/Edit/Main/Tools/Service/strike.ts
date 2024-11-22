@@ -1,5 +1,5 @@
 // 用于文本编辑器中的删除线功能
-import { Editor } from "@tiptap/vue-3";
+import {Editor} from "@tiptap/vue-3";
 
 export const strike = (editor: Editor) => {
     editor.chain().focus().toggleStrike().run();

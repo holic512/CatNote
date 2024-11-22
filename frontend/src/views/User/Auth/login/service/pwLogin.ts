@@ -1,5 +1,5 @@
 import axios from "../../../../../axios";
-import {tokenStore} from "../../../../../pinia/token.ts";
+import {tokenStore} from "@/pinia/token";
 
 async function pwLogin(username: string, password: string): Promise<number> {
     try {

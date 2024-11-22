@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {useSaveNoteState} from "@/views/User/Main/components/Edit/Pinia/SaveNoteState.ts";
+import {useSaveNoteState} from "@/views/User/Main/components/Edit/Pinia/SaveNoteState";
 // 创建 存储 笔记保存状态 的Pinia
 const editorState = useSaveNoteState()
 </script>

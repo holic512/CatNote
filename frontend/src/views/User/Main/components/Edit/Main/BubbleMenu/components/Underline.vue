@@ -1,10 +1,10 @@
 <script setup lang="ts">
 
-import {isUnderlineActive, underline} from "@/views/User/Main/components/Edit/Main/Tools/Service/underline.ts";
+import {isUnderlineActive, underline} from "@/views/User/Main/components/Edit/Main/Tools/Service/underline";
 import '../css/editTool-button.css'
 import IconUnderline from "@/views/User/Main/components/Edit/Main/Tools/icon/IconUnderline.vue";
 
-const editor = defineModel()
+const editor:any = defineModel()
 </script>
 
 <template>

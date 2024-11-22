@@ -1,6 +1,6 @@
 //
-import {useRightSelectNodeId} from "../../Pinia/RightSelectNodeId.ts";
-import {AddFolder} from "./AddFolder.ts";
+import {useRightSelectNodeId} from "../../Pinia/RightSelectNodeId";
+import {AddFolder} from "./AddFolder";
 
 
 export const onRightNFAddFolder = () => {

@@ -1,7 +1,7 @@
 // 用于 新建笔记 操作
 
 import axios from "../../../../../../../axios";
-import {useNoteTreeUpdate} from "../../Pinia/isNoteTreeUpdated.ts";
+import {useNoteTreeUpdate} from "../../Pinia/isNoteTreeUpdated";
 
 const AddNote = async (FolderId: number) => {
 

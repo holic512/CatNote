@@ -1,6 +1,6 @@
 // stores/useSaveNoteState.ts
-import { defineStore } from 'pinia'
-import { ref, Ref } from 'vue'
+import {defineStore} from 'pinia'
+import {ref, Ref} from 'vue'
 
 export const useSaveNoteState = defineStore('SaveNoteState', {
     // Define state variables

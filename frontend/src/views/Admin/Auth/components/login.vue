@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {ref} from 'vue';
 import {ElMessage} from 'element-plus';
-import {login, verCode} from "../services/login.ts";
+import {login, verCode} from "../services/login";
 
 import InputOtp from 'primevue/inputotp';
 import {useRouter} from 'vue-router';

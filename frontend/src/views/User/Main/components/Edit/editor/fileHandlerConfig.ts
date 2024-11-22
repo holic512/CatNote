@@ -3,19 +3,13 @@
 // 主要支持图片类型文件的插入。
 
 // 定义配置
-import {saveCompressedNoteImage} from "../Main/Service/saveCompressedNoteImage.ts";
+import {saveCompressedNoteImage} from "../Main/Service/saveCompressedNoteImage";
 
-const fileHandlerConfig = {
+const fileHandlerConfig: any = {
 
     // 允许的图片 MIME 类型，用于限制可插入的图片文件格式
     allowedMimeTypes: ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],
 
-    /**
-     * 处理拖拽文件的回调函数
-     * @param {any} currentEditor - 当前编辑器实例
-     * @param {File[]} files - 用户拖拽的文件数组
-     * @param {number} pos - 插入图片的位置
-     */
     onDrop: (currentEditor: any, files: File[], pos: number) => {
         files.forEach(file => {
             const fileReader = new FileReader();
@@ -44,14 +38,7 @@ const fileHandlerConfig = {
     },
 
 
-    /**
-     * 处理粘贴文件的回调函数
-     * @param {any} currentEditor - 当前编辑器实例
-     * @param {File[]} files - 用户粘贴的文件数组
-     * @param {string} htmlContent - 粘贴的 HTML 内容
-     * @returns {boolean} - 如果有 HTML 内容，则返回 false 表示停止插入
-     */
-    onPaste: (currentEditor: any, files: File[], htmlContent: string) => {
+    onPaste: (currentEditor: any, files: File[], htmlContent: string, pos: number) => {
         files.forEach(file => {
             if (htmlContent) {
                 // 如果粘贴内容包含 HTML，输出调试信息并停止手动插入

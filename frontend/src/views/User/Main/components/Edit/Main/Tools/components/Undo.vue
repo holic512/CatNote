@@ -1,11 +1,11 @@
 <script setup lang="ts">
 
-import {undo} from "@/views/User/Main/components/Edit/Main/Tools/Service/undo.ts";
+import {undo} from "@/views/User/Main/components/Edit/Main/Tools/Service/undo";
 import iconUndo from "@/views/User/Main/components/Edit/Main/Tools/icon/IconUndo.vue";
 
 import '../css/editTool-button.css'
 
-const editor = defineModel()
+const editor:any = defineModel()
 </script>
 
 <template>
