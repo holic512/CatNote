@@ -14,5 +14,5 @@ export const getCurrentNoteInfo = async (node: Node) => {
 
     // 存储到 pinia中
     const currentNoteInfo = useCurrentNoteInfoStore()
-    currentNoteInfo.setNoteInfo(node.data.id, node.data.label, parents)
+    currentNoteInfo.setNoteInfo(node.data.id, node.data.label, parents, node.data.avatar)
 }

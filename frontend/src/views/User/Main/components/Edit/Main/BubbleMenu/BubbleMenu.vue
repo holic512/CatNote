@@ -10,6 +10,7 @@ import Strikethrough from "@/views/User/Main/components/Edit/Main/BubbleMenu/com
 import TextColor from "@/views/User/Main/components/Edit/Main/BubbleMenu/components/TextColor.vue";
 import AI from "@/icon/AI.vue";
 import Review from "@/icon/Review.vue";
+import SetText from "@/views/User/Main/components/Edit/Main/BubbleMenu/SetText/SetText.vue";
 
 
 const editor: any = defineModel()
@@ -59,17 +60,7 @@ const editor: any = defineModel()
       <el-divider direction="vertical"/>
 
 
-      <el-dropdown trigger="click">
-        <el-button text style="width: auto;height: 28px;padding-right: 6px;padding-left: 6px">
-          <el-text tag="b" style="margin-right: 2px">
-            文本
-          </el-text>
-          <el-icon size="12">
-            <ArrowDown/>
-          </el-icon>
-        </el-button>
-
-      </el-dropdown>
+      <SetText v-model="editor"/>
 
       <BoldText v-model="editor"/>
 
@@ -89,8 +80,10 @@ const editor: any = defineModel()
 
 <style scoped>
 .bubbleBox {
-  width: 446px;
+  width: 450px; /* 占据父容器宽度 */
   display: flex;
+  flex-wrap: nowrap; /* 不换行 */
+  justify-content: space-between; /* 如果内容多，让它们平均分布 */
   align-items: center;
   background-color: white; /* 白底 */
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2); /* 更深的阴影 */

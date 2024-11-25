@@ -65,17 +65,13 @@ const handleNodeClick = (data: Tree, node: Node) => {
         .then(() => {
           // 设置当前显示笔记信息
           getCurrentNoteInfo(node);
-
           // 重置保存状态
           SaveNoteState.saveContent();
-
           router.push('/user/main/edit')
         })
   }else {
     // 设置当前显示笔记信息
     getCurrentNoteInfo(node);
-
-
     router.push('/user/main/edit')
   }
 }

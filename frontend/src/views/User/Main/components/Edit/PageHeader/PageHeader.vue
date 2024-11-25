@@ -18,12 +18,27 @@ const currentNoteInfo = useCurrentNoteInfoStore()
     <!--    文件路径头   -->
     <el-col :span="8" class="el-col">
       <el-breadcrumb separator="/">
+
+        <!--文件夹文本 -循环-->
         <el-breadcrumb-item v-for="(noteLocation) in currentNoteInfo.noteLocation">
           <el-text tag="b">{{ noteLocation }}</el-text>
         </el-breadcrumb-item>
+
         <el-breadcrumb-item>
-          <el-text tag="b">{{ currentNoteInfo.noteName }}</el-text>
+          <el-text tag="b" style="display: flex;gap: 4px;align-items: center;">
+            <!--  判断是否使用自定义图标 -->
+            <el-icon size="14" v-if="currentNoteInfo.avatar == null">
+              <Notebook/>
+            </el-icon>
+            <el-icon size="14" v-else>
+              {{ currentNoteInfo.avatar }}
+            </el-icon>
+            <!--  文本 -->
+            {{ currentNoteInfo.noteName }}
+          </el-text>
         </el-breadcrumb-item>
+
+
       </el-breadcrumb>
 
       <!--  文件保存 状态-->

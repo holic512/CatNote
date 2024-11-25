@@ -1,23 +1,19 @@
-# 使用Node.js的官方镜像
-FROM node:20.12.0-alpine
+#前端安装
+# 使用官方Nginx镜像作为基础镜像
+FROM nginx:alpine
 
-# 设置工作目录
-WORKDIR /app
+# 删除默认的Nginx配置文件
+RUN rm /etc/nginx/conf.d/default.conf
 
-# 复制package.json和package-lock.json和 密钥 .npmrc
-COPY .npmrc ./
-COPY package*.json ./
+# 将自定义的Nginx配置文件复制到容器中
+COPY default.conf /etc/nginx/conf.d/
 
-RUN cat .npmrc
+# 将构建好的Vue项目复制到Nginx的默认目录
+COPY dist /usr/share/nginx/html
 
-# 安装依赖
-RUN npm install
+# 暴露80端口
+EXPOSE 80
 
-# 复制应用源代码
-COPY . .
+# 启动Nginx
+CMD ["nginx", "-g", "daemon off;"]
 
-# 暴露开发服务器端口
-EXPOSE 8081
-
-# 定义启动命令
-CMD ["npm", "run", "dev"]

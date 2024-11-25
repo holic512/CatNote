@@ -81,6 +81,7 @@ import {updateNoteAvatar} from "./Service/updateNoteAvatar";
 import {updateNoteTitle} from "./Service/updateNoteTitle";
 import {updateFolderTitle} from "@/views/User/Main/components/Sidebar/components/Rename/Service/updateFolderTitle";
 import {updateFolderAvatar} from "@/views/User/Main/components/Sidebar/components/Rename/Service/updateFolderAvatar";
+import {useCurrentNoteInfoStore} from "@/views/User/Main/components/Edit/Pinia/currentNoteInfo";
 
 // 修改 笔记头像
 const onSelectEmoji = async (emoji: EmojiExt) => {
@@ -122,8 +123,12 @@ watch(() => newName.value, async () => {
 
 // 当修改成功 执行刷新 策略
   if (status == 200) {
+    // 刷新笔记树
     const isNoteTreeUpdated = useNoteTreeUpdate();
     isNoteTreeUpdated.UpdatedNoteTree();
+    // 刷新heardPage
+    const currentNoteInfo = useCurrentNoteInfoStore()
+    currentNoteInfo.noteName = newName.value;
   }
 })
 

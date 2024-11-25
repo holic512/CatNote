@@ -3,6 +3,7 @@ import {ModelRef, ref, watch} from "vue";
 import {Editor} from "@tiptap/vue-3";
 import IconText from "@/views/User/Main/components/Edit/Main/Tools/icon/IconText.vue";
 import IconBColor from "@/views/User/Main/components/Edit/Main/Tools/icon/IconBColor.vue";
+import {DropdownInstance} from "element-plus";
 
 const editor: ModelRef<Editor | undefined> = defineModel();
 
@@ -64,12 +65,26 @@ const backgroundColorOptions = [
 
 // 设置 文本颜色
 const setTextColor = (color: string) => {
+  // 保留焦点
+  editor.value?.chain().focus()
+  handleClose()
   editor.value?.chain().focus().setColor(color).run();
 };
 
 // 设置 高亮颜色
 const setHighlightColor = (color: string) => {
+  // 保留焦点
+  editor.value?.chain().focus()
+  handleClose()
+
   editor.value?.chain().focus().toggleHighlight({color}).run()
+}
+
+
+const dropdown = ref<DropdownInstance>()
+
+function handleClose() {
+  if (dropdown.value) dropdown.value?.handleClose()
 }
 
 </script>
@@ -83,7 +98,7 @@ const setHighlightColor = (color: string) => {
       :show-after="500"
       placement="bottom"
   >
-    <el-dropdown trigger="click">
+    <el-dropdown trigger="click" ref="dropdown">
       <el-button text style="width: 48px;height: 30px">
         <div class="circle" :style="{ backgroundColor: GetTextBColor }"></div>
         <el-icon size="14">
