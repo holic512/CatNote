@@ -20,6 +20,10 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
 }
 
+// 日历
+import { setupCalendar } from 'v-calendar';
+app.use(setupCalendar, {})
+
 // 配置pinia
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)

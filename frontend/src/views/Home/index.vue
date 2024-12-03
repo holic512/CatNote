@@ -170,6 +170,11 @@
     <div class="footer-text" ref="footerText">
       SlothNote – 为学习人士构建的非常强大的笔记工具
     </div>
+
+
+    <!--备案-->
+    <a href="https://beian.miit.gov.cn/" target="_blank">您的备案号</a>
+    <a href="https://beian.miit.gov.cn/" target="_blank">黑ICP备2024032772号</a>
   </div>
 </template>
 

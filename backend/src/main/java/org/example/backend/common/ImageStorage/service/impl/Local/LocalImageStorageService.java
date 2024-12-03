@@ -92,8 +92,8 @@ public class LocalImageStorageService implements ImageStorageService {
         // 这里可以根据需要返回本地图片的 URL
         File file = new File(storagePath, imageName);
         if (!file.exists()) {
-            logger.warn("图片不存在:{}", imageName);
-            throw new RuntimeException("图片不存在: " + imageName);
+            // 图片不存在 传递空地址
+            return null;
         }
 
         return "http://localhost:8080/images/" + imageName;

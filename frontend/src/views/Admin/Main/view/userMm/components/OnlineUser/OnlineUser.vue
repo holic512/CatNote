@@ -45,7 +45,10 @@ const kickoutR = async (uid: number) => {
 </script>
 
 <template>
-  <Dialog v-model:visible:any="onlineUserVisible" :draggable="false" modal header="在线用户页面" :style="{ width: '850px'}"
+
+
+  <!--  todo 类型不确定-->
+  <Dialog v-model:visible?="onlineUserVisible" :draggable="false" modal header="在线用户页面" :style="{ width: '850px'}"
           :pt="{
     header: { style: { paddingBottom:'10px',paddingTop:'10px'} },
     content: { style: { borderTop: '1px solid #E2E8F0'} },

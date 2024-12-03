@@ -68,7 +68,7 @@ const router = useRouter();
     </div>
 
 
-    <div class="sidebar-div" style="margin-bottom: 1px;">
+    <div class="sidebar-div" style="margin-bottom: 1px;" @click="router.push('/user/main/todolist')">
       <div class="sidebar-icon">
         <i class="pi pi-calendar" style="font-size: 1rem;color: #708090"/>
       </div>

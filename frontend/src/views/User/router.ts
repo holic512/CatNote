@@ -62,6 +62,11 @@ export default [
                         name: 'user-edit',
                         component: () => import('./Main/components/Edit/index.vue'),
                     },
+                    {
+                        path: 'todoList',
+                        name: 'user-todoList',
+                        component: () => import('./Main/components/TodoList/TodoList.vue'),
+                    },
                 ],
             },
         ]

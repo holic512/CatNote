@@ -7,6 +7,8 @@
     <file url="file://$PROJECT_DIR$/backend/src/main/resources/sql/create_note_info_table.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/backend/src/main/resources/sql/create_server_config _table.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/backend/src/main/resources/sql/create_server_config_data_table.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/backend/src/main/resources/sql/create_todo_category_table.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/backend/src/main/resources/sql/create_todo_info_table.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/backend/src/main/resources/sql/create_user_profiles_table.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/backend/src/main/resources/sql/create_users_table.sql" dialect="MySQL" />
     <file url="PROJECT" dialect="MySQL" />
