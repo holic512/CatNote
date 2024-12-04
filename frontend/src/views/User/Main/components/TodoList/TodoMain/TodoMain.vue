@@ -187,7 +187,7 @@ const handCompleted = () => {
 
 <style scoped>
 .TodoMain {
-  border-right: 1px solid #ddd; /* 边框 */
+
   height: 100%;
   padding: 16px;
 

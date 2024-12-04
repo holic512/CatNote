@@ -1,0 +1,33 @@
+# 开发环境变量
+spring:
+  # 数据库设置
+  datasource:
+    url: jdbc:mysql://localhost:3306/SlothNote
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  data:
+    # redis配置
+    redis:
+      host: localhost
+      port: 6379
+      password: 123456
+
+    # mongodb配置
+    mongodb:
+      host: 192.168.188.36
+      port: 27017
+      database: SlothNote
+      username: mongo_holic
+      password: mongo_holic
+      authentication-database: admin
+
+  # rabbit 配置
+  rabbitmq:
+    port: 5672
+    host: 192.168.188.36
+    username: rabbitmq
+    password: rabbitmq
+
+

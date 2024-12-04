@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@imengyu/vue3-context-menu": "^1.4.3",
-    "@popperjs/core": "^2.11.8",
     "@primevue/themes": "^4.0.5",
     "@tiptap-pro/extension-drag-handle": "^2.13.0",
     "@tiptap-pro/extension-file-handler": "^2.13.0",
@@ -48,12 +47,13 @@
   "devDependencies": {
     "@types/node": "^22.9.1",
     "@vitejs/plugin-vue": "^5.1.2",
+    "esbuild": "^0.24.0",
     "sass": "^1.80.6",
     "sass-embedded": "^1.80.6",
     "sass-loader": "^16.0.3",
     "terser": "^5.36.0",
-    "typescript": "^5.5.3",
-    "vite": "^5.4.0",
+    "typescript": "^5.6.2",
+    "vite": "^6.0.2",
     "vue-tsc": "^2.0.29"
   }
 }

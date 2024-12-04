@@ -1,331 +1,130 @@
+<script setup lang="ts">
+import {useRouter} from "vue-router";
+
+const items = [
+  {
+    title: "🛠 直观的设计",
+    details: "我们提供简洁直观的设计，让笔记的组织和管理变得轻松高效。优化的界面和交互方式，使得每次记录都成为愉悦的体验，帮助您快速捕捉灵感和重要信息。",
+  },
+  {
+    title: "🔑 类型安全",
+    details: "通过先进的类型安全机制，确保每一条笔记的数据都能准确无误地存储和访问。系统自动检查数据一致性，避免错误，提高您的工作效率和数据安全性。",
+  },
+  {
+    title: "⚙️ Markdown 支持",
+    details: "我们全面支持 Markdown 格式，让您可以轻松格式化文本、添加图片和链接，制作更加结构化和专业的笔记。无论是写作还是技术记录，Markdown 都是最便捷的工具。",
+  },
+  {
+    title: "🔌 可扩展性",
+    details: "通过强大的扩展功能，如事务处理和本地存储，您可以根据需求定制应用，满足各种复杂的使用场景。灵活的架构支持让您能够不断扩展和优化工作流程。",
+  },
+  {
+    title: "🏗 模块化设计",
+    details: "模块化设计让您可以根据实际需求进行个性化定制，多模块管理提升了笔记的组织性和可操作性。无论是个人使用还是团队协作，模块化都能提供最佳的支持。",
+  },
+  {
+    title: "📦 网页端轻量化",
+    details: "网页端不仅提供与桌面版同样强大的功能，还特别注重性能优化，保持极致的轻量化，确保无论网络环境如何，您都能享受到快速、流畅的体验。",
+  },
+  {
+    title: "🌐 跨平台兼容性",
+    details: "我们的平台支持多种操作系统和设备，确保您的笔记随时随地都可以访问和同步。无需下载安装，直接在浏览器中启动，无论是手机、平板还是电脑，都能无缝连接。",
+  },
+  {
+    title: "🔄 即时更新",
+    details: "自动更新功能确保您始终使用最新版本，无需手动下载或安装，确保新功能和修复即时到位，给您带来最优质、最流畅的使用体验。",
+  },
+  {
+    title: "📁 集中管理",
+    details: "所有的数据和设置都存储在云端，确保您的笔记在任何设备上都能保持同步。不仅如此，您可以随时在不同设备之间切换，数据始终保持一致，保障工作流程的连续性和高效性。",
+  },
+];
+
+// 注册 router 路由
+const router = useRouter();
+</script>
 <template>
   <div class="app-container">
-    <el-container>
-      <!-- 头部 -->
-      <el-header class="custom-header">
-        <el-row class="header-row" type="flex" justify="space-between" align="middle">
-          <!-- 左半部 -->
-          <el-col :span="16">
-            <div class="left-part">
-              <div class="brand-name">
-                <span
-                    v-for="(letter, index) in brandName.split('')"
-                    :key="index"
-                    class="brand-letter"
-                    @mouseover="animateLetter($event, index)"
-                    @mouseleave="resetLetter($event)"
-                >{{ letter }}</span>
+
+
+    <!--     头部-->
+    <div class="custom-header">
+      <img src="/favicon.ico" style="width: 24px;" alt="logo"/>
+      <el-text>首页</el-text>
+      <el-text>Bilibili</el-text>
+      <el-link href="https://github.com/holic512/SlothNote">GitHub</el-link>
+      <el-link @click="router.push('/user/auth')">登录</el-link>
+
+    </div>
+    <el-scrollbar>
+      <!--特效块-->
+      <div class="color-transition"></div>
+
+      <!-- title 1-->
+      <div style="padding-left: 18%; margin-bottom: 96px;margin-top: 96px">
+        <div>
+          <el-text class="title1" tag="b">记下,</el-text>
+          <br>
+          <el-text class="title1" tag="b"> 所有的一切.</el-text>
+        </div>
+        <div style="margin-top: 24px;">
+          <el-text class="linear-gradation-title" tag="b" style="font-size: 36px">SlothNote</el-text>
+          <el-text style="font-size: 24px">
+            帮助你和你的团队轻松
+          </el-text>
+          <br>
+          <el-text style="font-size: 24px"> 高效地完成更多任务,且心无旁骛.</el-text>
+        </div>
+
+
+      </div>
+
+      <div
+          style="display: flex; align-items: center;justify-content: center;flex-direction: column;margin-bottom: 36px">
+        <el-image src="/image-removebg-preview.png"/>
+        <el-text style="font-size: 48px" class="linear-gradation-title">SlothNote</el-text>
+        <el-text size="large">创造一些美丽的东西.</el-text>
+      </div>
+
+
+      <!-- title 2-->
+      <div style="height: 120px; display: flex; align-items: center;padding-left: 10%; ">
+        <el-text class="title2 linear-gradation-title" tag="b">功能.</el-text>
+        <el-text class="title2">为您打开了无限可能的大门</el-text>
+      </div>
+
+      <!--功能介绍-->
+      <div style="padding: 0 10% 140px 10%;">
+        <el-scrollbar>
+          <div style="display: flex; gap: 36px;padding:8px">
+            <div class="method-div" v-for="(item, index) in items" :key="index">
+              <div>
+                <h1>{{ item.title }}</h1>
+                <el-text size="large">{{ item.details }}</el-text>
+
               </div>
             </div>
-          </el-col>
-
-          <!-- 右半部 -->
-          <el-col :span="5">
-            <div class="right-part">
-              <div class="link-container">
-                <el-text class="link-text">首页</el-text>
-              </div>
-              <div class="link-container">
-                <el-text class="link-text">GitHub</el-text>
-              </div>
-            </div>
-          </el-col>
-        </el-row>
-      </el-header>
-    </el-container>
-
-    <div class="text-container">
-      <h1 class="large-text">
-        <span class="letter remember">R</span>
-        <span class="letter remember">e</span>
-        <span class="letter remember">m</span>
-        <span class="letter remember">e</span>
-        <span class="letter remember">m</span>
-        <span class="letter remember">b</span>
-        <span class="letter remember">e</span>
-        <span class="letter remember">r</span>
-        <br />
-        <span class="letter indent anything">a</span>
-        <span class="letter anything">n</span>
-        <span class="letter anything">y</span>
-        <span class="letter anything">t</span>
-        <span class="letter anything">h</span>
-        <span class="letter anything">i</span>
-        <span class="letter anything">n</span>
-        <span class="letter anything">g</span>
-      </h1>
-
-      <div class="button-container"  v-if="showButtons">
-        <el-button round plain :style="{ width: '200px', height: '50px', fontSize: '1.3rem' }">开始使用</el-button>
+          </div>
+        </el-scrollbar>
       </div>
-    </div>
 
-    <!-- Divider -->
-    <hr class="divider" />
 
-    <!-- 项目简介 -->
-    <div class="intro-section" ref="introSection">
-      <div class="intro-text">
-        <h1 class="main-title">基于 Vue 和 SpringBoot 的云笔记平台</h1>
-        <h2 class="sub-title">让你的笔记管理更加轻松高效！</h2>
-        <p class="description-text">
-          SlothNote 是一个专为高效笔记管理打造的云笔记平台，支持 Markdown 格式的笔记存储，
-          提供便捷的图片处理与版本控制功能。无论你是学生、职场人士还是自由职业者，
-          SlothNote 都能帮助你随时随地记录想法，保持工作条理性。
-        </p>
+      <div class="beian-container">
+        <el-text>
+          Copyright © 2024-2024 树懒笔记 slothnote.cn All Rights Reserved. 备案号：
+        </el-text>
+        <a href="https://beian.miit.gov.cn/" target="_blank" class="beian-link">
+          黑ICP备2024032772号
+        </a>
       </div>
-    </div>
-    <!-- 新增的直观设计部分 -->
-    <hr class="divider" />
-    <div class="new-info-container">
-      <img src="./assets/images/logo.svg" alt="直观设计" class="new-image" /> <!-- 添加图片 -->
-      <div class="new-info">
-        <h3 class="new-title">🛠 直观的设计</h3>
-        <p class="new-details">简化笔记组织，提升书写体验，让每次记录都变得轻松愉快。</p>
-      </div>
-    </div>
 
 
-    <!-- 新增的类型安全部分 -->
-    <hr class="divider" />
-    <div class="new-info-container">
-      <img src="./assets/images/logo.svg" alt="类型安全" class="new-image" /> <!-- 添加图片 -->
-      <div class="new-info">
-        <h3 class="new-title">🔑 类型安全</h3>
-        <p class="new-details">通过先进的安全机制，确保每条笔记的数据准确无误。</p>
-      </div>
-    </div>
-
-    <!-- 新增的Markdown支持部分 -->
-    <hr class="divider" />
-    <div class="new-info-container">
-      <img src="./assets/images/logo.svg" alt="Markdown支持" class="new-image" /> <!-- 添加图片 -->
-      <div class="new-info">
-        <h3 class="new-title">⚙️ Markdown 支持</h3>
-        <p class="new-details">完美支持 Markdown 格式，方便快捷地格式化您的笔记内容。</p>
-      </div>
-    </div>
-
-    <!-- 新增的可扩展性部分 -->
-    <hr class="divider" />
-    <div class="new-info-container">
-      <img src="./assets/images/logo.svg" alt="可扩展性" class="new-image" /> <!-- 添加图片 -->
-      <div class="new-info">
-        <h3 class="new-title">🔌 可扩展性</h3>
-        <p class="new-details">通过事务和本地存储功能扩展，灵活应对各种自定义需求。</p>
-      </div>
-    </div>
-
-    <!-- 新增的模块化设计部分 -->
-    <hr class="divider" />
-    <div class="new-info-container">
-      <img src="./assets/images/logo.svg" alt="模块化设计" class="new-image" /> <!-- 添加图片 -->
-      <div class="new-info">
-        <h3 class="new-title">🏗 模块化设计</h3>
-        <p class="new-details">支持多模块管理，提升笔记组织的清晰度和工作效率。</p>
-      </div>
-    </div>
-
-    <!-- 新增的网页端轻量化部分 -->
-    <hr class="divider" />
-    <div class="new-info-container">
-      <img src="./assets/images/logo.svg" alt="网页端轻量化" class="new-image" /> <!-- 添加图片 -->
-      <div class="new-info">
-        <h3 class="new-title">📦 网页端轻量化</h3>
-        <p class="new-details">在网页端仍旧提供强大功能并且保持极致的轻量化。</p>
-      </div>
-    </div>
-
-    <!-- 新增的跨平台兼容性部分 -->
-    <hr class="divider" />
-    <div class="new-info-container">
-      <img src="./assets/images/logo.svg" alt="跨平台兼容性" class="new-image" /> <!-- 添加图片 -->
-      <div class="new-info">
-        <h3 class="new-title">🌐 跨平台兼容性</h3>
-        <p class="new-details">在任何操作系统和设备上运行，无需下载和安装，随时随地访问您的笔记。</p>
-      </div>
-    </div>
-
-    <!-- 新增的即时更新部分 -->
-    <hr class="divider" />
-    <div class="new-info-container">
-      <img src="./assets/images/logo.svg" alt="即时更新" class="new-image" /> <!-- 添加图片 -->
-      <div class="new-info">
-        <h3 class="new-title">🔄 即时更新</h3>
-        <p class="new-details">自动获取最新版本，无需手动更新，享受最优质的体验。</p>
-      </div>
-    </div>
-
-    <!-- 新增的集中管理部分 -->
-    <hr class="divider" />
-    <div class="new-info-container">
-      <img src="./assets/images/logo.svg" alt="集中管理" class="new-image" /> <!-- 添加图片 -->
-      <div class="new-info">
-        <h3 class="new-title">📁 集中管理</h3>
-        <p class="new-details">数据和设置存储在服务器端，任何设备上均可访问相同的数据和配置。</p>
-      </div>
-    </div>
-
-    <!-- Footer Text -->
-    <div class="footer-text" ref="footerText">
-      SlothNote – 为学习人士构建的非常强大的笔记工具
-    </div>
-
-
-    <!--备案-->
-    <a href="https://beian.miit.gov.cn/" target="_blank">您的备案号</a>
-    <a href="https://beian.miit.gov.cn/" target="_blank">黑ICP备2024032772号</a>
+    </el-scrollbar>
   </div>
 </template>
 
-<script setup lang="ts">
-import gsap from "gsap";
-import {onMounted, ref} from "vue";
-
-const introSection = ref<HTMLElement | null>(null);
-const brandName = ref("SlothNote"); // 品牌名称
-const footerText = ref<HTMLElement | null>(null);
-const showButtons = ref(false);
-
-onMounted(() => {
-  // 使用 Intersection Observer 监听元素是否进入视口
-  const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          // 元素进入视口时触发动画
-          gsap.fromTo(
-              ".intro-text",
-              {
-                opacity: 0,
-                scale: 0.8,
-                y: 50,
-              },
-              {
-                opacity: 1,
-                scale: 1,
-                y: 0,
-                duration: 1.5,
-                ease: "power4.out",
-              }
-          );
-
-          // 停止观察，防止重复触发
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.3 } // 30% 可见度时触发
-  );
-
-  if (introSection.value) {
-    observer.observe(introSection.value);
-  }
-  // 动画效果为 "Remember"
-  gsap.from(".remember", {
-    duration: 1.5,
-    opacity: 0,
-    scale: gsap.utils.random(0.8, 1.2),
-    y: gsap.utils.random(-50, 0),
-    rotation: gsap.utils.random(-10, 10),
-    ease: "bounce.out",
-    color: gsap.utils.random(["#ff6347", "#6a5acd", "#20b2aa", "#ffa07a"]),
-    stagger: 0.1,
-  });
-
-  // 动画效果为 "anything"
-  gsap.from(".anything", {
-    duration: 1.5,
-    opacity: 0,
-    scale: gsap.utils.random(1, 1.5),
-    x: gsap.utils.random(-50, 50),
-    ease: "elastic.out(1, 0.5)",
-    color: gsap.utils.random(["#ff1493", "#7fff00", "#00ced1", "#ff4500"]),
-    stagger: 0.2,
-  });
-
-  // 新增的 footer 动画
-  gsap.from(footerText.value, {
-    duration: 1,
-    opacity: 0,
-    scale: 0,
-    transformOrigin: "center", // 从中间展开
-    ease: "back.out(1.7)", // 适当的弹性效果
-    delay: 1.5, // 延迟，使其在其他动画后出现
-  });
-
-  // 延迟显示按钮
-  setTimeout(() => {
-    showButtons.value = true; // 根据其他动画的时长调整延迟
-    gsap.fromTo('.button-container', {
-      opacity: 0,
-      y: 20
-    }, {
-      opacity: 1,
-      y: 0,
-      duration: 0.5,
-      ease: "power2.out",
-    });
-  }, 1500);
-});
-
-// 动画效果为每个字母
-const animateLetter = (event: MouseEvent, index: number) => {
-  const target = event.target as HTMLElement;
-
-  // 为每个字母设置不同的动画效果
-  gsap.to(target, {
-    scale: gsap.utils.random(1.5, 2),
-    rotation: gsap.utils.random(-30, 30),
-    y: gsap.utils.random(-30, 30),
-    duration: 0.5,
-    ease: "bounce.out",
-    color: gsap.utils.random(["#ff6347", "#6a5acd", "#20b2aa", "#ffa07a"]),
-    backgroundColor: gsap.utils.random(["#ffeb3b", "#f44336", "#4caf50", "#2196f3"]),
-    border: '3px solid #d35400',
-    borderRadius: '10px',
-  });
-};
-
-// 恢复字母原始状态
-const resetLetter = (event: MouseEvent) => {
-  const target = event.target as HTMLElement;
-  gsap.to(target, {
-    scale: 1,
-    rotation: 0,
-    y: 0,
-    duration: 0.5,
-    ease: "power1.out",
-    color: "#4a90e2",
-    backgroundColor: 'transparent',
-    border: 'none',
-  });
-};
-</script>
 
 <style scoped>
-.text-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-grow: 1;
-  text-align: center;
-  margin-top: 100px;
-  position: relative; /* 允许绝对定位子元素 */
-}
-
-.button-container {
-  position: absolute; /* 绝对定位 */
-  right: 20px; /* 右侧留白 */
-  bottom: 40px; /* 底部留白 */
-  display: flex; /* 使用 Flexbox 布局 */
-}
-
-.button-container el-button {
-  padding: 12px 24px; /* 添加内边距 */
-  font-size: 2rem; /* 增加字体大小 */
-  border-radius: 8px; /* 使按钮边角圆滑 */
-  transition: background-color 3s; /* 过渡效果 */
-}
-
 .app-container {
   display: flex;
   flex-direction: column;
@@ -333,173 +132,89 @@ const resetLetter = (event: MouseEvent) => {
 }
 
 .custom-header {
-  background-color: rgba(255, 255, 255, 0.9); /* 背景色 */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* 头部阴影效果 */
+  background-color: #F5F5F7; /* 背景色 */
   position: fixed; /* 固定头部 */
   top: 0;
   left: 0;
   right: 0;
   z-index: 10; /* 确保在其他内容之上 */
-}
 
-.header-row {
-  padding: 10px 20px;
-}
-
-.left-part {
   display: flex;
   align-items: center;
+  justify-content: center;
+
+  padding: 8px;
+  gap: 24px;
+
+  height: 40px;
 }
 
-.brand-name {
-  font-size: 1.5rem;
-  color: #4a90e2;
+.color-transition {
+  width: 100vw;
+  height: 32px;
+  margin-top: 40px;
+  /* 使用线性渐变背景来实现逐渐透明的阴影效果 */
+
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 1%, rgba(255, 255, 255, 1) 100%),
+  linear-gradient(to right, white, #8EBCF3 10%, #9185ED, #F675B9, #F9CFA8 90%, white);
+
+  background-size: 100% 100%; /* 背景的宽度和高度填满整个元素 */
+
+}
+
+.title1 {
+  font-size: 58px;
+  color: black;
+}
+
+.linear-gradation-title {
+  background: linear-gradient(to right, #8EBCF3, #9185ED, #F675B9); /* 定义渐变颜色 */
+  -webkit-background-clip: text; /* 使渐变应用到文字 */
+  color: transparent; /* 使文字本身透明，以便只显示背景渐变 */
+}
+
+.title2 {
+  font-size: 24px;
+}
+
+.method-div {
+  width: 320px;
+  flex-shrink: 0;
+  height: 360px;
+  background: #F6F5F4;
   display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.brand-letter {
-  transition: color 0.3s ease, border 0.3s ease;
-  cursor: pointer;
-  padding: 5px;
-  border-radius: 3px;
+.method-div:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
-.brand-letter:hover {
-  color: #d35400;
-}
 
-.right-part {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.link-container {
-  margin-left: 20px;
-}
-
-.link-text {
-  color: #333;
-  cursor: pointer;
-}
-
-.text-container {
+.beian-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-grow: 1;
-  text-align: center;
-  margin-top: 60px;
+  font-size: 14px;
+  margin-top: 20px;
+
+  padding: 36px;
+  background-color: #F5F5F5;
 }
 
-.large-text {
-  font-size: 15vw;
-  font-weight: bold;
-  line-height: 1.2;
-  color: #333;
-}
-
-.letter {
-  display: inline-block; /* 使每个字母独立显示 */
-  transition: background-color 0.3s ease; /* 添加背景色过渡效果 */
-}
-
-.indent {
-  margin-left: 2em;
-}
-
-/* 新增样式 */
-.footer-text {
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-  color: #555;
-  font-size: 1.2rem;
-  background-color: rgba(255, 255, 255, 0.8);
-  padding: 10px;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  transform-origin: center; /* 确保从中间展开 */
-
-}
-
-
-/* 项目简介部分样式 */
-/* 项目简介部分样式 */
-.intro-section {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh; /* 占满整个视口 */
-  text-align: center;
-  background: linear-gradient(135deg,#ffffff,#ffffff); /* 背景渐变 */
-  color: #000000; /* 白色字体 */
-  padding: 0 20px; /* 两侧留白 */
-}
-
-.intro-text {
-  max-width: 800px; /* 控制文字宽度 */
-  font-size: 1.2rem;
-}
-
-.main-title {
-  font-size: 3rem; /* 主标题字体大小 */
-  font-weight: bold;
-  margin-bottom: 20px;
-  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* 添加阴影 */
-  line-height: 1.2;
-}
-
-.sub-title {
-  font-size: 2rem; /* 副标题字体大小 */
-  margin-bottom: 20px;
+.beian-link {
+  color: #007bff;
+  text-decoration: none;
   font-weight: 500;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2); /* 添加轻微阴影 */
-}
-
-.description-text {
-  font-size: 1.5rem; /* 描述字体大小 */
-  line-height: 1.8; /* 增加行高提升可读性 */
-  background: rgba(0, 0, 0, 0.2); /* 背景色 */
-  padding: 15px;
-  border-radius: 10px; /* 圆角背景 */
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* 添加阴影 */
-}
-
-/* New info container styles */
-.new-info-container {
+  margin: 0 8px;
   display: flex;
   align-items: center;
-  margin: 40px 0; /* Spacing around the new info */
 }
-
-
-.new-info {
-  text-align: left; /* Align text to the left */
-}
-
-.new-title {
-  font-size: 2rem; /* Font size for the new title */
-  color: #4a90e2; /* Title color */
-  margin-bottom: 10px; /* Space below the title */
-}
-
-.new-details {
-  font-size: 1.2rem; /* Font size for the new details */
-  color: #333; /* Text color */
-}
-
-.new-info-container {
-  display: flex;
-  align-items: center;
-  margin: 40px 0; /* Spacing around the new info */
-  padding: 0 20px; /* 添加左右内边距 */
-}
-
-.new-image {
-  width: 180px; /* Adjust the image size */
-  height: 180px; /* Adjust the image size */
-  margin-right: 20px; /* Space between the image and text */
-  border-radius: 10px; /* Optional: Add rounded corners */
-}
-
 </style>
