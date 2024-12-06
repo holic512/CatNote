@@ -2,6 +2,8 @@
 <project version="4">
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/backend/src/main/resources/sql/create_admins_table.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/backend/src/main/resources/sql/create_favorite_folder_info_table.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/backend/src/main/resources/sql/create_favorite_note_table.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/backend/src/main/resources/sql/create_folder_info_table.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/backend/src/main/resources/sql/create_mail_server_settings_table.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/backend/src/main/resources/sql/create_note_info_table.sql" dialect="MySQL" />
