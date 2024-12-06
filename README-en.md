@@ -5,7 +5,7 @@
   <a href="./README-cn.md">简体中文</a>  |  English
   </p>
 <div>
-SlothNote is a cloud note platform based on Vue 3 and Spring Boot.
+<p>SlothNote is a cloud note platform based on Vue 3 and Spring Boot.</p>
 </div>
 
 <div>

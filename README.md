@@ -5,7 +5,7 @@
     简体中文 | <a href="./README-en.md">English</a>
   </p>
 <div>
-SlothNote 是一个基于 Vue 3 和 Spring Boot 的云笔记平台
+<p>SlothNote 是一个基于 Vue 3 和 Spring Boot 的云笔记平台</p>
 </div>
 
 <div>
