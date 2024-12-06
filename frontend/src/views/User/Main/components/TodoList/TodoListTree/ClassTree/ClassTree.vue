@@ -1,24 +1,37 @@
 <script setup lang="ts">
 
 import AddClass from "@/views/User/Main/components/TodoList/TodoListTree/addClass/addClass.vue";
-import {ref} from "vue";
+import {onMounted, ref, watch} from "vue";
 import {useTodoState} from "@/views/User/Main/components/TodoList/Pinia/TodoState";
+import {
+  GetUserTodoClasses
+} from "@/views/User/Main/components/TodoList/TodoListTree/ClassTree/Service/GetUserTodoClasses";
+import {TodoTypeById} from "@/views/User/Main/components/TodoList/TodoListTree/ClassTree/Service/TodoTypeById";
+import {useTodoCategoryState} from "@/views/User/Main/components/TodoList/Pinia/TodoCategoryState";
 
-const todoClasses = [
-  {
-    id: 1,
-    label: '自定义分类1',
-  },
-  {
-    id: 2,
-    label: 'Todo List',
-  },
-  {
-    id: 3,
-    label: 'Todo List',
-  },
-]
+// 用来存储分类
+const todoClasses = ref<ITodoClass[]>([])
 
+// 分类接口
+interface ITodoClass {
+  id: number,
+  user_id: number,
+  type: number,
+  name: string,
+}
+
+// 钩子函数
+onMounted(async () => {
+  todoClasses.value = await GetUserTodoClasses();
+})
+
+// 检测更新
+// TodoClassTree 更新策略
+const todoCategoryState = useTodoCategoryState();
+
+watch(() => todoCategoryState.isDescriptionVisible, async () => {
+  todoClasses.value = await GetUserTodoClasses();
+})
 
 // 控制是否显示 添加分类的 Dialog
 const AddClassDialogVisible = ref(false);
@@ -63,12 +76,12 @@ const todoState = useTodoState();
     </div>
 
     <!--    自定义分类   -->
-    <div v-for="todoClass in todoClasses" class="class-tree-button">
-      <el-text class="class-tree-button-text">
+    <div v-for="todoClass in todoClasses" class="class-tree-button" @click="todoState.ToClass(todoClass)">
+      <el-text class="class-tree-button-text" :type=TodoTypeById(todoClass.type)>
         <el-icon size="18">
           <Calendar/>
         </el-icon>
-        {{ todoClass.label }}
+        {{ todoClass.name }}
       </el-text>
     </div>
 

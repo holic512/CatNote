@@ -1,12 +1,18 @@
 /**
- * File Name: TodoCombinedDTO.java
- * Description: Todo
- * Author: holic512
- * Created Date: 2024-12-03
- * Version: 1.0
- * Usage:
- * Todo
+ * 文件名：TodoCombinedDTO.java
+ * <p>
+ * 描述：
+ * 此类是一个综合的数据传输对象（DTO），用于封装待办事项（TodoInfo）的详细信息及其关联的分类信息。
+ * 它专为数据层查询设计，以便在应用程序的不同层之间方便地传输完整的待办事项数据。
+ * <p>
+ * 作者：holic512
+ * 创建日期：2024-12-03
+ * 版本：1.0
+ * <p>
+ * 使用说明：
+ * 此DTO可以在需要合并待办事项和分类数据的各种场景中使用，例如，在数据访问层（DAO）或服务层中查询和返回综合的待办事项信息。
  */
+
 package org.example.backend.user.todo.dto;
 
 import lombok.Data;

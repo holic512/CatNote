@@ -5,13 +5,20 @@ import {useTodoState} from "@/views/User/Main/components/TodoList/Pinia/TodoStat
 import {getTodayDate} from "@/views/User/Main/components/TodoList/Service/getTodayDate";
 import {getAllTodoList} from "@/views/User/Main/components/TodoList/TodoMain/Service/getAllTodoList";
 import {TodoTypeById} from "@/views/User/Main/components/TodoList/TodoMain/Service/TodoTypeById";
+import {
+  getUserTodosByCategory
+} from "@/views/User/Main/components/TodoList/TodoListTree/ClassTree/Service/GetUserTodosByCategory";
+import {ReopenTodo} from "@/views/User/Main/components/TodoList/TodoMain/Service/ReopenTodo";
+import {ElMessage} from "element-plus";
+import {CompleteTodo} from "@/views/User/Main/components/TodoList/TodoMain/Service/CompleteTodo";
 
 // 初始化状态变量
 const todoState = useTodoState()
 
 // 监听todoState是否改变
-watch(() => todoState.state, async (newValue) => {
-  switch (newValue) {
+watch(() => todoState.isDescriptionVisible, async () => {
+  let newState = todoState.state;
+  switch (newState) {
     case 0:
       pageTitle.value = "全部待办";
       TodoData.value = await getAllTodoList();
@@ -19,6 +26,11 @@ watch(() => todoState.state, async (newValue) => {
 
     case 1:
       pageTitle.value = "今天待办(" + getTodayDate() + ")";
+      break;
+
+    case 2:
+      pageTitle.value = todoState.AClass.name;
+      TodoData.value = await getUserTodosByCategory(todoState.AClass.id);
       break;
   }
 
@@ -54,16 +66,35 @@ interface Todo {
 const TodoData = ref<Todo[]>([]);
 
 
-// 进行中的 点击函数
+// 进行中树标题的 点击函数
 const handInProgress = () => {
   isInProgressVisible.value = !isInProgressVisible.value
 }
 
-// 已完成的 点击函数
+// 已完成树标题的 点击函数
 const handCompleted = () => {
   isCompletedVisible.value = !isCompletedVisible.value
 }
 
+const ReopenTodoProxy = async (todoId: number) => {
+  const status = await ReopenTodo(todoId);
+  if (status == 200) {
+    // 更新成功 - 执行 更新表单策略
+    TodoData.value = await getAllTodoList();
+  } else {
+    ElMessage.info("无法连接到服务器")
+  }
+}
+
+const CompleteTodoProxy = async (todoId: number) => {
+  const status = await CompleteTodo(todoId);
+  if (status == 200) {
+    // 更新成功 - 执行 更新表单策略
+    TodoData.value = await getAllTodoList();
+  } else {
+    ElMessage.info("无法连接到服务器")
+  }
+}
 
 </script>
 
@@ -104,9 +135,8 @@ const handCompleted = () => {
             <div class="task-content">
 
               <!-- 选中框 -->
-              <div class="task-checkbox">
-                <el-checkbox/>
-              </div>
+
+              <el-checkbox class="task-checkbox" @click="CompleteTodoProxy(task.todo_id)"/>
 
 
               <div class="task-label">
@@ -154,7 +184,9 @@ const handCompleted = () => {
           <div v-if="isCompletedVisible" v-for="task in TodoData.filter(t => t.status === 1)" :key="task.todo_id"
                class="task-item">
             <div class="task-content">
-              <el-checkbox class="task-checkbox"></el-checkbox>
+
+              <!--  选中框  -->
+              <el-checkbox checked class="task-checkbox" @click="ReopenTodoProxy(task.todo_id)"></el-checkbox>
 
               <div class="task-label">
                 <el-text>

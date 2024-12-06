@@ -1,7 +1,7 @@
 # application.yml
 spring:
   profiles:
-    active: prod
+    active: dev
 
   servlet:
     multipart:

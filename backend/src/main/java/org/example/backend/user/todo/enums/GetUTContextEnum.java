@@ -9,6 +9,6 @@
  */
 package org.example.backend.user.todo.enums;
 
-public enum GUTContextEnum {
+public enum GetUTContextEnum {
     SUCCESS,
 }
