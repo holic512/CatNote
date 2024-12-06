@@ -11,21 +11,22 @@ package org.example.backend.user.todo.controller;
 
 import org.antlr.v4.runtime.misc.Pair;
 import org.example.backend.common.util.StpKit;
-import org.example.backend.user.todo.enums.GUTContextEnum;
-import org.example.backend.user.todo.service.GUTService;
+import org.example.backend.user.todo.enums.GetUTContextEnum;
+import org.example.backend.user.todo.service.GetUTodoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("user/todo")
 @RestController
-public class GUTController {
+public class GetUTController {
 
-    private final GUTService gutService;
+    private final GetUTodoService gutService;
 
     @Autowired
-    public GUTController(GUTService gutService) {
+    public GetUTController(GetUTodoService gutService) {
         this.gutService = gutService;
     }
 
@@ -40,7 +41,7 @@ public class GUTController {
         Long UserId = (Long) StpKit.USER.getSession().get("id");
 
         // 调用服务类
-        Pair<GUTContextEnum, Object> result = gutService.getAllTodos(UserId);
+        Pair<GetUTContextEnum, Object> result = gutService.getAllTodos(UserId);
 
         return result.b;
     }
@@ -61,9 +62,26 @@ public class GUTController {
      *
      * @return
      */
-    @GetMapping("/category/{category}")
-    public String getTodosByCategory(String category) {
-        return "Todos in category: " + category;
+    @GetMapping("/TodosByCategory")
+    public Object getTodosByCategory(@Param("categoryId") Long categoryId) {
+        // 获取用户Id
+        Long UserId = (Long) StpKit.USER.getSession().get("id");
+
+        // 调用服务类
+        Pair<GetUTContextEnum, Object> result = gutService.getAllTodosByCategoryId(UserId, categoryId);
+
+        return result.b;
+    }
+
+    /**
+     * 获取 该用户的 todoTree
+     */
+    @GetMapping("/todoCategory")
+    public Object getAllTodoCategory() {
+        Long UserId = (Long) StpKit.USER.getSession().get("id");
+        // 调用服务类
+        Pair<GetUTContextEnum, Object> result = gutService.getAllTodoCategory(UserId);
+        return result.b;
     }
 
 }

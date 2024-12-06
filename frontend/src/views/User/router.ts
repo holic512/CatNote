@@ -54,7 +54,7 @@ export default [
                     },
                     {
                         path: 'home',
-                        name: 'user-home',
+                        name: 'user-main-home1',
                         component: () => import('./Main/components/Home/index.vue'),
                     },
                     {

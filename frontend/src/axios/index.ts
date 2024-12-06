@@ -10,9 +10,10 @@ import router from "../router/index.js";
 
 // 创建一个 Axios 实例
 const instance = axios.create({
+    // baseURL: `${window.location.origin}/api/`,  // 根据当前域名动态设置 baseURL
     baseURL: 'http://localhost:8080/', // 这里是你的基础 URL
     timeout: 10000, // 可选的超时时间
-    headers: { "Content-Type": "application/json" }
+    headers: {"Content-Type": "application/json"}
 });
 
 // 计算属性用于获取当前路由路径

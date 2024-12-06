@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="SqlDialectMappings">
-    <file url="file://$PROJECT_DIR$/backend/src/main/resources/sql/create_admins_table.sql" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/backend/src/main/resources/sql/create_favorite_folder_info_table.sql" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/backend/src/main/resources/sql/create_favorite_note_table.sql" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/backend/src/main/resources/sql/create_folder_info_table.sql" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/backend/src/main/resources/sql/create_mail_server_settings_table.sql" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/backend/src/main/resources/sql/create_note_info_table.sql" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/backend/src/main/resources/sql/create_server_config _table.sql" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/backend/src/main/resources/sql/create_server_config_data_table.sql" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/backend/src/main/resources/sql/create_todo_category_table.sql" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/backend/src/main/resources/sql/create_todo_info_table.sql" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/backend/src/main/resources/sql/create_user_profiles_table.sql" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/backend/src/main/resources/sql/create_users_table.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/backend/src/main/resources/sql/createTable/create_admins_table.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/backend/src/main/resources/sql/createTable/create_folder_info_table.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/backend/src/main/resources/sql/createTable/create_mail_server_settings_table.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/backend/src/main/resources/sql/createTable/create_note_info_table.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/backend/src/main/resources/sql/createTable/create_server_config _table.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/backend/src/main/resources/sql/createTable/create_server_config_data_table.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/backend/src/main/resources/sql/createTable/create_todo_category_table.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/backend/src/main/resources/sql/createTable/create_todo_info_table.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/backend/src/main/resources/sql/createTable/create_user_profiles_table.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/backend/src/main/resources/sql/createTable/create_users_table.sql" dialect="MySQL" />
     <file url="PROJECT" dialect="MySQL" />
   </component>
 </project>

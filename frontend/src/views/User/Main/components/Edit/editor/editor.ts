@@ -1,4 +1,4 @@
-import {useEditor} from "@tiptap/vue-3";
+import {Editor, useEditor} from "@tiptap/vue-3";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 import TextStyle from "@tiptap/extension-text-style";
@@ -17,9 +17,19 @@ import {Table} from "@tiptap/extension-table";
 import {TableRow} from "@tiptap/extension-table-row";
 import {TableHeader} from "@tiptap/extension-table-header";
 import {TableCell} from "@tiptap/extension-table-cell";
+import {getHierarchicalIndexes, TableOfContents} from "@tiptap-pro/extension-table-of-contents";
+import {useIndexItemsStore} from "@/views/User/Main/components/Edit/Pinia/IndexItems";
+import {onBeforeUnmount, onMounted} from "vue";
+import {SaveNote} from "@/views/User/Main/components/Edit/service/SaveNote";
+
 
 export function createEditorInstance() {
+
     const editorSaveState = useSaveNoteState();
+
+    // 存储目录
+    const IndexItemsStore = useIndexItemsStore();
+
 
     const editor = useEditor({
         extensions: [
@@ -44,14 +54,15 @@ export function createEditorInstance() {
                 multicolor: true,
             }),
 
-            // // 目录
-            // TableOfContents.configure({
-            //     getIndex: getHierarchicalIndexes,
-            //     onUpdate(content) {
-            //         // 在这里更新目录项
-            //         items.value = content;
-            //     },
-            // }),
+            // 目录
+            TableOfContents.configure({
+                getIndex: getHierarchicalIndexes,
+                onUpdate(content) {
+
+                    // 在这里更新目录项
+                    IndexItemsStore.IndexItems = content;
+                },
+            }),
 
             // 图片
             Image,
@@ -92,13 +103,12 @@ export function createEditorInstance() {
             TableCell,
 
 
-
-
         ],
 
         content: "",
 
-// 监听粘贴事件
+
+        // 监听粘贴事件
         onPaste: (e, slice) => {
             // 取消默认粘贴行为
             e.preventDefault();
@@ -126,6 +136,28 @@ export function createEditorInstance() {
         }
 
     })
+
+    // 监听键盘事件
+    const handleKeyDown = (event: any) => {
+        if ((event.ctrlKey || event.metaKey) && event.key === 's') {
+            event.preventDefault();  // 阻止默认保存行为
+
+            // 调用保存
+            SaveNote(<Editor>editor.value).then(r => {
+            })
+        }
+    };
+
+    // 添加事件监听器
+    onMounted(() => {
+        document.addEventListener('keydown', handleKeyDown);
+    });
+
+    // 移除事件监听器
+    onBeforeUnmount(() => {
+        document.removeEventListener('keydown', handleKeyDown);
+    });
+
 
     return editor
 }

@@ -1,8 +1,11 @@
 # 使用OpenJDK镜像作为基础镜像
 FROM openjdk:17-jdk-slim
 
+# 设置维护者信息（可选）
+LABEL maintainer="holic512@163.com"
+
 # 将Spring Boot Jar包复制到容器中
-ARG JAR_FILE=target/your-app-name.jar
+ARG JAR_FILE=target/backend-0.0.1-SNAPSHOT.jar
 COPY ${JAR_FILE} app.jar
 
 # 暴露端口（与Spring Boot的server.port配置一致）

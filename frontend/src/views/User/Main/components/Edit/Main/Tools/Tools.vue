@@ -67,7 +67,7 @@ const editor = defineModel()
 <style scoped>
 .container {
   width: 100%;
-  height: 44px;
+  height: 36px;
   border-bottom: 1px solid #F0F3F5;
 
   display: flex;

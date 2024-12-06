@@ -3,7 +3,7 @@
 
 import IconSaveNote from "./IconSaveNote.vue";
 import {useSaveNoteState} from "@/views/User/Main/components/Edit/Pinia/SaveNoteState";
-import {SaveNote} from "@/views/User/Main/components/Edit/PageHeader/components/SaveNote/SaveNote";
+import {SaveNote} from "@/views/User/Main/components/Edit/service/SaveNote";
 
 // 创建 存储 笔记保存状态 的Pinia
 const editorState = useSaveNoteState()
@@ -18,7 +18,7 @@ const editor:any = defineModel()
       v-if="!editorState.isSaved"
       class="box-item"
       effect="dark"
-      content=" 保存 "
+      content=" 保存 Ctrl + S"
       :show-after="500"
       placement="bottom"
   >

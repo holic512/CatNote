@@ -1,7 +1,6 @@
 <script setup lang="ts">
 
 import TodoListTree from "@/views/User/Main/components/TodoList/TodoListTree/TodoListTree.vue";
-import Div3 from "@/views/User/Main/components/TodoList/div3/div3.vue";
 import TodoMain from "@/views/User/Main/components/TodoList/TodoMain/TodoMain.vue";
 
 
@@ -15,11 +14,6 @@ import TodoMain from "@/views/User/Main/components/TodoList/TodoMain/TodoMain.vu
     <div style="width: 82%;height: 100%" >
       <TodoMain/>
     </div>
-<!--    <div style="width: 30%;height: 100%" class="div3">-->
-<!--      <Div3/>-->
-<!--    </div>-->
-
-
   </div>
 </template>
 
@@ -35,12 +29,10 @@ import TodoMain from "@/views/User/Main/components/TodoList/TodoMain/TodoMain.vu
   /* 渐变背景 */
  background: linear-gradient(to top right, #ffffff, #f6f8fb);
 
-
 }
 
 .div1 {
   border-right: 1px solid #ddd; /* 边框 */
-
 }
 
 

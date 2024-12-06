@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import {ref} from "vue";
+import {ElMessage} from "element-plus";
+import {addClass} from "@/views/User/Main/components/TodoList/TodoListTree/addClass/AddClass";
+import {useTodoCategoryState} from "@/views/User/Main/components/TodoList/Pinia/TodoCategoryState";
 
 // 控制是否显示
 const AddClassDialogVisible = defineModel();
@@ -16,7 +19,34 @@ const handleClose = () => {
   AddClassDialogVisible.value = false;
 }
 
-const classTypeRadio = ref()
+// 用于存储 分类类别 单选数据
+const classTypeRadio = ref<number>(1);
+
+// TodoClassTree 更新策略
+const todoCategoryState = useTodoCategoryState();
+
+// 代理 添加分类策略
+const addClassProxy = async () => {
+  // 检查数据
+  if (categoryName.value == "") {
+    ElMessage.warning("标题名称不能为空")
+    return
+  }
+
+  const status = await addClass(categoryName.value, classTypeRadio.value);
+
+  if (status == 200) {
+    ElMessage.success("待做分类添加成功")
+
+    // 执行更新策略
+    todoCategoryState.description();
+
+    // 关闭输入框
+    handleClose();
+  } else {
+    ElMessage.info("无法连接到服务器")
+  }
+}
 </script>
 
 <template>
@@ -40,19 +70,19 @@ const classTypeRadio = ref()
 
       <el-form-item label="分类样式">
         <el-radio-group v-model="classTypeRadio">
-          <el-radio value="1" >
+          <el-radio :value="0">
             <el-tag size="small" type="primary">默认</el-tag>
           </el-radio>
-          <el-radio value="2" >
+          <el-radio :value="1">
             <el-tag size="small" type="info">基础</el-tag>
           </el-radio>
-          <el-radio value="3" >
+          <el-radio :value="2">
             <el-tag size="small" type="success">成功</el-tag>
           </el-radio>
-          <el-radio value="4">
+          <el-radio :value="3">
             <el-tag size="small" type="warning">重要</el-tag>
           </el-radio>
-          <el-radio value="5" >
+          <el-radio :value="4">
             <el-tag size="small" type="danger">严重</el-tag>
           </el-radio>
         </el-radio-group>
@@ -63,7 +93,7 @@ const classTypeRadio = ref()
     <template #footer>
       <div class="dialog-footer">
         <el-button @click="handleClose">取消</el-button>
-        <el-button type="primary">确认</el-button>
+        <el-button type="primary" @click="addClassProxy">确认</el-button>
       </div>
     </template>
   </el-dialog>

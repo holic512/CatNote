@@ -2,12 +2,19 @@
 import Sidebar from "./components/Sidebar/Sidebar.vue"
 
 
-import {onBeforeUnmount, onMounted, ref} from 'vue';
+import {onBeforeUnmount, onMounted, ref, watch} from 'vue';
 
 // 控制设置窗 弹出与关闭
 import Setting from "./components/Setting/index.vue"
+import {useLeftPanel} from "@/views/User/Main/Pinia/panel1Vis";
+import Button from "primevue/button";
+import SidebarM from "@/views/User/Main/components/SidebarM/SidebarM.vue";
 
+// 控制设置是否显示
 const SettingVisible = ref<boolean>(false);
+
+// 左侧面板信息控制
+const LeftPanelState = useLeftPanel();
 
 // 控制 Tooltip 显示与隐藏
 const showTooltip = ref(false);
@@ -21,10 +28,8 @@ const fixedMouseY = ref(0);
 const isDragging = ref(false);
 
 // 左侧面板的宽度
-const panel1Width = ref(250);
+const panel1Width = ref(LeftPanelState.vis ? 250 : 48);
 
-// 右侧面板的宽度
-const panel2Width = ref(window.innerWidth - panel1Width.value - 2);
 
 // 记录是否锁定 Tooltip 位置
 const positionLocked = ref(false);
@@ -58,9 +63,6 @@ const onMouseMove = (event: MouseEvent) => {
       // 更新panel1位置
       panel1Width.value = newWidth;
 
-      // 更新 panel2位置
-      panel2Width.value = window.innerWidth - panel1Width.value - 2; // 减去分割线宽度
-
       fixedMouseX.value = event.pageX; // 更新鼠标位置
     }
   }
@@ -73,23 +75,36 @@ const onMouseUp = () => {
   document.body.style.cursor = 'default'; // 恢复光标样式
 };
 
-// 窗口大小变化时重新计算面板宽度
-const onWindowResize = () => {
-  panel2Width.value = window.innerWidth - panel1Width.value - 2; // 减去分割线宽度
-};
-
 // 绑定和移除事件监听
 onMounted(() => {
   window.addEventListener('mousemove', onMouseMove);
   window.addEventListener('mouseup', onMouseUp);
-  window.addEventListener('resize', onWindowResize);
 });
 
 onBeforeUnmount(() => {
   window.removeEventListener('mousemove', onMouseMove);
   window.removeEventListener('mouseup', onMouseUp);
-  window.removeEventListener('resize', onWindowResize);
 });
+
+
+// 控制左侧面板是否显示
+const leftPanelVis = ref(LeftPanelState.vis);
+
+watch(() => LeftPanelState.vis, (newValue) => {
+  if (newValue) {
+    // 展开动作
+    panel1Width.value = 250; // 切换宽度
+    setTimeout(() => {
+      leftPanelVis.value = true;
+    }, 180)
+  } else {
+    // 关闭动作
+    panel1Width.value = 48; // 切换宽度
+    setTimeout(() => {
+      leftPanelVis.value = false;
+    }, 180)
+  }
+})
 
 
 </script>
@@ -99,22 +114,22 @@ onBeforeUnmount(() => {
 
     <!-- 左侧面板 -->
     <div class="panel1" :style="{ width: panel1Width + 'px' }">
-      <div style="height: 100vh; background-color: #f7f7f5;">
-
-        <Sidebar v-model="SettingVisible"/>
-
-      </div>
+        <Sidebar v-model="SettingVisible" v-if="leftPanelVis"/>
+        <SidebarM v-if="!leftPanelVis"/>
     </div>
+
 
     <!-- 分割线 -->
     <div class="gutter"
+         v-if="leftPanelVis"
          @mousedown="onMouseDown"
          @mouseenter="onMouseEnter"
          @mouseleave="onMouseLeave"
-    ></div>
+    />
+
 
     <!-- 右侧面板 -->
-    <div class="panel2" :style="{ width: panel2Width + 'px' }">
+    <div class="panel2">
       <router-view/>
     </div>
 
@@ -136,6 +151,8 @@ onBeforeUnmount(() => {
 
   </div>
 
+
+  <!--设置动态框-->
   <Setting v-model="SettingVisible"/>
 
 </template>
@@ -147,14 +164,23 @@ onBeforeUnmount(() => {
 }
 
 /* 左右面板的样式 */
-.panel1, .panel2 {
+.panel1 {
   height: 100vh;
+  background-color: #f7f7f5;
+  border-right: 1px #F1F1EF solid;
+
+  transition: width 0.3s ease-in-out; /* 设置平滑过渡动画 */
+}
+
+
+.panel2 {
+  height: 100vh;
+  flex: 1;
 }
 
 /* 分割线的样式 */
 .gutter {
-
-  width: 2px;
+  width: 1px;
   background-color: #F1F1EF;
   cursor: ew-resize;
   position: relative;

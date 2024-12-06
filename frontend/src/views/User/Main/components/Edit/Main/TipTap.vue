@@ -6,6 +6,8 @@ import Tools from "./Tools/Tools.vue";
 import {Editor, EditorContent} from '@tiptap/vue-3'
 import {ShallowRef} from "vue";
 import BubbleMenu from "@/views/User/Main/components/Edit/Main/BubbleMenu/BubbleMenu.vue";
+import ToCItem from "@/views/User/Main/components/Edit/Main/ToCltem/ToCItem.vue";
+import {useIndexItemsStore} from "@/views/User/Main/components/Edit/Pinia/IndexItems";
 
 const editor: ShallowRef<Editor | undefined> = defineModel()
 
@@ -14,6 +16,9 @@ const editor: ShallowRef<Editor | undefined> = defineModel()
 const focusOnParagraph = () => {
   editor.value?.commands.focus(); // 将焦点设置到编辑器
 }
+
+// 存储目录
+const IndexItemsStore = useIndexItemsStore();
 
 
 </script>
@@ -30,22 +35,31 @@ const focusOnParagraph = () => {
     </div>
   </el-scrollbar>
 
-  <!--  <div style="position: absolute; right: 18px; top: 164px; text-align: right;">-->
-  <!--    <el-popover-->
-  <!--        placement="left"-->
-  <!--        title="目录"-->
-  <!--        :width="250"-->
-  <!--        trigger="hover"-->
-  <!--    >-->
-  <!--      <template #reference>-->
-  <!--        <el-button class="m-2">H</el-button>-->
-  <!--      </template>-->
+  <div style="position: absolute; right: 18px; top: 164px; text-align: right;">
+    <el-popover
+        placement="left"
+        title="目录"
+        :width="250"
+        trigger="hover"
+    >
+      <template #reference>
+        <div style="width: 24px;">
+          <div v-for="item in IndexItemsStore.IndexItems" :key="item.id">
+            <hr
+                v-if="item.level >= 1 && item.level <= 6"
+                :style="{ width: `${100 - (item.level - 1) * 10}%`,border: '1px solid #E3E2E0',margin: '4px 0 0 auto'}"
+            />
+          </div>
 
-  <!--      <template #default>-->
-  <!--        <ToCItem v-if="editor" :editor="editor" :items="items"/>-->
-  <!--      </template>-->
-  <!--    </el-popover>-->
-  <!--  </div>-->
+
+        </div>
+      </template>
+
+      <template #default>
+        <ToCItem v-if="editor" :editor="editor" :items="IndexItemsStore.IndexItems"/>
+      </template>
+    </el-popover>
+  </div>
 
 
 </template>
