@@ -99,6 +99,8 @@ const onSelectEmoji = async (emoji: EmojiExt) => {
   if (status == 200) {
     const isNoteTreeUpdated = useNoteTreeUpdate();
     isNoteTreeUpdated.UpdatedNoteTree();
+
+    emojiPickerVis.value = false;
   }
 };
 

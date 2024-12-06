@@ -1,8 +1,8 @@
 import {Editor} from "@tiptap/vue-3";
-import {useCurrentNoteInfoStore} from "../../../Pinia/currentNoteInfo";
-import axios from "../../../../../../../../axios";
+import {useCurrentNoteInfoStore} from "../Pinia/currentNoteInfo";
+import axios from "../../../../../../axios";
 import {ElMessage} from "element-plus";
-import {useSaveNoteState} from "../../../Pinia/SaveNoteState";
+import {useSaveNoteState} from "../Pinia/SaveNoteState";
 
 export const SaveNote = async (editor: Editor) => {
 

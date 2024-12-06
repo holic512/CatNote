@@ -1,6 +1,5 @@
 <template>
   <div>
-    <el-button @click="console.log(editor.getJSON())">模拟保存</el-button>
     <!-- 如果没有目录项，则显示空状态 -->
     <div class="empty-state" v-if="items.length === 0">
       <p>开始编辑文档以查看大纲。</p>
@@ -13,7 +12,7 @@
           v-for="(item, i) in items"
           :key="item.id"
           @click="onItemClick($event, item.id)"
-          :style="{ paddingLeft: `${item.level * 20 - 20}px` }"
+          :style="{ paddingLeft: `${item.level * 4 - 4}px` }"
       >
         <div class="mulu">
           <el-text> {{ item.textContent }}</el-text>
