@@ -145,6 +145,8 @@ const todoState = useTodoState();
   padding: 8px;
   border-radius: 4px;
   margin: 2px;
+
+  user-select: none;
 }
 
 .todo-list-button:hover {
