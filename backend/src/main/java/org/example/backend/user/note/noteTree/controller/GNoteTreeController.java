@@ -1,7 +1,8 @@
 /**
  * File Name: GNoteTreeController.java
  * Description: 该控制器用于处理用户笔记树的 GET 请求，主要负责查询用户的文件夹和笔记结构。
- * Author: holic512
+ *
+ * @Author: holic512
  * Created Date: 2024-10-16
  * Version: 1.0
  * Usage:
@@ -21,7 +22,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+
+import static org.example.backend.user.note.noteTree.enums.GetUNTContextEnum.*;
 
 @RestController
 @RequestMapping("/user/noteTree")
@@ -52,27 +56,6 @@ public class GNoteTreeController {
         );
     }
 
-    // /**
-    //  * 查询 父级id 为parentID 的文件树列表
-    //  *
-    //  * @param parentId 父级id 为空证明 是父级文件夹
-    //  * @return
-    //  */
-    // @GetMapping("/noteTree")
-    // public ResponseEntity<Object> getFolders(@RequestParam(required = false) Long parentId) {
-    //     // 获取用户id
-    //     long id = (long) StpKit.USER.getSession().get("id");
-    //
-    //     // 调用服务层
-    //     List<NoteTreeDto> noteTree = gNoteTreeService.getNoteTreeList(id, parentId);
-    //
-    //     return ResponseEntity.ok(new ApiResponse.Builder<>()
-    //             .status(200)
-    //             .message("OK")
-    //             .data(noteTree)
-    //             .build()
-    //     );
-    // }
 
     /**
      * 根据用户的笔记Id 获取 文件夹Id
@@ -142,5 +125,94 @@ public class GNoteTreeController {
                     .message("网络出现问题")
                     .build());
     }
+
+
+    /**
+     * 获取 用户-笔记的 创建时间和更新时间
+     */
+    @GetMapping("NoteCreatedAtAndUpdatedAt")
+    public ResponseEntity<Object> getNoteCreatedAtAndUpdatedAtAndSaveAt(@RequestParam Long noteId) {
+        // 获取用户id
+        Long user_id = (Long) StpKit.USER.getSession().get("id");
+
+        Pair<GetUNTContextEnum, HashMap<String, String>> result = getNoteTreeService.getNoteCreatedAtAndUpdatedAt(user_id, noteId);
+
+        if (result.a == GetUNTContextEnum.SUCCESS)
+            return ResponseEntity.ok(new ApiResponse.Builder<>()
+                    .status(200)
+                    .message("查询成功")
+                    .data(result.b)
+                    .build());
+        else if (result.a == GetUNTContextEnum.USER_NOTE_ID_MISMATCH)
+            return ResponseEntity.ok(new ApiResponse.Builder<>()
+                    .status(404)
+                    .message("用户id与笔记id不匹配")
+                    .build());
+        else return ResponseEntity.ok(new ApiResponse.Builder<>()
+                    .status(500)
+                    .message("网络出现问题")
+                    .build());
+    }
+
+
+    /**
+     * 获取 用户-笔记的 保存时间(MongoDb)
+     */
+    @GetMapping("NoteSaveAt")
+    public ResponseEntity<Object> getNoteSaveAt(@RequestParam Long noteId) {
+        // 获取用户id
+        Long user_id = (Long) StpKit.USER.getSession().get("id");
+
+        Pair<GetUNTContextEnum, String> result = getNoteTreeService.getNoteSaveAt(user_id, noteId);
+
+        if (result.a == GetUNTContextEnum.SUCCESS)
+            return ResponseEntity.ok(new ApiResponse.Builder<>()
+                    .status(200)
+                    .message("查询成功")
+                    .data(result.b)
+                    .build());
+        else if (result.a == GetUNTContextEnum.USER_NOTE_ID_MISMATCH)
+            return ResponseEntity.ok(new ApiResponse.Builder<>()
+                    .status(404)
+                    .message("用户id与笔记id不匹配")
+                    .build());
+        else if (result.a == UNEDITED)
+            return ResponseEntity.ok(new ApiResponse.Builder<>()
+                    .status(404)
+                    .message("笔记还未开始编辑")
+                    .build());
+
+        else return ResponseEntity.ok(new ApiResponse.Builder<>()
+                    .status(500)
+                    .message("网络出现问题")
+                    .build());
+    }
+
+    /**
+     * 获取 用户-文件夹的 创建时间和更新时间
+     */
+    @GetMapping("folderCreatedAtAndUpdatedAt")
+    public ResponseEntity<Object> getFolderCreatedAtAndUpdatedAt(@RequestParam Long folderId) {
+        Long user_id = (Long) StpKit.USER.getSession().get("id");
+
+        Pair<GetUNTContextEnum, HashMap<String, String>> result = getNoteTreeService.getFolderCreatedAtAndUpdatedAt(user_id, folderId);
+        if (result.a == GetUNTContextEnum.SUCCESS)
+            return ResponseEntity.ok(new ApiResponse.Builder<>()
+                    .status(200)
+                    .message("查询成功")
+                    .data(result.b)
+                    .build());
+        else if (result.a == GetUNTContextEnum.USER_NOTE_ID_MISMATCH)
+            return ResponseEntity.ok(new ApiResponse.Builder<>()
+                    .status(404)
+                    .message("用户id与文件夹Id不匹配")
+                    .build());
+        else return ResponseEntity.ok(new ApiResponse.Builder<>()
+                    .status(500)
+                    .message("网络出现问题")
+                    .build());
+    }
+
+
 }
 

@@ -13,4 +13,8 @@ public enum GetUNTContextEnum {
     SUCCESS,
     // 用户与笔记Id不匹配
     USER_NOTE_ID_MISMATCH,
+    /**
+     * 表示笔记还未编辑过
+     */
+    UNEDITED,
 }

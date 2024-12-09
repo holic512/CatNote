@@ -19,48 +19,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface NTFolderRep extends JpaRepository<FolderInfo, Long> {
-
-    // /**
-    //  * 查询用户的所有顶级文件夹信息。
-    //  *
-    //  * @param userId 用户 ID
-    //  * @return 顶级文件夹的列表，每个文件夹信息封装在 NoteTreeDto 对象中
-    //  */
-    // @Query("select new org.example.backend.user.note.noteTree.pojo.NoteTreeDto(f.id, f.folderName," +
-    //         " org.example.backend.user.note.noteTree.enums.TreeType.FOLDER," +
-    //
-    //         // 检测 文件夹是否有子文件夹,子笔记
-    //         "CASE WHEN EXISTS (SELECT 1 FROM FolderInfo fi WHERE fi.parentId = f.id) OR " +
-    //         "            EXISTS (SELECT 1 FROM NoteInfo ni WHERE ni.folderId = f.id) " +
-    //         "     THEN false ELSE true END) " +
-    //
-    //
-    //         "FROM FolderInfo f " +
-    //         "where f.userId = :userId and f.parentId IS NULL")
-    // List<NoteTreeDto> findTopLevelFoldersByUserId(@Param("userId") Long userId);
-    //
-    // /**
-    //  * 查询用户指定父文件夹下的所有子文件夹信息。
-    //  *
-    //  * @param userId   用户 ID
-    //  * @param parentId 父文件夹 ID
-    //  * @return 子文件夹的列表，每个文件夹信息封装在 NoteTreeDto 对象中
-    //  */
-    // @Query("select new org.example.backend.user.note.noteTree.pojo.NoteTreeDto(f.id, f.folderName," +
-    //         "org.example.backend.user.note.noteTree.enums.TreeType.FOLDER, " +
-    //
-    //         // 检测 文件夹是否有子文件夹,子笔记
-    //         "CASE WHEN EXISTS (SELECT 1 FROM FolderInfo fi WHERE fi.parentId = f.id) OR " +
-    //         "            EXISTS (SELECT 1 FROM NoteInfo ni WHERE ni.folderId = f.id) " +
-    //         "     THEN false ELSE true END) " +
-    //
-    //         "FROM FolderInfo f " +
-    //         "where f.userId = :userId and f.parentId = :parentId")
-    // List<NoteTreeDto> findSubFoldersByUserIdAndParentId(@Param("userId") Long userId, @Param("parentId") Long parentId);
-
 
     /**
      * 根据用户 ID 查询特定文件夹的信息。
@@ -89,5 +51,11 @@ public interface NTFolderRep extends JpaRepository<FolderInfo, Long> {
     // 根据 文件夹Id获取 文件夹简介
     @Query("select f.description from FolderInfo f where f.id = :id")
     String findDescriptionById(@Param("id") Long id);
+
+    @Query("SELECT n.createdAt FROM NoteInfo n WHERE n.id = :id")
+    LocalDateTime findCreatedAtById(@Param("id") Long folderId);
+
+    @Query("SELECT n.updatedAt FROM NoteInfo n WHERE n.id = :id")
+    LocalDateTime findUpdatedAtById(@Param("id") Long folderId);
 
 }

@@ -15,27 +15,75 @@ import org.antlr.v4.runtime.misc.Pair;
 import org.example.backend.user.note.noteTree.enums.GetUNTContextEnum;
 import org.example.backend.user.note.noteTree.pojo.NoteTreeDto;
 
+import java.util.HashMap;
 import java.util.List;
 
 public interface GetNoteTreeService {
 
-    // /**
-    //  * 查询用户指定父文件夹下的文件夹和笔记信息。
-    //  *
-    //  * @param userId   用户 ID
-    //  * @param parentId 父文件夹 ID，如果为空则查询顶级文件夹
-    //  * @return 文件夹和笔记的列表，每个节点信息封装在 NoteTreeDto 对象中
-    //  */
-    // List<NoteTreeDto> getNoteTreeList(long userId, Long parentId);
-
-
-    // 根据 笔记文件夹 查询 父文件夹id
+    /**
+     * 根据笔记文件夹查询父文件夹ID。
+     *
+     * @param NoteId 笔记的唯一标识符。
+     * @return 返回父文件夹的ID。如果笔记没有父文件夹，则返回null或特定值（如-1），具体取决于业务逻辑。
+     */
     Long getFolderIdByNoteId(long NoteId);
 
-    // 根据 用户id  查询 该用户的 完整笔记树
-    List<NoteTreeDto> getNoteTreeListByNoteId(long NoteId,long FolderId);
+    /**
+     * 根据用户ID查询该用户的完整笔记树。
+     *
+     * @param NoteId  笔记的唯一标识符。
+     * @param FolderId 父文件夹的ID，用于过滤属于特定文件夹的笔记树。
+     * @return 包含用户笔记树结构的列表，其中每个元素都是一个 {@link NoteTreeDto} 对象。
+     */
+    List<NoteTreeDto> getNoteTreeListByNoteId(long NoteId, long FolderId);
 
-    Pair<GetUNTContextEnum,String> getNoteDescription (Long UserId,Long NoteId);
+    /**
+     * 获取笔记的描述信息。
+     *
+     * @param UserId 用户的唯一标识符。
+     * @param NoteId 笔记的唯一标识符。
+     * @return 返回一个Pair对象，其中第一个元素是 {@link GetUNTContextEnum} 枚举类型，表示获取上下文的状态；
+     *         第二个元素是包含笔记描述信息的字符串。
+     */
+    Pair<GetUNTContextEnum, String> getNoteDescription(Long UserId, Long NoteId);
 
-    Pair<GetUNTContextEnum,String> getFolderDescription (Long UserId,Long NoteId);
+    /**
+     * 获取文件夹的描述信息。
+     *
+     * @param UserId 用户的唯一标识符。
+     * @param NoteId 文件夹中某笔记的唯一标识符（可能是为了关联到特定文件夹）。
+     * @return 返回一个Pair对象，其中第一个元素是 {@link GetUNTContextEnum} 枚举类型，表示获取上下文的状态；
+     *         第二个元素是包含文件夹描述信息的字符串。
+     */
+    Pair<GetUNTContextEnum, String> getFolderDescription(Long UserId, Long NoteId);
+
+    /**
+     * 获取笔记的创建时间、更新时间。
+     *
+     * @param UserId 用户的唯一标识符。
+     * @param NoteId 笔记的唯一标识符。
+     * @return 返回一个Pair对象，其中第一个元素是 {@link GetUNTContextEnum} 枚举类型，表示获取上下文的状态；
+     *         第二个元素是一个字符串，包含了笔记的创建时间、更新时间，格式由业务逻辑决定。
+     */
+    Pair<GetUNTContextEnum, HashMap<String,String>>  getNoteCreatedAtAndUpdatedAt(Long UserId, Long NoteId);
+
+    /**
+     * 获取笔记的最后保存时间。
+     *
+     * @param UserId 用户的唯一标识符。
+     * @param NoteId 笔记的唯一标识符。
+     * @return 返回一个Pair对象，其中第一个元素是 {@link GetUNTContextEnum} 枚举类型，表示获取上下文的状态；
+     *         第二个元素是包含笔记最后保存时间的字符串，格式由业务逻辑决定。
+     */
+    Pair<GetUNTContextEnum, String> getNoteSaveAt(Long UserId, Long NoteId);
+
+    /**
+     * 获取文件夹的创建时间、更新时间。
+     *
+     * @param UserId 用户的唯一标识符。
+     * @param folderId 文件夹的唯一标识符。
+     * @return 返回一个Pair对象，其中第一个元素是 {@link GetUNTContextEnum} 枚举类型，表示获取上下文的状态；
+     *         第二个元素是一个字符串，包含了笔记的创建时间、更新时间，格式由业务逻辑决定。
+     */
+    Pair<GetUNTContextEnum, HashMap<String,String>>  getFolderCreatedAtAndUpdatedAt(Long UserId, Long folderId);
 }

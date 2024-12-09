@@ -12,56 +12,36 @@
 package org.example.backend.user.note.noteTree.service.impl;
 
 import org.antlr.v4.runtime.misc.Pair;
+import org.example.backend.common.domain.Note;
 import org.example.backend.user.note.noteTree.enums.GetUNTContextEnum;
 import org.example.backend.user.note.noteTree.enums.TreeType;
 import org.example.backend.user.note.noteTree.pojo.NoteTreeDto;
 import org.example.backend.user.note.noteTree.repository.NTNoteRep;
 import org.example.backend.user.note.noteTree.repository.NTFolderRep;
+import org.example.backend.user.note.noteTree.repository.NoteTreeNoteRepM;
 import org.example.backend.user.note.noteTree.service.GetNoteTreeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.time.format.DateTimeFormatter;
 
-import static org.example.backend.user.note.noteTree.enums.GetUNTContextEnum.SUCCESS;
-import static org.example.backend.user.note.noteTree.enums.GetUNTContextEnum.USER_NOTE_ID_MISMATCH;
+import static org.example.backend.user.note.noteTree.enums.GetUNTContextEnum.*;
 
 @Service
 public class GetNoteTreeServiceImpl implements GetNoteTreeService {
 
     private final NTFolderRep folderRep;
     private final NTNoteRep noteRep;
+    private final NoteTreeNoteRepM noteRepM;
 
     @Autowired
-    GetNoteTreeServiceImpl(NTFolderRep ntFolderRep, NTNoteRep ntNoteRep) {
+    GetNoteTreeServiceImpl(NTFolderRep ntFolderRep, NTNoteRep ntNoteRep, NoteTreeNoteRepM noteTreeNoteRepM) {
         this.folderRep = ntFolderRep;
         this.noteRep = ntNoteRep;
+        this.noteRepM = noteTreeNoteRepM;
     }
-
-
-    // @Override
-    // public List<NoteTreeDto> getNoteTreeList(long userId, Long parentId) {
-    //
-    //     // 根据 此id 和 此父文件夹id 的 文件夹列表 笔记列表
-    //     List<NoteTreeDto> folderList;
-    //     List<NoteTreeDto> noteList;
-    //     // 当parentId 是null 则执行根目录查询 反之
-    //     if (parentId == null) {
-    //         folderList = folderRep.findTopLevelFoldersByUserId(userId);
-    //         noteList = noteRep.findTopLevelNotesByUserId(userId);
-    //     } else {
-    //         folderList = folderRep.findSubFoldersByUserIdAndParentId(userId, parentId);
-    //         noteList = noteRep.findNotesByUserIdAndFolderId(userId, parentId);
-    //     }
-    //
-    //     // 合并文件夹列表和笔记列表
-    //     List<NoteTreeDto> combinedList = new ArrayList<>();
-    //     combinedList.addAll(folderList); // 添加文件夹
-    //     combinedList.addAll(noteList); // 添加笔记
-    //
-    //     return combinedList; // 返回合并后的列表
-    // }
 
     @Override
     public Long getFolderIdByNoteId(long NoteId) {
@@ -113,13 +93,86 @@ public class GetNoteTreeServiceImpl implements GetNoteTreeService {
     }
 
     @Override
-    public Pair<GetUNTContextEnum, String> getFolderDescription(Long UserId, Long NoteId) {
+    public Pair<GetUNTContextEnum, String> getFolderDescription(Long UserId, Long folderId) {
         // 判断是否 存在该 UserId 的 NoteId
-        Long realUserId = folderRep.findUserIdById(NoteId);
+        Long realUserId = folderRep.findUserIdById(folderId);
         if (!realUserId.equals(UserId))
             return new Pair<>(USER_NOTE_ID_MISMATCH, null);
 
-        String noteDescription = folderRep.findDescriptionById(NoteId);
+        String noteDescription = folderRep.findDescriptionById(folderId);
         return new Pair<>(SUCCESS, noteDescription);
+    }
+
+    @Override
+    public Pair<GetUNTContextEnum, HashMap<String, String>> getNoteCreatedAtAndUpdatedAt(Long UserId, Long NoteId) {
+        // 判断是否 存在该 UserId 的 NoteId
+        Long realUserId = noteRep.findUserIdById(NoteId);
+        if (!realUserId.equals(UserId))
+            return new Pair<>(USER_NOTE_ID_MISMATCH, null);
+
+        // 定义 存储
+        HashMap<String, String> hashMap = new HashMap<>();
+        // 定义格式化器
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH:mm");
+
+        // 获取创建时间
+        LocalDateTime CreatedAt = noteRep.findCreatedAtById(NoteId);
+        String formattedCreatedAt = CreatedAt.format(formatter);
+        hashMap.put("CreateAt", formattedCreatedAt);
+
+        // 获取修改时间
+        LocalDateTime UpdatedAt = noteRep.findUpdatedAtById(NoteId);
+        String formattedUpdatedAt = UpdatedAt.format(formatter);
+        hashMap.put("UpdatedAt", formattedUpdatedAt);
+
+        return new Pair<>(SUCCESS, hashMap);
+    }
+
+    @Override
+    public Pair<GetUNTContextEnum, String> getNoteSaveAt(Long UserId, Long NoteId) {
+
+        // 判断是否 存在该 UserId 的 NoteId
+        Long realUserId = noteRep.findUserIdById(NoteId);
+        if (!realUserId.equals(UserId)){
+            return new Pair<>(USER_NOTE_ID_MISMATCH, null);
+        }
+
+        // 执行查询
+        Optional<Note> result = noteRepM.findById(NoteId);
+
+        // 如果查询为空 证明笔记还没有编辑
+        if (result.isEmpty()) {
+            return new Pair<>(UNEDITED, null);
+        }
+
+        // 定义格式化器
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH:mm");
+        String formattedUpdatedAt = result.get().getLastSavedAt().format(formatter);
+        return new Pair<>(SUCCESS, formattedUpdatedAt);
+    }
+
+    @Override
+    public Pair<GetUNTContextEnum, HashMap<String, String>> getFolderCreatedAtAndUpdatedAt(Long UserId, Long folderId) {
+        // 判断是否 存在该 UserId 的 folderId
+        Long realUserId = folderRep.findUserIdById(folderId);
+        if (!realUserId.equals(UserId))
+            return new Pair<>(USER_NOTE_ID_MISMATCH, null);
+
+        // 定义 存储
+        HashMap<String, String> hashMap = new HashMap<>();
+        // 定义格式化器
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH:mm");
+
+        // 获取创建时间
+        LocalDateTime CreatedAt = folderRep.findCreatedAtById(folderId);
+        String formattedCreatedAt = CreatedAt.format(formatter);
+        hashMap.put("CreateAt", formattedCreatedAt);
+
+        // 获取修改时间
+        LocalDateTime UpdatedAt = folderRep.findUpdatedAtById(folderId);
+        String formattedUpdatedAt = UpdatedAt.format(formatter);
+        hashMap.put("UpdatedAt", formattedUpdatedAt);
+
+        return new Pair<>(SUCCESS, hashMap);
     }
 }

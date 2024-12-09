@@ -1,7 +1,20 @@
 <script setup lang="ts">
 import {useDetailsState} from "@/views/User/Main/components/Sidebar/Pinia/DetailsState";
 import {useRightSelectNodeId} from "@/views/User/Main/components/Sidebar/Pinia/RightSelectNodeId";
-import {onMounted, watch} from "vue";
+import {onMounted, ref, watch} from "vue";
+import {
+  getNoteDescription
+} from "@/views/User/Main/components/Sidebar/components/Description/Service/GetNoteDescription";
+import {
+  getFolderDescription
+} from "@/views/User/Main/components/Sidebar/components/Description/Service/GetFolderDescription";
+import {
+  GetNoteCreatedAtAndUpdatedAt
+} from "@/views/User/Main/components/Sidebar/components/Details/Service/GetNoteCreatedAtAndUpdatedAt";
+import {GetNoteSaveAt} from "@/views/User/Main/components/Sidebar/components/Details/Service/GetNoteSaveAt";
+import {
+  getFolderCreatedAtAndUpdatedAt
+} from "@/views/User/Main/components/Sidebar/components/Details/Service/GetFolderCreatedAtAndUpdatedAt";
 
 // 控制页面是否显示
 const DetailsState = useDetailsState();
@@ -9,13 +22,55 @@ const DetailsState = useDetailsState();
 // 获取右键 选中节点的 信息
 const rightSelect: any = useRightSelectNodeId();
 
-// 除了 rightSelect 中 data信息之外,待获取信息有简介,占用空间,创建时间,修改时间
+// 简介
+const description = ref("");
+// 占用空间
+const occupiedSpace = ref("暂无");
+// 创建时间
+const createdAt = ref("");
+// 修改时间
+const updatedAt = ref("");
+// 保存时间
+const savedAt = ref("");
 
 // 监听 当此页面被换出时 获取右键菜单的 信息
-watch(() => DetailsState.DetailsIs, (newValue) => {
-  // 当他等于 true
+watch(() => DetailsState.DetailsIs, async (newValue) => {
+  // 当为 true 则显示
   if (newValue) {
-    console.log(rightSelect.data);
+    // 判断是笔记还是文件夹
+    if (rightSelect.data.type == "NOTE") {
+
+      // 启动所有异步调用
+      const [doc1, doc2, doc3] = await Promise.all([
+        // doc1
+        getNoteDescription(rightSelect.data.id),
+        // doc2
+        GetNoteCreatedAtAndUpdatedAt(rightSelect.data.id),
+        // doc3
+        GetNoteSaveAt(rightSelect.data.id),
+      ]);
+
+      // 赋值
+      description.value = doc1;
+      createdAt.value = doc2.CreateAt;
+      updatedAt.value = doc2.UpdatedAt;
+      savedAt.value = doc3;
+
+    } else if (rightSelect.data.type == "FOLDER") {
+      // 启动所有异步调用
+      const [doc1, doc2] = await Promise.all([
+        getFolderDescription(rightSelect.data.id),
+        getFolderCreatedAtAndUpdatedAt(rightSelect.data.id),
+      ]);
+
+      description.value = doc1;
+
+      createdAt.value = doc2.CreateAt;
+      updatedAt.value = doc2.UpdatedAt;
+
+      savedAt.value = "仅查看笔记";
+
+    }
   }
 })
 
@@ -62,17 +117,16 @@ watch(() => DetailsState.DetailsIs, (newValue) => {
 
 
       <!-- 分割线 -->
-      <el-divider/>
+      <el-divider style="margin: 16px 0 16px 0"/>
 
       <div class="info-block">
-        <div style="width: 80px;margin-left: 8px;">
-          简介:
-        </div>
+        <div style="width: 80px;margin-left: 8px;">简介:</div>
         <div style="width:344px;">
-          这篇笔记总结了我在工作中的一些经验与教训这篇笔记总结了我在工作中的一些经验与教训这篇笔记总结了我在工作中的一些经验与教训这篇笔记总结了我在工作中的一些经验与教训
+          {{ (description != null) ? description : "暂无" }}
         </div>
       </div>
 
+      <!-- 分割线 -->
       <el-divider style="margin: 16px 0 16px 0"/>
 
       <div class="info-block">
@@ -84,6 +138,7 @@ watch(() => DetailsState.DetailsIs, (newValue) => {
         </div>
       </div>
 
+      <!-- 分割线 -->
       <el-divider style="margin: 16px 0 16px 0"/>
 
 
@@ -96,6 +151,7 @@ watch(() => DetailsState.DetailsIs, (newValue) => {
         </div>
       </div>
 
+      <!-- 分割线 -->
       <el-divider style="margin: 16px 0 16px 0"/>
 
       <div class="info-block">
@@ -103,17 +159,46 @@ watch(() => DetailsState.DetailsIs, (newValue) => {
           创建时间:
         </div>
         <div>
-          2024‎年‎12‎月‎4‎日，‏‎19:17:51
+          {{ createdAt }}
         </div>
       </div>
 
       <div class="info-block">
         <div style="width: 80px;margin-left: 8px;">
-          修改时间:
+          上次修改:
         </div>
         <div>
-          2024‎年‎12‎月‎4‎日，‏‎19:17:51
+          {{ updatedAt }}
         </div>
+
+        <el-tooltip
+            content="指该选中单元最近一次修改信息的时间"
+            placement="right"
+        >
+          <el-icon style="margin-left: 8px">
+            <InfoFilled/>
+          </el-icon>
+        </el-tooltip>
+      </div>
+
+      <div class="info-block">
+        <div style="width: 80px;margin-left: 8px;">
+          上次保存:
+        </div>
+        <div>
+          {{ (savedAt != null) ? savedAt : "暂无" }}
+        </div>
+
+        <el-tooltip
+            content="指笔记内容最近一次保存的时间"
+            placement="right"
+        >
+          <el-icon style="margin-left: 8px">
+            <InfoFilled/>
+          </el-icon>
+        </el-tooltip>
+
+
       </div>
 
     </div>
@@ -129,7 +214,7 @@ watch(() => DetailsState.DetailsIs, (newValue) => {
 }
 
 .dialog-body {
-  padding: 0 0 24px 0;
+  padding: 0 4px 24px 4px;
 }
 
 .note-info {

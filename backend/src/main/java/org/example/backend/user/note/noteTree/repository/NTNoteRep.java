@@ -17,35 +17,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface NTNoteRep extends JpaRepository<NoteInfo, Long> {
-
-    // /**
-    //  * 查询用户的所有顶级笔记信息。
-    //  *
-    //  * @param userId 用户 ID
-    //  * @return 顶级笔记的列表，每个笔记信息封装在 NoteTreeDto 对象中
-    //  */
-    // @Query("select new org.example.backend.user.note.noteTree.pojo.NoteTreeDto(n.id, n.noteTitle," +
-    //         "org.example.backend.user.note.noteTree.enums.TreeType.NOTE, true) " +
-    //         "FROM NoteInfo n " +
-    //         "where n.userId = :userId and n.folderId IS NULL")
-    // List<NoteTreeDto> findTopLevelNotesByUserId(@Param("userId") Long userId);
-    //
-    // /**
-    //  * 查询用户指定文件夹下的所有笔记信息。
-    //  *
-    //  * @param userId   用户 ID
-    //  * @param folderId 文件夹 ID
-    //  * @return 指定文件夹下的笔记列表，每个笔记信息封装在 NoteTreeDto 对象中
-    //  */
-    // @Query("select new org.example.backend.user.note.noteTree.pojo.NoteTreeDto(n.id, n.noteTitle," +
-    //         "org.example.backend.user.note.noteTree.enums.TreeType.NOTE, true) " +
-    //         "FROM NoteInfo n " +
-    //         "where n.userId = :userId and n.folderId = :folderId")
-    // List<NoteTreeDto> findNotesByUserIdAndFolderId(@Param("userId") Long userId, @Param("folderId") Long folderId);
-
 
     @Query("SELECT n.folderId FROM NoteInfo n WHERE n.id = :id")
     Long findFolderIdById(@Param("id") Long id);
@@ -66,5 +42,11 @@ public interface NTNoteRep extends JpaRepository<NoteInfo, Long> {
     // 根据 笔记Id获取 笔记简介
     @Query("SELECT n.noteSummary FROM NoteInfo n WHERE n.id = :id")
     String findNoteSummaryById(@Param("id") Long noteId);
+
+    @Query("SELECT n.createdAt FROM NoteInfo n WHERE n.id = :id")
+    LocalDateTime findCreatedAtById(@Param("id") Long noteId);
+
+    @Query("SELECT n.updatedAt FROM NoteInfo n WHERE n.id = :id")
+    LocalDateTime findUpdatedAtById(@Param("id") Long noteId);
 
 }

@@ -9,12 +9,15 @@
  */
 package org.example.backend.user.note.note.service.impl;
 
+import org.bson.codecs.jsr310.LocalDateTimeCodec;
 import org.example.backend.common.domain.Note;
 import org.example.backend.user.note.note.repository.UNoteInfoRep;
 import org.example.backend.user.note.note.repository.UNoteRepM;
 import org.example.backend.user.note.note.service.PUNoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Service
 public class PUNoteServiceImpl implements PUNoteService {
@@ -49,6 +52,9 @@ public class PUNoteServiceImpl implements PUNoteService {
         if (!ownerId.equals(userId)) {
             return null; // 如果当前用户不是笔记所有者，返回 null
         }
+
+        // 更新 保存时间
+        note.setLastSavedAt(LocalDateTime.now());
 
         // 执行保存
         uNoteRepM.save(note);
