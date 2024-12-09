@@ -1,5 +1,4 @@
-// 用于 控制 重命名显示 的pinia
-// 当前笔记树是否已更新，用于记录笔记树的更新状态
+// 用于控制 右键菜单-重命名 显示 的pinia
 import {defineStore} from 'pinia'
 
 

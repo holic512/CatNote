@@ -11,11 +11,13 @@
  */
 package org.example.backend.user.note.noteTree.service;
 
+import org.antlr.v4.runtime.misc.Pair;
+import org.example.backend.user.note.noteTree.enums.GetUNTContextEnum;
 import org.example.backend.user.note.noteTree.pojo.NoteTreeDto;
 
 import java.util.List;
 
-public interface GNoteTreeService {
+public interface GetNoteTreeService {
 
     // /**
     //  * 查询用户指定父文件夹下的文件夹和笔记信息。
@@ -32,4 +34,8 @@ public interface GNoteTreeService {
 
     // 根据 用户id  查询 该用户的 完整笔记树
     List<NoteTreeDto> getNoteTreeListByNoteId(long NoteId,long FolderId);
+
+    Pair<GetUNTContextEnum,String> getNoteDescription (Long UserId,Long NoteId);
+
+    Pair<GetUNTContextEnum,String> getFolderDescription (Long UserId,Long NoteId);
 }

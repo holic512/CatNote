@@ -11,10 +11,7 @@ package org.example.backend.user.note.noteTree.controller;
 
 import org.example.backend.common.response.ApiResponse;
 import org.example.backend.common.util.StpKit;
-import org.example.backend.user.note.noteTree.enums.PutFolderTitleEnum;
-import org.example.backend.user.note.noteTree.enums.PutNoteAvatarEnum;
-import org.example.backend.user.note.noteTree.enums.PutFolderAvatarEnum;
-import org.example.backend.user.note.noteTree.enums.PutNoteTitleEnum;
+import org.example.backend.user.note.noteTree.enums.*;
 import org.example.backend.user.note.noteTree.service.PutNoteTreeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -78,6 +75,9 @@ public class PutNoteTreeController {
 
     }
 
+    /**
+     * 更新 笔记标题
+     */
     @PutMapping("NoteTitle")
     public ResponseEntity<Object> putNoteTitle(@RequestBody HashMap<String, String> noteData) {
         // 获取用户 ID
@@ -123,6 +123,9 @@ public class PutNoteTreeController {
         }
     }
 
+    /**
+     * 更新 文件夹标题
+     */
     @PutMapping("FolderAvatar")
     public ResponseEntity<Object> putFolderAvatar(@RequestBody HashMap<String, String> folderData) {
         // 获取用户 ID
@@ -168,6 +171,9 @@ public class PutNoteTreeController {
         }
     }
 
+    /**
+     * 更新 文件夹标题
+     */
     @PutMapping("FolderTitle")
     public ResponseEntity<Object> putFolderTitle(@RequestBody HashMap<String, String> folderData) {
         // 获取用户 ID
@@ -210,6 +216,62 @@ public class PutNoteTreeController {
                         .build()
                 );
             }
+        }
+    }
+
+
+    /**
+     * 更新 笔记 简介
+     */
+    @PutMapping("NoteSummary")
+    public ResponseEntity<Object> putNoteSummary(@RequestBody HashMap<String, String> noteData) {
+        // 获取 用户id,笔记id,笔记简介(新)
+        long userId = (long) StpKit.USER.getSession().get("id");
+        Long noteId = Long.parseLong(noteData.get("noteId"));
+        String noteDescription = noteData.get("noteDescription");
+
+        PutUNTContextEnum result = putNoteTreeService.putNoteDescription(userId, noteId, noteDescription);
+
+        if (result == PutUNTContextEnum.SUCCESS) {
+            return ResponseEntity.ok(new ApiResponse.Builder<>()
+                    .status(200)
+                    .message("笔记简介更新成功")
+                    .build()
+            );
+        } else {
+            return ResponseEntity.ok(new ApiResponse.Builder<>()
+                    .status(500)
+                    .message("网络出现问题")
+                    .build()
+            );
+        }
+    }
+
+
+    /**
+     * 更新 文件夹 简介
+     */
+    @PutMapping("FolderDescription")
+    public ResponseEntity<Object> putFolderDescription(@RequestBody HashMap<String, String> folderData) {
+        // 获取 用户id,文件夹id,文件夹简介(新)
+        long userId = (long) StpKit.USER.getSession().get("id");
+        Long noteId = Long.parseLong(folderData.get("folderId"));
+        String noteDescription = folderData.get("folderDescription");
+
+        PutUNTContextEnum result = putNoteTreeService.putFolderDescription(userId, noteId, noteDescription);
+
+        if (result == PutUNTContextEnum.SUCCESS) {
+            return ResponseEntity.ok(new ApiResponse.Builder<>()
+                    .status(200)
+                    .message("文件夹简介更新成功")
+                    .build()
+            );
+        } else {
+            return ResponseEntity.ok(new ApiResponse.Builder<>()
+                    .status(500)
+                    .message("网络出现问题")
+                    .build()
+            );
         }
     }
 }

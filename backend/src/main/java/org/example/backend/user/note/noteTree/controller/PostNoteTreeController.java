@@ -23,13 +23,13 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/user/noteTree")
-public class PNoteTreeController {
+public class PostNoteTreeController {
 
 
     private final PNoteTreeService pNoteTreeService;
 
     @Autowired
-    public PNoteTreeController(PNoteTreeService pNoteTreeService) {
+    public PostNoteTreeController(PNoteTreeService pNoteTreeService) {
         this.pNoteTreeService = pNoteTreeService;
     }
 

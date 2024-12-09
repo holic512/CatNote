@@ -37,7 +37,8 @@ public class NoteInfo {
     private String noteTitle; // 笔记名称
 
     @Column(name = "note_summary")
-    private String noteSummary; // 笔记简介
+    // 笔记简介
+    private String noteSummary;
 
     @Column(name = "note_avatar", length = 4)
     private char[] noteAvatar; // 文件夹头像 emoji，存储单个 emoji 字符

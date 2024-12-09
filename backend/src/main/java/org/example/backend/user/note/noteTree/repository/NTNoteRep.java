@@ -59,7 +59,12 @@ public interface NTNoteRep extends JpaRepository<NoteInfo, Long> {
             "where n.userId = :userId And n.folderId = :folderId AND n.isDeleted = 0 ")
     List<NoteTreeDto> findFolderByUserIdAndFolderId(@Param("userId") Long userId, @Param("folderId") Long folderId);
 
+    // 根据 笔记Id获取用户Id
     @Query("SELECT n.userId FROM NoteInfo n WHERE n.id = :id")
-    Long findUserIdById(@Param("id") Long id);
+    Long findUserIdById(@Param("id") Long noteId);
+
+    // 根据 笔记Id获取 笔记简介
+    @Query("SELECT n.noteSummary FROM NoteInfo n WHERE n.id = :id")
+    String findNoteSummaryById(@Param("id") Long noteId);
 
 }

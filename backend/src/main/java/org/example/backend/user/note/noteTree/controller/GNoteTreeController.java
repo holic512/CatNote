@@ -11,10 +11,12 @@
  */
 package org.example.backend.user.note.noteTree.controller;
 
+import org.antlr.v4.runtime.misc.Pair;
 import org.example.backend.common.response.ApiResponse;
 import org.example.backend.common.util.StpKit;
+import org.example.backend.user.note.noteTree.enums.GetUNTContextEnum;
 import org.example.backend.user.note.noteTree.pojo.NoteTreeDto;
-import org.example.backend.user.note.noteTree.service.GNoteTreeService;
+import org.example.backend.user.note.noteTree.service.GetNoteTreeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,20 +27,22 @@ import java.util.List;
 @RequestMapping("/user/noteTree")
 public class GNoteTreeController {
 
-    private final GNoteTreeService gNoteTreeService;
+    private final GetNoteTreeService getNoteTreeService;
 
     @Autowired
-    GNoteTreeController(GNoteTreeService gNoteTreeService) {
-        this.gNoteTreeService = gNoteTreeService;
+    GNoteTreeController(GetNoteTreeService getNoteTreeService) {
+        this.getNoteTreeService = getNoteTreeService;
     }
 
-
+    /**
+     * 获取用户的全部 笔记树 - 递归
+     */
     @GetMapping("/UserAll")
     public ResponseEntity<Object> GetUserAllNoteTree() {
         // 获取用户id
         Long user_id = (Long) StpKit.USER.getSession().get("id");
 
-        List<NoteTreeDto> result = gNoteTreeService.getNoteTreeListByNoteId(user_id, 0);
+        List<NoteTreeDto> result = getNoteTreeService.getNoteTreeListByNoteId(user_id, 0);
 
         return ResponseEntity.ok(new ApiResponse.Builder<>()
                 .status(200)
@@ -70,16 +74,73 @@ public class GNoteTreeController {
     //     );
     // }
 
+    /**
+     * 根据用户的笔记Id 获取 文件夹Id
+     */
     @GetMapping("/folderIdByNoteId")
     public ResponseEntity<Object> getFolderIdByNoteId(@RequestParam Long noteId) {
 
-        Long folderId = gNoteTreeService.getFolderIdByNoteId(noteId);
+        Long folderId = getNoteTreeService.getFolderIdByNoteId(noteId);
 
         return ResponseEntity.ok(new ApiResponse.Builder<>()
                 .status(200)
                 .message("查询成功")
                 .data(folderId)
                 .build());
+    }
+
+    /**
+     * 获取用户的 笔记简介
+     */
+    @GetMapping("NoteDescription")
+    public ResponseEntity<Object> getNoteDescription(@RequestParam Long noteId) {
+        // 获取用户id
+        Long user_id = (Long) StpKit.USER.getSession().get("id");
+
+        Pair<GetUNTContextEnum, String> result = getNoteTreeService.getNoteDescription(user_id, noteId);
+
+        if (result.a == GetUNTContextEnum.SUCCESS)
+            return ResponseEntity.ok(new ApiResponse.Builder<>()
+                    .status(200)
+                    .message("查询成功")
+                    .data(result.b)
+                    .build());
+        else if (result.a == GetUNTContextEnum.USER_NOTE_ID_MISMATCH)
+            return ResponseEntity.ok(new ApiResponse.Builder<>()
+                    .status(404)
+                    .message("用户id与笔记id不匹配")
+                    .build());
+        else return ResponseEntity.ok(new ApiResponse.Builder<>()
+                    .status(500)
+                    .message("网络出现问题")
+                    .build());
+    }
+
+    /**
+     * 获取用户的 文件夹简介
+     */
+    @GetMapping("folderDescription")
+    public ResponseEntity<Object> getFolderDescription(@RequestParam Long noteId) {
+        // 获取用户id
+        Long user_id = (Long) StpKit.USER.getSession().get("id");
+
+        Pair<GetUNTContextEnum, String> result = getNoteTreeService.getFolderDescription(user_id, noteId);
+
+        if (result.a == GetUNTContextEnum.SUCCESS)
+            return ResponseEntity.ok(new ApiResponse.Builder<>()
+                    .status(200)
+                    .message("查询成功")
+                    .data(result.b)
+                    .build());
+        else if (result.a == GetUNTContextEnum.USER_NOTE_ID_MISMATCH)
+            return ResponseEntity.ok(new ApiResponse.Builder<>()
+                    .status(404)
+                    .message("用户id与笔记id不匹配")
+                    .build());
+        else return ResponseEntity.ok(new ApiResponse.Builder<>()
+                    .status(500)
+                    .message("网络出现问题")
+                    .build());
     }
 }
 

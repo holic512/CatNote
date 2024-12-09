@@ -83,11 +83,10 @@ import {updateFolderTitle} from "@/views/User/Main/components/Sidebar/components
 import {updateFolderAvatar} from "@/views/User/Main/components/Sidebar/components/Rename/Service/updateFolderAvatar";
 import {useCurrentNoteInfoStore} from "@/views/User/Main/components/Edit/Pinia/currentNoteInfo";
 
-// 修改 笔记头像
+// 修改 笔记头像 操作
 const onSelectEmoji = async (emoji: EmojiExt) => {
-  // 区分状态
-  let status;
-
+  // 接口返回状态-判断逻辑生效
+  let status: any;
   if (rightSelect.data.type == 'NOTE') {
     status = await updateNoteAvatar(rightSelect.data.id, emoji.i);
   } else {
@@ -97,10 +96,19 @@ const onSelectEmoji = async (emoji: EmojiExt) => {
 
   // 当修改成功 执行刷新 策略
   if (status == 200) {
+    // 初始化 笔记更新状态  并 更新笔记状态
     const isNoteTreeUpdated = useNoteTreeUpdate();
     isNoteTreeUpdated.UpdatedNoteTree();
 
+    // 关闭表情选择器
     emojiPickerVis.value = false;
+
+    // 当修改的是当前的笔记 同时刷新heardPage
+    const currentNoteInfo = useCurrentNoteInfoStore()
+    if (currentNoteInfo.noteId == rightSelect.data.id) {
+      currentNoteInfo.noteName = newName.value;
+    }
+
   }
 };
 
@@ -128,9 +136,12 @@ watch(() => newName.value, async () => {
     // 刷新笔记树
     const isNoteTreeUpdated = useNoteTreeUpdate();
     isNoteTreeUpdated.UpdatedNoteTree();
-    // 刷新heardPage
+
+    // 当修改的是当前的笔记 同时刷新heardPage
     const currentNoteInfo = useCurrentNoteInfoStore()
-    currentNoteInfo.noteName = newName.value;
+    if (currentNoteInfo.noteId == rightSelect.data.id) {
+      currentNoteInfo.noteName = newName.value;
+    }
   }
 })
 
@@ -217,12 +228,10 @@ watch(() => RenameData.RenameIs, () => {
 
 .rename-input {
   flex: 1;
-
 }
 
 .button {
   width: 32px;
   height: 32px;
-
 }
 </style>

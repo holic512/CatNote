@@ -33,7 +33,7 @@ onMounted(async () => {
   NoteTreeData.value = await getUserAllTreeData();
 });
 
-// 监控 笔记更新状态
+// 监控 笔记树 的 更新状态
 const isNoteTreeUpdated = useNoteTreeUpdate();
 watch(() => isNoteTreeUpdated.isNoteTreeUpdated, async (newState) => {
   // 当 newState 为 true 时 需要更新
@@ -48,6 +48,7 @@ const SaveNoteState = useSaveNoteState()
 
 // 左键点击
 const handleNodeClick = (data: Tree, node: Node) => {
+
   // 当目标是笔记时 - 判断当前是否保存 -> 发起需要保存的提示 -> 获取笔记信息 , 重置保存状态  ->跳转到笔记路由
   if (data.type !== 'NOTE') return
 
@@ -69,7 +70,7 @@ const handleNodeClick = (data: Tree, node: Node) => {
           SaveNoteState.saveContent();
           router.push('/user/main/edit')
         })
-  }else {
+  } else {
     // 设置当前显示笔记信息
     getCurrentNoteInfo(node);
     router.push('/user/main/edit')
@@ -81,7 +82,7 @@ const NodeMenuOption = ref({
   show: false,
   optionsComponent: {
     zIndex: 3,
-    minWidth: 140,
+    minWidth: 160,
     x: 500,
     y: 200
   }
@@ -90,7 +91,7 @@ const FolderMenuOption = ref({
   show: false,
   optionsComponent: {
     zIndex: 3,
-    minWidth: 140,
+    minWidth: 160,
     x: 500,
     y: 200
   }
@@ -216,24 +217,24 @@ const handleNodeCollapse = (data) => {
           <template #default="{node,data}">
             <div class="NoteTree"
                  style="display: flex; justify-content: space-between; align-items: center;width: 100%">
-              <div style="display: flex; justify-content: left; align-items: center;width: 100%">
+              <div style="display: flex; justify-content: left; align-items: center;width: 100%;">
                 <!--  判断是否使用自定义图标 -->
-                <div v-if="data.avatar == null">
-                  <div v-if='data.type == "NOTE" ' style="margin-top: 4px">
-                    <el-icon size="14">
+                <div v-if="data.avatar == null" style="margin: 6px 2px 0 2px">
+                  <div v-if='data.type == "NOTE" '>
+                    <el-icon size="16">
                       <Notebook/>
                     </el-icon>
                   </div>
-                  <div v-else-if='data.type == "FOLDER" ' style="margin-top: 4px">
-                    <el-icon size="14">
+                  <div v-else-if='data.type == "FOLDER" '>
+                    <el-icon size="16">
                       <Folder/>
                     </el-icon>
                   </div>
                 </div>
                 <div v-else>
-                  <el-icon size="13">
-                    {{ data.avatar }}
-                  </el-icon>
+
+                  {{ data.avatar }}
+
                 </div>
 
 
@@ -290,7 +291,7 @@ const handleNodeCollapse = (data) => {
 }
 
 :deep(.el-tree-node__content) {
-  height: 30px;
+  height: 32px;
 }
 
 :deep(.el-tree-node__content):hover {

@@ -4,11 +4,20 @@ import {ContextMenu, ContextMenuGroup, ContextMenuItem, ContextMenuSeparator} fr
 import {onRightNFAddNote} from "@/views/User/Main/components/Sidebar/RightMenu/Service/onRightNFAddNote";
 import {onRightNFAddFolder} from "@/views/User/Main/components/Sidebar/RightMenu/Service/onRightNFAddFolder";
 import {useRenameData} from "@/views/User/Main/components/Sidebar/Pinia/RenameData";
+import {useDetailsState} from "@/views/User/Main/components/Sidebar/Pinia/DetailsState";
+import {useDescriptionState} from "@/views/User/Main/components/Sidebar/Pinia/DescriptionState";
 
 
 const NodeMenuOption: any = defineModel();
 
+// 控制 重命名是否 显示的State
 const IsRename = useRenameData()
+
+// 控制 详细信息是否 显示的State
+const IsDetails = useDetailsState()
+
+// 控制 编辑简介是否 显示的State
+const DescriptionState = useDescriptionState();
 
 </script>
 
@@ -29,16 +38,18 @@ const IsRename = useRenameData()
     <context-menu-separator/>
 
     <context-menu-item label="重命名" @click="IsRename.IsRename()"/>
-    <context-menu-item label="移动到"/>
-    <context-menu-item label="复制"/>
+    <context-menu-item label="编辑简介" @click="DescriptionState.IsDescription"/>
+    <context-menu-item label="移动至"/>
+    <context-menu-item label="复制到"/>
 
     <context-menu-separator/>
 
     <context-menu-item label="批量导出" disabled/>
 
     <context-menu-separator/>
-    <context-menu-item label="属性"/>
-    <context-menu-group label="更多">
+    <context-menu-item label="详细信息" @click="IsDetails.IsDetails"/>
+
+    <context-menu-group label="其他">
       <context-menu-item label="分享"/>
       <context-menu-item label="收藏"/>
       <context-menu-item label="阅读密码"/>

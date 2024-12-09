@@ -86,4 +86,8 @@ public interface NTFolderRep extends JpaRepository<FolderInfo, Long> {
     @Query("select f.userId from FolderInfo f where f.id = :id")
     Long findUserIdById(@Param("id") Long id);
 
+    // 根据 文件夹Id获取 文件夹简介
+    @Query("select f.description from FolderInfo f where f.id = :id")
+    String findDescriptionById(@Param("id") Long id);
+
 }

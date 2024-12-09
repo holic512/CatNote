@@ -1,16 +1,17 @@
-// 当前笔记的选中Id 用于 右键添加,编辑等一系列操作
+// 当前笔记的选中Id 用于 右键菜单后续的 添加,编辑等一系列操作
 import {defineStore} from 'pinia'
 import {Tree} from "../NoteTree/interface/treeInterface";
 
 export const useRightSelectNodeId = defineStore('RightSelectNodeId', {
     state() {
         return {
-            // 文件夹的 id
+            // 选中的 id
             selectNodeId: 0,
 
             // 选中的数据
             data: {},
 
+            // 用于重命名 动态显示的 位置
             selectX: 0,
             selectY: 0,
         }

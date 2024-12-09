@@ -27,12 +27,12 @@ const currentNoteInfo = useCurrentNoteInfoStore()
         <el-breadcrumb-item>
           <el-text tag="b" style="display: flex;gap: 4px;align-items: center;">
             <!--  判断是否使用自定义图标 -->
-            <el-icon size="14" v-if="currentNoteInfo.avatar == null">
+            <el-icon size="18" v-if="currentNoteInfo.avatar == null">
               <Notebook/>
             </el-icon>
-            <el-icon size="14" v-else>
+            <div  v-else>
               {{ currentNoteInfo.avatar }}
-            </el-icon>
+            </div>
             <!--  文本 -->
             {{ currentNoteInfo.noteName }}
           </el-text>

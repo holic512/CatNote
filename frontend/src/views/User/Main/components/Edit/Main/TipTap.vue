@@ -4,10 +4,11 @@ import '/src/fonts/alibabaFy.css'
 import Tools from "./Tools/Tools.vue";
 
 import {Editor, EditorContent} from '@tiptap/vue-3'
-import {ShallowRef} from "vue";
+import {ref, ShallowRef} from "vue";
 import BubbleMenu from "@/views/User/Main/components/Edit/Main/BubbleMenu/BubbleMenu.vue";
 import ToCItem from "@/views/User/Main/components/Edit/Main/ToCltem/ToCItem.vue";
 import {useIndexItemsStore} from "@/views/User/Main/components/Edit/Pinia/IndexItems";
+import {ElScrollbar} from "element-plus";
 
 const editor: ShallowRef<Editor | undefined> = defineModel()
 
@@ -20,6 +21,7 @@ const focusOnParagraph = () => {
 // 存储目录
 const IndexItemsStore = useIndexItemsStore();
 
+const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>()
 
 </script>
 
@@ -29,7 +31,7 @@ const IndexItemsStore = useIndexItemsStore();
 
   <BubbleMenu v-model="editor"/>
 
-  <el-scrollbar style="height: calc(100% - 44px)" @click="focusOnParagraph">
+  <el-scrollbar style="height: calc(100% - 44px)" @click="focusOnParagraph" ref="scrollbarRef">
     <div class="editor-content">
       <editor-content :editor="editor" class="tiptap-editor"/>
     </div>
@@ -50,13 +52,10 @@ const IndexItemsStore = useIndexItemsStore();
                 :style="{ width: `${100 - (item.level - 1) * 10}%`,border: '1px solid #E3E2E0',margin: '4px 0 0 auto'}"
             />
           </div>
-
-
         </div>
       </template>
-
       <template #default>
-        <ToCItem v-if="editor" :editor="editor" :items="IndexItemsStore.IndexItems"/>
+        <ToCItem v-if="editor" :editor="editor" :items="IndexItemsStore.IndexItems" :scrollbarRef ="scrollbarRef"/>
       </template>
     </el-popover>
   </div>

@@ -11,25 +11,30 @@
  */
 package org.example.backend.user.note.noteTree.service.impl;
 
+import org.antlr.v4.runtime.misc.Pair;
+import org.example.backend.user.note.noteTree.enums.GetUNTContextEnum;
 import org.example.backend.user.note.noteTree.enums.TreeType;
 import org.example.backend.user.note.noteTree.pojo.NoteTreeDto;
 import org.example.backend.user.note.noteTree.repository.NTNoteRep;
 import org.example.backend.user.note.noteTree.repository.NTFolderRep;
-import org.example.backend.user.note.noteTree.service.GNoteTreeService;
+import org.example.backend.user.note.noteTree.service.GetNoteTreeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.example.backend.user.note.noteTree.enums.GetUNTContextEnum.SUCCESS;
+import static org.example.backend.user.note.noteTree.enums.GetUNTContextEnum.USER_NOTE_ID_MISMATCH;
+
 @Service
-public class GNoteTreeServiceImpl implements GNoteTreeService {
+public class GetNoteTreeServiceImpl implements GetNoteTreeService {
 
     private final NTFolderRep folderRep;
     private final NTNoteRep noteRep;
 
     @Autowired
-    GNoteTreeServiceImpl(NTFolderRep ntFolderRep, NTNoteRep ntNoteRep) {
+    GetNoteTreeServiceImpl(NTFolderRep ntFolderRep, NTNoteRep ntNoteRep) {
         this.folderRep = ntFolderRep;
         this.noteRep = ntNoteRep;
     }
@@ -94,5 +99,27 @@ public class GNoteTreeServiceImpl implements GNoteTreeService {
         }
 
         return resultList;
+    }
+
+    @Override
+    public Pair<GetUNTContextEnum, String> getNoteDescription(Long UserId, Long NoteId) {
+        // 判断是否 存在该 UserId 的 NoteId
+        Long realUserId = noteRep.findUserIdById(NoteId);
+        if (!realUserId.equals(UserId))
+            return new Pair<>(USER_NOTE_ID_MISMATCH, null);
+
+        String noteDescription = noteRep.findNoteSummaryById(NoteId);
+        return new Pair<>(SUCCESS, noteDescription);
+    }
+
+    @Override
+    public Pair<GetUNTContextEnum, String> getFolderDescription(Long UserId, Long NoteId) {
+        // 判断是否 存在该 UserId 的 NoteId
+        Long realUserId = folderRep.findUserIdById(NoteId);
+        if (!realUserId.equals(UserId))
+            return new Pair<>(USER_NOTE_ID_MISMATCH, null);
+
+        String noteDescription = folderRep.findDescriptionById(NoteId);
+        return new Pair<>(SUCCESS, noteDescription);
     }
 }

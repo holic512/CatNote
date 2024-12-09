@@ -9,17 +9,18 @@
  */
 package org.example.backend.user.note.noteTree.service.impl;
 
+import org.antlr.v4.runtime.misc.Pair;
 import org.example.backend.common.entity.FolderInfo;
 import org.example.backend.common.entity.NoteInfo;
-import org.example.backend.user.note.noteTree.enums.PutFolderAvatarEnum;
-import org.example.backend.user.note.noteTree.enums.PutFolderTitleEnum;
-import org.example.backend.user.note.noteTree.enums.PutNoteAvatarEnum;
-import org.example.backend.user.note.noteTree.enums.PutNoteTitleEnum;
+import org.example.backend.user.note.noteTree.enums.*;
 import org.example.backend.user.note.noteTree.repository.NTFolderRep;
 import org.example.backend.user.note.noteTree.repository.NTNoteRep;
 import org.example.backend.user.note.noteTree.service.PutNoteTreeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import static org.example.backend.user.note.noteTree.enums.GetUNTContextEnum.SUCCESS;
+import static org.example.backend.user.note.noteTree.enums.GetUNTContextEnum.USER_NOTE_ID_MISMATCH;
 
 @Service
 public class PutNoteTreeServiceImpl implements PutNoteTreeService {
@@ -101,6 +102,7 @@ public class PutNoteTreeServiceImpl implements PutNoteTreeService {
 
     @Override
     public PutFolderTitleEnum putFolderTitle(Long userId, Long folderId, String folderTitle) {
+
         // 检测文件夹是否存在并获取其所属用户 ID
         Long folderOwnerId = ntFolderRep.findUserIdById(folderId);
         if (folderOwnerId == null) {
@@ -119,6 +121,38 @@ public class PutNoteTreeServiceImpl implements PutNoteTreeService {
         ntFolderRep.save(folderInfo);
 
         return PutFolderTitleEnum.UPDATE_SUCCESS;
+    }
+
+    @Override
+    public PutUNTContextEnum putNoteDescription(Long userId, Long noteId, String description) {
+        // 判断是否 存在该 UserId 的 NoteId
+        Long realUserId = ntNoteRep.findUserIdById(noteId);
+        if (!realUserId.equals(userId))
+            return PutUNTContextEnum.USER_NOTE_ID_MISMATCH;
+
+        // 执行更新
+        NoteInfo noteInfo = ntNoteRep.findById(noteId)
+                .orElseThrow(() -> new IllegalStateException("文件夹已被删除，但检查时未发现"));
+        noteInfo.setNoteSummary(description);
+        ntNoteRep.save(noteInfo);
+
+        return PutUNTContextEnum.SUCCESS;
+    }
+
+    @Override
+    public PutUNTContextEnum putFolderDescription(Long userId, Long FolderId, String description) {
+        // 判断是否 存在该 UserId 的 NoteId
+        Long realUserId = ntFolderRep.findUserIdById(FolderId);
+        if (!realUserId.equals(userId))
+            return PutUNTContextEnum.USER_NOTE_ID_MISMATCH;
+
+        // 更新文件夹简介
+        FolderInfo folderInfo = ntFolderRep.findById(FolderId)
+                .orElseThrow(() -> new IllegalStateException("文件夹已被删除，但检查时未发现"));
+        folderInfo.setDescription(description);
+        ntFolderRep.save(folderInfo);
+
+        return PutUNTContextEnum.SUCCESS;
     }
 
 

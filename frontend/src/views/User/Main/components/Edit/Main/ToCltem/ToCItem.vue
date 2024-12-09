@@ -37,6 +37,9 @@ const props = defineProps({
     type: Editor,
     required: true,
   },
+  scrollbarRef: {
+    type: Object,
+  }
 });
 
 // 定义方法
@@ -50,17 +53,25 @@ const onItemClick = (e, id) => {
     if (element) {
       const pos = props.editor.view.posAtDOM(element, 0); // 获取元素的位置
 
-
       const tr = props.editor.view.state.tr;
       tr.setSelection(new TextSelection(tr.doc.resolve(pos))); // 设置选中状态
       props.editor.view.dispatch(tr); // 更新编辑器视图
       props.editor.view.focus(); // 将焦点设置到编辑器
 
-      // 平滑滚动到对应的元素位置
-      window.scrollTo({
-        top: element.getBoundingClientRect().top + window.scrollY,
-        behavior: 'smooth',
-      });
+      // 获取滚动容器
+      const scrollbar = props.scrollbarRef;
+
+      if (scrollbar) {
+        // 平滑滚动到对应的元素位置，考虑偏移量
+        const topPosition = element.getBoundingClientRect().top + window.scrollY - 100;
+
+        // 使用 el-Scrollbar 提供的 scrollTo 方法滚动到目标位置
+        scrollbar?.scrollTo({top: topPosition, behavior: 'smooth'});
+      } else {
+        console.warn('el-Scrollbar 实例未找到');
+      }
+
+
     } else {
       console.warn(`无法找到对应 ID 的元素: ${id}`);
     }

@@ -4,6 +4,8 @@ import NoteTree from "./NoteTree/noteTree.vue";
 import {useRouter} from "vue-router";
 import Rename from "@/views/User/Main/components/Sidebar/components/Rename/Rename.vue";
 import {useLeftPanel} from "@/views/User/Main/Pinia/panel1Vis";
+import Details from "@/views/User/Main/components/Sidebar/components/Details/Details.vue";
+import Description from "@/views/User/Main/components/Sidebar/components/Description/Description.vue";
 
 // 控制用户设置 显示
 const UserSettingVisible = defineModel()
@@ -99,6 +101,16 @@ const LeftPanelState = useLeftPanel();
 
     <!--    工具类    -->
 
+    <!--  设置  -->
+    <div class="sidebar-div" style="margin-bottom: 1px;" @click="">
+      <div class="sidebar-icon">
+        <i class="pi pi-star-fill" style="font-size: 1rem;color: #708090"/>
+      </div>
+      <div style="display: flex;  align-items: center;">
+        <el-text>收藏</el-text>
+      </div>
+    </div>
+
     <!--  账号  -->
     <div class="sidebar-div" style="margin-bottom: 1px;" @click="UserSettingVisible = true ">
       <div class="sidebar-icon">
@@ -120,8 +132,14 @@ const LeftPanelState = useLeftPanel();
     </div>
   </div>
 
-
+  <!--重命名 动态框-->
   <Rename/>
+
+  <!--详细信息 动态框-->
+  <Details/>
+
+  <!--编辑简介 动态框-->
+  <Description/>
 
 </template>
 

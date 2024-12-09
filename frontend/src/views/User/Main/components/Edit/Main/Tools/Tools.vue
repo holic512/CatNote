@@ -10,6 +10,7 @@ import PlusMore from "./Plus/PlusMore.vue";
 import Undo from "./components/Undo.vue";
 import Redo from "./components/Redo.vue";
 import HighlightText from "./components/TextColor.vue";
+import EmojiPicker from "@/views/User/Main/components/Edit/Main/Tools/components/EmojiPicker.vue";
 
 // 获取编辑器实例
 const editor = defineModel()
@@ -59,7 +60,8 @@ const editor = defineModel()
     <!--  有序排列  -->
     <OrderedList v-model="editor"/>
 
-
+    <!--  表情选择器  -->
+    <EmojiPicker v-model="editor"/>
   </div>
 
 </template>
