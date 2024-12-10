@@ -30,11 +30,11 @@ const currentNoteInfo = useCurrentNoteInfoStore()
             <el-icon size="18" v-if="currentNoteInfo.avatar == null">
               <Notebook/>
             </el-icon>
-            <div  v-else>
+            <div v-else>
               {{ currentNoteInfo.avatar }}
             </div>
             <!--  文本 -->
-            {{ currentNoteInfo.noteName }}
+            {{ (currentNoteInfo.noteName != null) ? currentNoteInfo.noteName : "新建文档" }}
           </el-text>
         </el-breadcrumb-item>
 

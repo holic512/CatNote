@@ -21,7 +21,7 @@ spring:
 
 image:
   storage:
-    path: backend/image
+    path: H:\javaProjects\CatNote\image
 
 server:
   port: 8080

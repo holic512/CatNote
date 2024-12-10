@@ -23,10 +23,6 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         }
 
-        .header {
-            text-align: right;
-        }
-
         .header img {
             width: 30px; /* 增加图标大小 */
             height: 30px;
@@ -59,9 +55,6 @@
 </head>
 <body>
 <div class="container">
-    <div class="header">
-        <img src="/static/favicon.svg" alt="Close"/>
-    </div>
     <div class="content">
         <h1>确认你的邮件地址</h1>
         <h2 th:text="'你好 '+${username}"></h2>

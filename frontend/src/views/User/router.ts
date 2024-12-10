@@ -67,6 +67,11 @@ export default [
                         name: 'user-todoList',
                         component: () => import('./Main/components/TodoList/TodoList.vue'),
                     },
+                    {
+                        path: 'myStar',
+                        name: 'user-myStar',
+                        component: () => import('./Main/components/MyStar/MyStar.vue'),
+                    },
                 ],
             },
         ]

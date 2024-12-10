@@ -50,7 +50,7 @@ public class SaTokenConfigure implements WebMvcConfigurer {
                     .notMatch("/auth/**")
                     .notMatch("/admin/auth/**")
                     .notMatch("/user/auth/**")
-                    .notMatch("/user/image/**")
+                    .notMatch("/images/**")
 
                     .match("/admin/**").check(r -> StpKit.ADMIN.checkLogin())
                     .match("/user/**").check(r -> StpKit.USER.checkLogin());

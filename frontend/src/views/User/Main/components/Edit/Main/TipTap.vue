@@ -4,39 +4,131 @@ import '/src/fonts/alibabaFy.css'
 import Tools from "./Tools/Tools.vue";
 
 import {Editor, EditorContent} from '@tiptap/vue-3'
-import {ref, ShallowRef} from "vue";
+import {onMounted, ref, ShallowRef, watch} from "vue";
 import BubbleMenu from "@/views/User/Main/components/Edit/Main/BubbleMenu/BubbleMenu.vue";
 import ToCItem from "@/views/User/Main/components/Edit/Main/ToCltem/ToCItem.vue";
 import {useIndexItemsStore} from "@/views/User/Main/components/Edit/Pinia/IndexItems";
 import {ElScrollbar} from "element-plus";
+import {useCurrentNoteInfoStore} from "@/views/User/Main/components/Edit/Pinia/currentNoteInfo";
+import {updateNoteTitle} from "@/views/User/Main/components/Edit/Main/Service/updateNoteTitle";
+import {useNoteTreeUpdate} from "@/views/User/Main/components/Sidebar/Pinia/isNoteTreeUpdated";
+import SetCover from "@/views/User/Main/components/Edit/Main/SetCover/SetCover.vue";
+import {useNoteCoverState} from "@/views/User/Main/components/Edit/Main/SetCover/paina/NoteCoverState";
 
 const editor: ShallowRef<Editor | undefined> = defineModel()
-
 
 // 焦点恢复到编译器
 const focusOnParagraph = () => {
   editor.value?.commands.focus(); // 将焦点设置到编辑器
 }
 
-// 存储目录
+// 存储目录的pinia
 const IndexItemsStore = useIndexItemsStore();
 
+// 存储滚筒条实例 用于目录跳转
 const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>()
+
+// NoteCoverState 是否显示的 pinia
+const NoteCoverState = useNoteCoverState();
+
+// 获取当前笔记 的 基础信息
+const currentNoteInfo = useCurrentNoteInfoStore()
+
+// 定义input model
+const InputNoteTitle = ref<string>();
+
+// 定义 背景框
+const noteCover = ref<string>();
+
+// 钩子函数
+onMounted(() => {
+  SetupInfo()
+})
+
+// 监听 当前笔记 是否改变
+watch(() => currentNoteInfo.noteId, () => {
+  SetupInfo()
+})
+
+// 笔记内容加载
+const SetupInfo = () => {
+  // 更新input内容
+  InputNoteTitle.value = currentNoteInfo.noteName;
+}
+
+// 监听 InputNoteTitle 是否改变 并执行重命名
+watch(() => InputNoteTitle.value, async (newValue) => {
+  if (currentNoteInfo.noteId != null && newValue != null) {
+
+    // 执行更新
+    await updateNoteTitle(currentNoteInfo.noteId, newValue)
+    // 并且更新 page
+    currentNoteInfo.noteName = newValue;
+
+    // 刷新笔记树
+    const isNoteTreeUpdated = useNoteTreeUpdate();
+    isNoteTreeUpdated.UpdatedNoteTree();
+  }
+})
 
 </script>
 
 <template>
   <!--编辑器 工具-->
-  <Tools v-model="editor"/>
+  <div style="height: 100%;display: flex;flex-direction: column;">
+    <!--  横装 工具栏-->
+    <Tools v-model="editor"/>
 
-  <BubbleMenu v-model="editor"/>
+    <!--  笔记内容  -->
+    <el-scrollbar style="flex: 1;">
 
-  <el-scrollbar style="height: calc(100% - 44px)" @click="focusOnParagraph" ref="scrollbarRef">
-    <div class="editor-content">
-      <editor-content :editor="editor" class="tiptap-editor"/>
-    </div>
-  </el-scrollbar>
+      <!--  封面  -->
+      <img alt="1" :src="'/NoteCover/noteCover' + currentNoteInfo.cover + '.jpg'" style="height: 160px;width: 100%"
+           v-if="currentNoteInfo.cover != null"/>
 
+      <!--  当没有 封面 但是有图标的情况下-->
+      <div v-if="currentNoteInfo.cover == null && currentNoteInfo.avatar != null" style="margin-top: 36px"/>
+
+      <div
+          style="height: 30px;width: 100%;display: flex;justify-content: center;align-items: center;margin-bottom: 4px">
+        <div style="width: 720px;position: relative;top: -15px; /* 向上移动 50px */">
+          <span style="font-size: 54px">{{ currentNoteInfo.avatar }}</span>
+        </div>
+      </div>
+      <div class="container-tiptap">
+        <!-- 功能部分 -->
+        <div class="feature">
+          <div class="feature-div">
+            <el-text>
+              😀 添加图标
+            </el-text>
+          </div>
+
+          <div class="feature-div" @click="NoteCoverState.IsNoteCover()">
+            <el-text>
+              <el-icon>
+                <PictureFilled/>
+              </el-icon>
+              添加封面
+            </el-text>
+          </div>
+
+        </div>
+
+
+        <!-- 重命名部分 -->
+        <input class="styled-input" placeholder="新建笔记" v-model="InputNoteTitle">
+      </div>
+
+
+      <div class="editor-content" @click="focusOnParagraph" ref="scrollbarRef">
+        <editor-content :editor="editor" class="tiptap-editor"/>
+      </div>
+    </el-scrollbar>
+  </div>
+
+
+  <!--  目录功能  -->
   <div style="position: absolute; right: 18px; top: 164px; text-align: right;">
     <el-popover
         placement="left"
@@ -55,19 +147,82 @@ const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>()
         </div>
       </template>
       <template #default>
-        <ToCItem v-if="editor" :editor="editor" :items="IndexItemsStore.IndexItems" :scrollbarRef ="scrollbarRef"/>
+        <ToCItem v-if="editor" :editor="editor" :items="IndexItemsStore.IndexItems" :scrollbarRef="scrollbarRef"/>
       </template>
     </el-popover>
   </div>
 
+  <!--  选中浮动菜单  -->
+  <BubbleMenu v-model="editor"/>
 
+  <!--  设置背景菜单  -->
+  <SetCover/>
 </template>
 
 
 <style lang="scss">
+.input-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.styled-input {
+  width: 720px;
+  height: 52px; /* 稍微增加高度 */
+  font-size: 40px; /* 增大字体 */
+  font-weight: bold;
+  border: 0;
+  outline: none; /* 去除聚焦时的默认蓝色边框 */
+}
+
+.styled-input::placeholder {
+  color: #E0E0DF;
+}
+
+.container-tiptap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: relative; /* 为了让功能部分在悬停时显示在容器上面 */
+}
+
+.feature {
+  width: 720px;
+  opacity: 0; /* 初始时隐藏功能部分 */
+  transition: opacity 0.3s ease; /* 添加过渡效果 */
+
+  display: flex;
+  gap: 4px;
+}
+
+.container-tiptap:hover .feature {
+  opacity: 1; /* 当悬停在最外层容器上时，显示功能部分 */
+}
+
+.feature-div {
+  width: 92px;
+  height: 28px;
+  padding: 4px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 4px;
+
+  user-select: none;
+}
+
+.feature-div:hover {
+  background-color: #EFEFED;
+}
+
 /* 样式用于编辑器的主要内容区域 */
 .editor-content {
-  outline: none; /* 去掉选中时的黑框 */
   cursor: text; /* 鼠标悬停时显示文本光标 */
   flex: 1;
   display: flex;
@@ -75,6 +230,7 @@ const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>()
   width: 100%;
   height: 100%;
 }
+
 
 /* 去掉文本选中时的轮廓 */
 .editor-content *:focus {
@@ -148,7 +304,7 @@ const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>()
     max-width: 100%;
   }
 
-  //引用块
+  // 引用块
   blockquote {
     border-left: 4px solid #555; /* 更粗的边框和更深的颜色 */
 
@@ -247,7 +403,7 @@ const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>()
 
 /* ProseMirror 编辑器的通用样式 */
 .ProseMirror {
-  padding: 1rem 1rem 1rem 0; /* 设置内容的内边距 */
+  padding: 0 1rem 1rem 0; /* 设置内容的内边距 */
 
   * {
     margin-top: 0.75em; /* 设置每个子元素的顶部外边距 */

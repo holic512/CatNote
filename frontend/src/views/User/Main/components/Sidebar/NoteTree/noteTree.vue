@@ -239,7 +239,7 @@ const handleNodeCollapse = (data) => {
 
 
                 <el-text style="margin-left: 4px;">
-                  {{ data.label }}
+                  {{ (data.label == null || data.label == '') ? "新建文档" : data.label }}
                 </el-text>
               </div>
 

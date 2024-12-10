@@ -35,6 +35,9 @@ public class NoteTreeDto {
     // 自定义头像
     private char[] Avatar;
 
+    // 自定义背景
+    private String Cover;
+
 
     // 用于存储文件夹的 构造函数
     NoteTreeDto(Long id, String label, TreeType type, char[] Avatar) {
@@ -43,6 +46,15 @@ public class NoteTreeDto {
         this.type = type;
         this.Avatar = Avatar;
 
+    }
+
+    // 用于存储笔记的 构造函数 - 多了个背景
+    NoteTreeDto(Long id, String label, TreeType type, char[] Avatar, String Cover) {
+        this.id = id;
+        this.label = label;
+        this.type = type;
+        this.Avatar = Avatar;
+        this.Cover = Cover;
     }
 
 

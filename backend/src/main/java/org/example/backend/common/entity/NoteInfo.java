@@ -43,6 +43,9 @@ public class NoteInfo {
     @Column(name = "note_avatar", length = 4)
     private char[] noteAvatar; // 文件夹头像 emoji，存储单个 emoji 字符
 
+
+    private String note_cover_url;
+
     @Column(name = "note_password")
     private String notePassword; // 笔记密码
 

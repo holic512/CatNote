@@ -35,7 +35,6 @@ public class PNoteTreeServiceImpl implements PNoteTreeService {
     public void addNote(Long parentId, Long UserId) {
         // 处理数据
         NoteInfo noteInfo = new NoteInfo();
-        noteInfo.setNoteTitle("新建笔记");
         noteInfo.setNoteType(NoteType.Normal.getValue());
         noteInfo.setFolderId(parentId);
         noteInfo.setUserId(UserId);

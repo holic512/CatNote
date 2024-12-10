@@ -30,19 +30,19 @@ public class TodoInfo {
     @Column(name = "category_id", nullable = false)
     private Long category_id;
 
-    @Column(name = "title", nullable = false, columnDefinition = "VARCHAR(255) NOT NULL COMMENT '待办事项标题'")
+    @Column(name = "title")
     private String title;
 
-    @Column(name = "description", columnDefinition = "TEXT COMMENT '待办事项描述'")
+    @Column(name = "description")
     private String description;
 
-    @Column(name = "start_date", columnDefinition = "DATETIME COMMENT '开始日期'")
+    @Column(name = "start_date")
     private LocalDateTime startDate;
 
-    @Column(name = "due_date", columnDefinition = "DATETIME COMMENT '截止日期'")
+    @Column(name = "due_date")
     private LocalDateTime dueDate;
 
-    @Column(name = "status", nullable = false, columnDefinition = "TINYINT UNSIGNED DEFAULT 0 COMMENT '当前待做状态,0:未完成,1:已完成'")
+    @Column(name = "status")
     private Integer status = 0;
 
     @Column(name = "is_deleted", nullable = false, columnDefinition = "TINYINT UNSIGNED DEFAULT 0 COMMENT '是否已删除，0:未删除，1:已删除'")

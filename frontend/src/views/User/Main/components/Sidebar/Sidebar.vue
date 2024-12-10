@@ -101,8 +101,8 @@ const LeftPanelState = useLeftPanel();
 
     <!--    工具类    -->
 
-    <!--  设置  -->
-    <div class="sidebar-div" style="margin-bottom: 1px;" @click="">
+    <!--  收藏  -->
+    <div class="sidebar-div" style="margin-bottom: 1px;" @click="router.push('/user/main/myStar')">
       <div class="sidebar-icon">
         <i class="pi pi-star-fill" style="font-size: 1rem;color: #708090"/>
       </div>

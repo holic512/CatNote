@@ -30,7 +30,7 @@ public interface NTNoteRep extends JpaRepository<NoteInfo, Long> {
     // 根据用户id 父文件夹 id 获取 未被 拟删除的 笔记 的( id 名称 类别)
     @Query("SELECT new org.example.backend.user.note.noteTree.pojo.NoteTreeDto(n.id,n.noteTitle," +
             "org.example.backend.user.note.noteTree.enums.TreeType.NOTE" +
-            ",n.noteAvatar)" +
+            ",n.noteAvatar,n.note_cover_url)" +
             "FROM NoteInfo n " +
             "where n.userId = :userId And n.folderId = :folderId AND n.isDeleted = 0 ")
     List<NoteTreeDto> findFolderByUserIdAndFolderId(@Param("userId") Long userId, @Param("folderId") Long folderId);

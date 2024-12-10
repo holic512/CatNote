@@ -8,3 +8,6 @@
 /dataSources.local.xml
 # Zeppelin 忽略的文件
 /ZeppelinRemoteNotebooks/
+
+# 存储图片的图床
+../image
