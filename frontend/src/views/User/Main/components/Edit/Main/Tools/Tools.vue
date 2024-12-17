@@ -11,14 +11,18 @@ import Undo from "./components/Undo.vue";
 import Redo from "./components/Redo.vue";
 import HighlightText from "./components/TextColor.vue";
 import EmojiPicker from "@/views/User/Main/components/Edit/Main/Tools/components/EmojiPicker.vue";
+import {useUserPreferencesStore} from "@/views/User/Main/Pinia/userPreferencesStore";
 
 // 获取编辑器实例
 const editor = defineModel()
 
+// 获取个性化实例
+const PreferencesStore = useUserPreferencesStore()
+
 </script>
 
 <template>
-  <div class="container">
+  <div class="ToolsContainer">
 
     <!--  撤销  -->
     <Undo v-model="editor"/>
@@ -62,12 +66,20 @@ const editor = defineModel()
 
     <!--  表情选择器  -->
     <EmojiPicker v-model="editor"/>
+
+
+    <div style="flex: 1"/>
+
+    <el-button text class="button" ref="buttonRef" style="margin-right: 8px" @click="PreferencesStore.toggleEditorToolbar()">
+      <el-icon><BottomLeft /></el-icon>
+    </el-button>
+
   </div>
 
 </template>
 
 <style scoped>
-.container {
+.ToolsContainer {
   width: 100%;
   height: 36px;
   border-bottom: 1px solid #F0F3F5;

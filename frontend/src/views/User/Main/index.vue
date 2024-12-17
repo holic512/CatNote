@@ -6,7 +6,7 @@ import {onBeforeUnmount, onMounted, ref, watch} from 'vue';
 
 // 控制设置窗 弹出与关闭
 import Setting from "./components/Setting/index.vue"
-import {useLeftPanel} from "@/views/User/Main/Pinia/panel1Vis";
+import {useUserPreferencesStore} from "@/views/User/Main/Pinia/userPreferencesStore";
 import Button from "primevue/button";
 import SidebarM from "@/views/User/Main/components/SidebarM/SidebarM.vue";
 
@@ -14,7 +14,7 @@ import SidebarM from "@/views/User/Main/components/SidebarM/SidebarM.vue";
 const SettingVisible = ref<boolean>(false);
 
 // 左侧面板信息控制
-const LeftPanelState = useLeftPanel();
+const LeftPanelState = useUserPreferencesStore();
 
 // 控制 Tooltip 显示与隐藏
 const showTooltip = ref(false);
@@ -28,7 +28,7 @@ const fixedMouseY = ref(0);
 const isDragging = ref(false);
 
 // 左侧面板的宽度
-const panel1Width = ref(LeftPanelState.vis ? 250 : 48);
+const panel1Width = ref(LeftPanelState.LeftPanelVis ? 250 : 48);
 
 
 // 记录是否锁定 Tooltip 位置
@@ -88,9 +88,9 @@ onBeforeUnmount(() => {
 
 
 // 控制左侧面板是否显示
-const leftPanelVis = ref(LeftPanelState.vis);
+const leftPanelVis = ref(LeftPanelState.LeftPanelVis);
 
-watch(() => LeftPanelState.vis, (newValue) => {
+watch(() => LeftPanelState.LeftPanelVis, (newValue) => {
   if (newValue) {
     // 展开动作
     panel1Width.value = 250; // 切换宽度

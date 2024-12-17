@@ -60,6 +60,8 @@ onMounted(async () => {
   // 获取初始数据 固定获取第一页的数据
   products.value = await fetchInitialPageData(nowRow.value);
 
+  console.log(products.value)
+
   // 挂载 页面尺寸监听器
   window.addEventListener('resize', handleResize);
 

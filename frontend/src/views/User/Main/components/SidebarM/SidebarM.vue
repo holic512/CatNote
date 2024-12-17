@@ -1,10 +1,10 @@
 <script setup lang="ts">
 
 import Button from "primevue/button";
-import {useLeftPanel} from "@/views/User/Main/Pinia/panel1Vis";
+import {useUserPreferencesStore} from "@/views/User/Main/Pinia/userPreferencesStore";
 import {useRouter} from "vue-router";
 // 左侧面板信息控制
-const LeftPanelState = useLeftPanel();
+const LeftPanelState = useUserPreferencesStore();
 
 // 获取路由实例
 const router = useRouter();
@@ -23,7 +23,7 @@ const router = useRouter();
     </div>
 
     <!--  缩放按钮  -->
-    <div class="sidebar-div" @click="LeftPanelState.openVis()">
+    <div class="sidebar-div" @click="LeftPanelState.toggleLeftPanel()">
       <i class="pi pi-angle-double-right" style="font-size: 1rem;color: #708090"/>
     </div>
 

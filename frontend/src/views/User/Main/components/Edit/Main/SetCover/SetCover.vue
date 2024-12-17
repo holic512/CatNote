@@ -9,12 +9,20 @@ import {useNoteTreeUpdate} from "@/views/User/Main/components/Sidebar/Pinia/isNo
 // NoteCoverState 是否显示的 pinia
 const NoteCoverState = useNoteCoverState();
 
+// 创建背景封面的数组
+const colorOptions = Array.from({ length: 14 }, (_, i) => `1-${(i + 1).toString().padStart(3, '0')}`);
+const patternOptions = Array.from({ length: 6 }, (_, i) => `2-${(i + 1).toString().padStart(3, '0')}`);
+
+
 // 监听是否显示
-watch(() => NoteCoverState.NoteCoverVis, () => {
+watch(() => NoteCoverState.NoteCoverVis, () => handleNoteCoverVisibilityChange())
+
+// 将监听回调提取到外部
+const handleNoteCoverVisibilityChange = () => {
   if (NoteCoverState.NoteCoverVis) {
     isFeatureDivClicked = true;
   }
-})
+};
 
 
 // 用于判断是否点击了开启背景设置的按钮
@@ -79,38 +87,35 @@ const upNoteCoverProxy = async (noteCover: any) => {
     <div class="SetCoverContent">
       <el-scrollbar height="290" class="SetCoverScrollbar">
 
+
+        <!-- 当前背景 -->
         <div class="SetCoverImageContainer">
           <div class="SetCoverText">
             <el-text size="small" type="info">当前背景</el-text>
           </div>
-          <el-image class="SetCoverImage"
-                    :src="'/NoteCover/noteCover' + currentNoteInfo.cover + '.jpg'"
-                    fit="cover"/>
+          <el-image class="SetCoverImage" :src="'/NoteCover/noteCover' + currentNoteInfo.cover + '.jpg'" fit="cover"/>
         </div>
 
-        <!--  颜色与渐变  -->
+        <!-- 颜色与渐变 -->
         <div class="SetCoverImageContainer">
           <div class="SetCoverText">
             <el-text size="small" type="info">颜色与渐变</el-text>
           </div>
-          <div v-for="i in 14" :key="'color-' + i" @click="upNoteCoverProxy('1-'+ i.toString().padStart(3, '0')) ">
-            <el-image class="SetCoverImage"
-                      :src="'/NoteCover/noteCover1-' + i.toString().padStart(3, '0') + '.jpg'"
-                      fit="cover"/>
+          <div v-for="color in colorOptions" :key="'color-' + color" @click="upNoteCoverProxy(color)">
+            <el-image class="SetCoverImage" :src="'/NoteCover/noteCover' + color + '.jpg'" fit="cover"/>
           </div>
         </div>
 
-        <!--  花纹  -->
+        <!-- 花纹 -->
         <div class="SetCoverImageContainer">
           <div class="SetCoverText">
             <el-text size="small">花纹</el-text>
           </div>
-          <div v-for="i in 6" :key="'pattern-' + i" @click="upNoteCoverProxy('2-'+ i.toString().padStart(3, '0')) ">
-            <el-image class="SetCoverImage"
-                      :src="'/NoteCover/noteCover2-' + i.toString().padStart(3, '0') + '.jpg'"
-                      fit="cover"/>
+          <div v-for="pattern in patternOptions" :key="'pattern-' + pattern" @click="upNoteCoverProxy(pattern)">
+            <el-image class="SetCoverImage" :src="'/NoteCover/noteCover' + pattern + '.jpg'" fit="cover"/>
           </div>
         </div>
+
       </el-scrollbar>
     </div>
   </div>

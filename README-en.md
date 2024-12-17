@@ -28,6 +28,19 @@
 - **Environment Variables (Config)**: Supports custom management of environment variables and configuration files, allowing users to easily adjust application settings.
 - **Multi-Platform Support**: Can be deployed via Docker, supporting various operating systems.
 
+## Development Tasks
+
+- [ ] Optimize table addition functionality
+- [ ] Add comment functionality
+- [ ] Add note presentation mode
+- [ ] Add bookmark feature
+- [ ] Add import/export feature
+- [ ] Add sharing feature (with local saving)
+- [ ] Add homepage functionality
+- [ ] Add search functionality
+- [ ] Test and optimize details
+- [ ] Refactor code logic for optimization
+
 ## Deployment
 
 ### Docker Compose (Recommended)

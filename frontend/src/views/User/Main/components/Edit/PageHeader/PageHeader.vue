@@ -13,7 +13,7 @@ const currentNoteInfo = useCurrentNoteInfoStore()
 </script>
 
 <template>
-  <el-row justify="space-between">
+  <el-row justify="space-between" class="row-pageHeader">
 
     <!--    文件路径头   -->
     <el-col :span="8" class="el-col">
@@ -34,7 +34,9 @@ const currentNoteInfo = useCurrentNoteInfoStore()
               {{ currentNoteInfo.avatar }}
             </div>
             <!--  文本 -->
-            {{ (currentNoteInfo.noteName != null) ? currentNoteInfo.noteName : "新建文档" }}
+            {{
+              (currentNoteInfo.noteName == null || currentNoteInfo.noteName == '') ? "新建文档" : currentNoteInfo.noteName
+            }}
           </el-text>
         </el-breadcrumb-item>
 
@@ -134,10 +136,13 @@ const currentNoteInfo = useCurrentNoteInfoStore()
 </template>
 
 <style scoped>
+.row-pageHeader{
+  height: 100%;
+}
+
 .el-col {
   display: flex;
   align-items: center;
-  height: 48px;
 }
 
 .el-col-right {

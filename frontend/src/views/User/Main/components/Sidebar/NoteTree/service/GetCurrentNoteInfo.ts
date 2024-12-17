@@ -15,7 +15,7 @@ export const getCurrentNoteInfo = async (node: Node) => {
     // 存储到 pinia中
     const currentNoteInfo = useCurrentNoteInfoStore()
 
-    console.log(node.data)
+    // console.log(node.data)
 
     // 先清理 在储存
     currentNoteInfo.clearNoteInfo()

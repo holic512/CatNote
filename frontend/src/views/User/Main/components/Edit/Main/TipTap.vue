@@ -14,12 +14,14 @@ import {updateNoteTitle} from "@/views/User/Main/components/Edit/Main/Service/up
 import {useNoteTreeUpdate} from "@/views/User/Main/components/Sidebar/Pinia/isNoteTreeUpdated";
 import SetCover from "@/views/User/Main/components/Edit/Main/SetCover/SetCover.vue";
 import {useNoteCoverState} from "@/views/User/Main/components/Edit/Main/SetCover/paina/NoteCoverState";
+import {useUserPreferencesStore} from "@/views/User/Main/Pinia/userPreferencesStore";
+import VerticalTools from "@/views/User/Main/components/Edit/Main/Tools/VerticalTools/VerticalTools.vue";
 
 const editor: ShallowRef<Editor | undefined> = defineModel()
 
 // 焦点恢复到编译器
 const focusOnParagraph = () => {
-  editor.value?.commands.focus(); // 将焦点设置到编辑器
+  // editor.value?.commands.focus(); // 将焦点设置到编辑器
 }
 
 // 存储目录的pinia
@@ -71,31 +73,37 @@ watch(() => InputNoteTitle.value, async (newValue) => {
   }
 })
 
+// 获取个性化实例
+const PreferencesStore = useUserPreferencesStore()
+
 </script>
 
 <template>
   <!--编辑器 工具-->
   <div style="height: 100%;display: flex;flex-direction: column;">
     <!--  横装 工具栏-->
-    <Tools v-model="editor"/>
+    <Tools v-model="editor" v-if="PreferencesStore.editorToolbarVisible"/>
 
     <!--  笔记内容  -->
     <el-scrollbar style="flex: 1;">
 
       <!--  封面  -->
-      <img alt="1" :src="'/NoteCover/noteCover' + currentNoteInfo.cover + '.jpg'" style="height: 160px;width: 100%"
+      <img alt="1" :src="'/NoteCover/noteCover' + currentNoteInfo.cover + '.jpg'" style="height: 140px;width: 100%"
            v-if="currentNoteInfo.cover != null"/>
 
       <!--  当没有 封面 但是有图标的情况下-->
       <div v-if="currentNoteInfo.cover == null && currentNoteInfo.avatar != null" style="margin-top: 36px"/>
 
+      <!-- 头像图标 -->
       <div
           style="height: 30px;width: 100%;display: flex;justify-content: center;align-items: center;margin-bottom: 4px">
         <div style="width: 720px;position: relative;top: -15px; /* 向上移动 50px */">
           <span style="font-size: 54px">{{ currentNoteInfo.avatar }}</span>
         </div>
       </div>
+
       <div class="container-tiptap">
+
         <!-- 功能部分 -->
         <div class="feature">
           <div class="feature-div">
@@ -118,6 +126,7 @@ watch(() => InputNoteTitle.value, async (newValue) => {
 
         <!-- 重命名部分 -->
         <input class="styled-input" placeholder="新建笔记" v-model="InputNoteTitle">
+
       </div>
 
 
@@ -157,6 +166,11 @@ watch(() => InputNoteTitle.value, async (newValue) => {
 
   <!--  设置背景菜单  -->
   <SetCover/>
+
+  <!--  竖装工具栏  -->
+  <VerticalTools v-model="editor" v-if="!PreferencesStore.editorToolbarVisible"/>
+
+
 </template>
 
 
@@ -170,7 +184,7 @@ watch(() => InputNoteTitle.value, async (newValue) => {
 
 .styled-input {
   width: 720px;
-  height: 52px; /* 稍微增加高度 */
+  height: 48px; /* 稍微增加高度 */
   font-size: 40px; /* 增大字体 */
   font-weight: bold;
   border: 0;

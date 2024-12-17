@@ -99,6 +99,6 @@ onBeforeUnmount(() => {
 <style scoped>
 .common-header {
   border-bottom: 1px solid #F0F3F5;
-  height: 48px;
+  height: 38px;
 }
 </style>

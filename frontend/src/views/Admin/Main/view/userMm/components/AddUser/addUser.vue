@@ -137,7 +137,7 @@ const resetForm = () => {
 <template>
 
   <!--  todo 类型不确定-->
-  <Dialog v-model:visible?="addUserVisible" :draggable="false" modal header="添加用户" :style="{ width: '450px'}"
+  <Dialog v-model:visible="addUserVisible" :draggable="false" modal header="添加用户" :style="{ width: '450px'}"
           :pt="{
     header: { style: { paddingBottom:'10px',paddingTop:'10px'} },
     content: { style: { borderTop: '1px solid #E2E8F0'} },

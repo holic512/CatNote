@@ -16,6 +16,7 @@ import org.example.backend.common.UserAvatar.UserAvatarService;
 import org.example.backend.common.dto.user.UserDetailDto;
 import org.example.backend.common.entity.User;
 import org.example.backend.common.repository.UserRepository;
+import org.example.backend.common.util.SCryptUtil;
 import org.example.backend.common.util.UuidUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -103,11 +104,14 @@ public class AdminUserMmServiceImpl implements AdminUserMmService {
             uid = UuidUtil.getUid();
         } while (userRepository.existsByUid(uid));
 
+        // 密码加密
+        String password = SCryptUtil.hashPassword(addUserRequest.getPassword());
+
         // 整合到User类中
         User user = new User.Builder()
                 .uid(uid)
                 .username(addUserRequest.getUsername())
-                .password(addUserRequest.getPassword())
+                .password(password)
                 .email(addUserRequest.getEmail())
                 .status(addUserRequest.getStatus().getValue())
                 .build();

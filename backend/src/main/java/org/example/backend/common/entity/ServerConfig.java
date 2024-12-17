@@ -22,8 +22,11 @@ public class ServerConfig {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;  // 自增主键，唯一标识每一条记录
 
-    @Column(name = "image_storage_mode", nullable = false, columnDefinition = "TINYINT(1) COMMENT '图片存储模式，0: 本地存储，1: 阿里OSS'")
+    @Column(name = "image_storage_mode", nullable = false)
     private Integer imageStorageMode; // 图片存储模式，0: 本地存储，1: 阿里OSS
+
+    @Column(name = "mail_mode", nullable = false)
+    private Integer MailMode; // 图片存储模式，0: 本地存储，1: 阿里OSS
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;  // 记录创建时间，默认为当前时间戳

@@ -9,6 +9,7 @@ package org.example.backend.common.Mail.Service;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.example.backend.common.Mail.dto.MailCodeMessage;
+import org.example.backend.common.Mail.pojo.MailClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -20,12 +21,12 @@ import org.example.backend.common.Mail.enums.MailCodePurpose;
 @Component
 public class MailCodeService {
 
-    private final JavaMailSender javaMailSender;
+    private final MailClient mailClient;
     private final TemplateEngine templateEngine;
 
     @Autowired
-    public MailCodeService(JavaMailSender javaMailSender, TemplateEngine templateEngine) {
-        this.javaMailSender = javaMailSender;
+    public MailCodeService(MailClient mailClient, TemplateEngine templateEngine) {
+        this.mailClient = mailClient;
         this.templateEngine = templateEngine;
     }
 
@@ -34,7 +35,15 @@ public class MailCodeService {
      * @return 发送状态
      */
     public boolean sendVerificationCode(MailCodeMessage mailCodeMessage) {
+        // 判断邮箱功能 是否开启
+        if (!mailClient.getState()) {
+            // 如果没开启 则直接返回发送成功
+            return true;
+        }
+
+        // 开启
         try {
+            JavaMailSender mailSender = mailClient.getMailSender();
 
             String email = mailCodeMessage.getEmail();
             String code = mailCodeMessage.getCode();
@@ -44,7 +53,7 @@ public class MailCodeService {
             String subject = code + "是你的CatNote验证码";
 
             // 创建并配置邮件消息
-            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             helper.setFrom("holic512@163.com");
             helper.setTo(email);
@@ -69,11 +78,12 @@ public class MailCodeService {
             helper.setText(htmlContent, true);
 
             // 发送邮件
-            javaMailSender.send(message);
+            mailSender.send(message);
             return true;
         } catch (MessagingException e) {
             return false;
         }
+
     }
 
 

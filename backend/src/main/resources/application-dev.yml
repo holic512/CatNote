@@ -1,8 +1,15 @@
 # 开发环境变量
 spring:
+
+  # 数据库初始化
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath*:sql/InitSql/init_create_table.sql
+
   # 数据库设置
   datasource:
-    url: jdbc:mysql://localhost:3306/SlothNote
+    url: jdbc:mysql://localhost:3306/test
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver

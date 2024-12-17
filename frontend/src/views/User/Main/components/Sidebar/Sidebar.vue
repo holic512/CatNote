@@ -3,7 +3,7 @@ import Button from 'primevue/button';
 import NoteTree from "./NoteTree/noteTree.vue";
 import {useRouter} from "vue-router";
 import Rename from "@/views/User/Main/components/Sidebar/components/Rename/Rename.vue";
-import {useLeftPanel} from "@/views/User/Main/Pinia/panel1Vis";
+import {useUserPreferencesStore} from "@/views/User/Main/Pinia/userPreferencesStore";
 import Details from "@/views/User/Main/components/Sidebar/components/Details/Details.vue";
 import Description from "@/views/User/Main/components/Sidebar/components/Description/Description.vue";
 
@@ -14,7 +14,7 @@ const UserSettingVisible = defineModel()
 const router = useRouter();
 
 // 左侧面板信息控制
-const LeftPanelState = useLeftPanel();
+const LeftPanelState = useUserPreferencesStore();
 
 </script>
 
@@ -41,7 +41,7 @@ const LeftPanelState = useLeftPanel();
       <!--      收缩侧边栏 箭头  -->
       <div>
         <Button class="sidebar-button" text icon="pi pi-angle-double-left" size="small"
-                @click="LeftPanelState.offVis()"/>
+                @click="LeftPanelState.toggleLeftPanel()"/>
       </div>
 
       <div>
