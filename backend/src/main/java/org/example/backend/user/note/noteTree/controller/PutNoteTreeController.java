@@ -124,10 +124,11 @@ public class PutNoteTreeController {
     }
 
     /**
-     * 更新 文件夹标题
+     * 更新 文件夹头像
      */
     @PutMapping("FolderAvatar")
     public ResponseEntity<Object> putFolderAvatar(@RequestBody HashMap<String, String> folderData) {
+
         // 获取用户 ID
         long userId = (long) StpKit.USER.getSession().get("id");
 

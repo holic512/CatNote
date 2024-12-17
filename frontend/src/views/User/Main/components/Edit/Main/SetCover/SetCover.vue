@@ -129,7 +129,7 @@ const upNoteCoverProxy = async (noteCover: any) => {
   background-color: white;
   top: 160px;
   left: 40vw;
-  box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
   border-radius: 4px;
   border: #EDEDEC 1px solid;
 }

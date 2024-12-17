@@ -104,13 +104,13 @@ const PreferencesStore = useUserPreferencesStore()
 
       <div class="container-tiptap">
 
-        <!-- 功能部分 -->
+        <!-- 功能 按钮部分 -->
         <div class="feature">
-          <div class="feature-div">
-            <el-text>
-              😀 添加图标
-            </el-text>
-          </div>
+<!--          <div class="feature-div">-->
+<!--            <el-text>-->
+<!--              😀 添加图标-->
+<!--            </el-text>-->
+<!--          </div>-->
 
           <div class="feature-div" @click="NoteCoverState.IsNoteCover()">
             <el-text>

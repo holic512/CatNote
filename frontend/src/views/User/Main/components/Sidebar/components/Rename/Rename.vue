@@ -45,7 +45,7 @@ const handleClickOutside = (event: MouseEvent) => {
     closeDialog();
   }
 
-  const dialog2 = document.querySelector(".rename-emoji");
+  const dialog2 = document.querySelector(".s-rename-emoji-box");
   if (dialog2 && !dialog2.contains(event.target as Node)) {
     emojiPickerVis.value = false;
   }
@@ -93,7 +93,6 @@ const onSelectEmoji = async (emoji: EmojiExt) => {
     status = await updateFolderAvatar(rightSelect.data.id, emoji.i);
   }
 
-
   // 当修改成功 执行刷新 策略
   if (status == 200) {
     // 初始化 笔记更新状态  并 更新笔记状态
@@ -112,6 +111,32 @@ const onSelectEmoji = async (emoji: EmojiExt) => {
   }
 };
 
+// 移除 头像操作
+const removeAvatarEmoji = async () => {
+  let status: any;
+  if (rightSelect.data.type == 'NOTE') {
+    status = await updateNoteAvatar(rightSelect.data.id, "");
+  } else {
+    status = await updateFolderAvatar(rightSelect.data.id, "");
+  }
+
+  // 当修改成功 执行刷新 策略
+  if (status == 200) {
+    // 初始化 笔记更新状态  并 更新笔记状态
+    const isNoteTreeUpdated = useNoteTreeUpdate();
+    isNoteTreeUpdated.UpdatedNoteTree();
+
+    // 关闭表情选择器
+    emojiPickerVis.value = false;
+
+    // 当修改的是当前的笔记 同时刷新heardPage
+    const currentNoteInfo = useCurrentNoteInfoStore()
+    if (currentNoteInfo.noteId == rightSelect.data.id) {
+      currentNoteInfo.noteName = newName.value;
+    }
+
+  }
+}
 
 // 监听 重命名输入框 来进行无痕重命名
 watch(() => newName.value, async () => {
@@ -163,9 +188,9 @@ watch(() => RenameData.RenameIs, () => {
   >
     <div class="dialog-content">
       <!--  按钮 显示当前文件的 图标-->
-      <el-button class="button" plain @click="emojiPickerVis = true">
+      <el-button class="rename-emoji-button" plain @click="emojiPickerVis = true">
         <!--  判断是否使用自定义图标 -->
-        <div v-if="rightSelect.data.avatar == null">
+        <div v-if="rightSelect.data.avatar == null || rightSelect.data.avatar ==''">
           <div v-if='rightSelect.data.type == "NOTE" ' style="margin-top: 4px">
             <el-icon size="16">
               <Notebook/>
@@ -177,11 +202,10 @@ watch(() => RenameData.RenameIs, () => {
             </el-icon>
           </div>
         </div>
-        <div v-else>
-          <el-icon size="16">
-            {{ rightSelect.data.avatar }}
-          </el-icon>
+        <div v-else style="font-size: 16px;padding-top: 2px">
+          {{ rightSelect.data.avatar }}
         </div>
+
       </el-button>
 
       <el-input
@@ -194,12 +218,26 @@ watch(() => RenameData.RenameIs, () => {
   </div>
 
   <!--    表情选择器   -->
-  <EmojiPicker
-      v-if="emojiPickerVis"
-      :native="true" @select="onSelectEmoji" :group-names="iln" class="rename-emoji"
-      :disable-skin-tones="true" :hide-group-icons="true" :hide-search="true"
-      :style="{top: positionEmoji.y+'px',left:position.x+'px'}"
-  />
+  <div v-show="emojiPickerVis"
+       :style="{top: positionEmoji.y+'px',left:position.x+'px'}"
+       class="s-rename-emoji-box"
+  >
+    <div style="border-bottom: 1px #EDEDEC solid;padding: 4px;display: flex;  height: 36px;">
+      <el-text style="margin-left: 8px" size="small">修改头像</el-text>
+      <div style="flex: 1"/>
+      <el-button size="small" text @click="removeAvatarEmoji()">移除头像</el-button>
+    </div>
+    <EmojiPicker
+        @select="onSelectEmoji"
+        :group-names="iln"
+        class="rename-emoji"
+        :disable-skin-tones="true"
+        :hide-group-icons="true"
+        :hide-search="true"
+    />
+  </div>
+
+
 </template>
 
 
@@ -216,9 +254,18 @@ watch(() => RenameData.RenameIs, () => {
   z-index: 1000;
 }
 
-.rename-emoji {
+.s-rename-emoji-box {
   position: absolute;
-  z-index: 1200;
+  z-index: 1000; /* 确保表情选择器在其他内容之上 */
+  background-color: white;
+  border-radius: 4px;
+  width: 290px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.rename-emoji {
+  border-radius: 8px;
+  box-shadow: 0 0;
 }
 
 .dialog-content {
@@ -230,7 +277,7 @@ watch(() => RenameData.RenameIs, () => {
   flex: 1;
 }
 
-.button {
+.rename-emoji-button {
   width: 32px;
   height: 32px;
 }

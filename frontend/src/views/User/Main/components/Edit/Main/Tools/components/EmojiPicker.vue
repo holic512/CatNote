@@ -83,26 +83,41 @@ onBeforeUnmount(() => {
   </el-tooltip>
 
   <!-- 表情选择器 -->
-  <EmojiPicker
-      v-show="showEmojiPicker"
-      :native="true"
-      ref="emojiPickerRef"
-      @select="onSelectEmoji"
-      :group-names="iln"
-      class="rename-emoji"
-      :disable-skin-tones="true"
-      :hide-group-icons="true"
-      :hide-search="true"
-      :style="{ position: 'absolute', top: emojiPosition.y + 'px', left: emojiPosition.x + 'px' }"
-  />
+  <div v-show="showEmojiPicker"
+       :style="{ position: 'absolute', top: emojiPosition.y + 'px', left: emojiPosition.x + 'px' }"
+       class="tool-emoji-box"
+  >
+    <div style="border-bottom: 1px #EDEDEC solid;padding: 4px;display: flex;  height: 36px;">
+      <el-text style="margin-left: 8px" size="small">插入表情</el-text>
+    </div>
+
+    <EmojiPicker
+        ref="emojiPickerRef"
+        @select="onSelectEmoji"
+        :group-names="iln"
+        class="insert-emoji"
+        :disable-skin-tones="true"
+        :hide-group-icons="true"
+        :hide-search="true"
+
+    />
+  </div>
+
 </template>
 
 <style scoped>
-.rename-emoji {
+.tool-emoji-box {
   z-index: 1000; /* 确保表情选择器在其他内容之上 */
   background-color: white;
-  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 290px;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2);
+
+  border: #EDEDEC 1px solid;
+}
+
+.insert-emoji {
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0;
 }
 </style>

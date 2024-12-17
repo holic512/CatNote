@@ -10,6 +10,7 @@ export const updateNoteAvatar = async (noteId: number, avatar: string) => {
                 avatar: avatar,
             }
         )
+        console.log(response.data)
         return response.data.status
     } catch (e) {
         console.error(e)

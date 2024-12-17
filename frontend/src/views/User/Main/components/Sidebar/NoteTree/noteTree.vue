@@ -219,7 +219,7 @@ const handleNodeCollapse = (data) => {
                  style="display: flex; justify-content: space-between; align-items: center;width: 100%">
               <div style="display: flex; justify-content: left; align-items: center;width: 100%;">
                 <!--  判断是否使用自定义图标 -->
-                <div v-if="data.avatar == null" style="margin: 6px 2px 0 2px">
+                <div v-if="data.avatar == null||data.avatar == '' " style="margin: 6px 2px 0 2px">
                   <div v-if='data.type == "NOTE" '>
                     <el-icon size="16">
                       <Notebook/>
@@ -231,10 +231,9 @@ const handleNodeCollapse = (data) => {
                     </el-icon>
                   </div>
                 </div>
+                <!--  显示自定义头像  -->
                 <div v-else>
-
                   {{ data.avatar }}
-
                 </div>
 
 
