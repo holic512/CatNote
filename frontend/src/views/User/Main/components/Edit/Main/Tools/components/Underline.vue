@@ -17,7 +17,7 @@ const editor:any = defineModel()
   >
 
     <!-- 下划线 -->
-    <el-button text class="button" @click="underline(editor)">
+    <el-button text class="tool-button" @click="underline(editor)">
       <el-icon color="#000000" size="18" v-show="!isUnderlineActive(editor)">
         <IconUnderline/>
       </el-icon>

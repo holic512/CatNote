@@ -18,7 +18,7 @@ const editor:any = defineModel()
   >
 
     <!--删除线-->
-    <el-button text class="button" @click="strike(editor)">
+    <el-button text class="tool-button" @click="strike(editor)">
       <el-icon color="#000000" size="18" v-show="!isStrikeActive(editor)">
         <IconStrikethrough/>
       </el-icon>

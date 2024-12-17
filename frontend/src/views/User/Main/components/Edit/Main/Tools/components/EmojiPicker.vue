@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import {computed, ref, onMounted, onBeforeUnmount} from "vue";
 
+import '../css/editTool-button.css'
+
 // 引入表情选择器相关配置
 import EmojiPicker, {EmojiExt} from "vue3-emoji-picker";
 import "vue3-emoji-picker/css";
@@ -77,8 +79,8 @@ onBeforeUnmount(() => {
       placement="bottom"
   >
     <!-- 按钮 -->
-    <el-button text class="button" ref="buttonRef" @click="toggleEmojiPicker">
-      😁
+    <el-button text class="tool-button tool-emoji-button" ref="buttonRef" @click="toggleEmojiPicker">
+      😀
     </el-button>
   </el-tooltip>
 
@@ -119,5 +121,9 @@ onBeforeUnmount(() => {
 .insert-emoji {
   border-radius: 8px;
   box-shadow: 0 0;
+}
+.tool-emoji-button{
+  font-size: 18px;
+  padding-top: 10px;
 }
 </style>

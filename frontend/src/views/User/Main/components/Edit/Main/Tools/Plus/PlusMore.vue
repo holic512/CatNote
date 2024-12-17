@@ -10,7 +10,6 @@ import IconHeading5 from "./Icon/blocks1/IconHeading-5.vue"
 import IconHeading6 from "./Icon/blocks1/IconHeading-6.vue"
 
 import IconTodo from "./Icon/blocks1/IconTodo.vue";
-import IconTable from "./Icon/blocks1/IconTable.vue";
 import IconBlockquote from "./Icon/blocks1/IconBlockquote.vue";
 import IconDivider from "./Icon/blocks1/IconDivider.vue";
 import IconDetails from "./Icon/blocks1/IconDetails.vue";
@@ -42,7 +41,6 @@ const blocks1 = [
   {label: '六级标题', tag: '设置六级标题的格式', icon: IconHeading6},
 
   {label: '待办', tag: '管理任务和待办事项', icon: IconTodo},
-  {label: '表格', tag: '插入一个表格', icon: IconTable},
   {label: '引用', tag: '引用其他内容', icon: IconBlockquote},
   {label: '分隔线', tag: '插入一条分隔线', icon: IconDivider},
   {label: '详细信息', tag: '查看详细信息', icon: IconDetails}

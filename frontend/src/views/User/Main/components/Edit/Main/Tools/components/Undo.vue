@@ -17,7 +17,7 @@ const editor:any = defineModel()
       placement="bottom"
   >
 
-    <el-button text class="button" @click="undo(editor)">
+    <el-button text class="tool-button" @click="undo(editor)">
       <el-icon color="#000000" size="18">
         <iconUndo/>
       </el-icon>

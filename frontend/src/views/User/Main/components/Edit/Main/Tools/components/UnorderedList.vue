@@ -1,8 +1,13 @@
 <script setup lang="ts">
+import '../css/editTool-button.css'
+
+
 import {toggleBulletList} from "@/views/User/Main/components/Edit/Main/Tools/Service/toggleBulletList";
 import IconUList from "@/views/User/Main/components/Edit/Main/Tools/icon/IconUnorderedList.vue";
 
-const editor:any = defineModel()
+const editor: any = defineModel()
+
+
 </script>
 
 <template>
@@ -15,7 +20,7 @@ const editor:any = defineModel()
   >
 
     <!--  无序排列  -->
-    <el-button text class="button" @click="toggleBulletList(editor)">
+    <el-button text class="tool-button" @click="toggleBulletList(editor)">
       <el-icon color="#000000" size="18">
         <IconUList/>
       </el-icon>

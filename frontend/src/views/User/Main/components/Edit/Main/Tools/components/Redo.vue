@@ -16,7 +16,7 @@ const editor:any = defineModel()
       placement="bottom"
   >
 
-    <el-button text class="button" @click="redo(editor)">
+    <el-button text class="tool-button" @click="redo(editor)">
       <el-icon color="#000000" size="18">
         <IconRedo/>
       </el-icon>

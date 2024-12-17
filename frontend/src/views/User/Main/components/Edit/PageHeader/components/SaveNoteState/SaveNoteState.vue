@@ -7,13 +7,13 @@ const editorState = useSaveNoteState()
 
 <template>
   <el-text size="small" type="info" class="el-text" v-show="editorState.isSaved">
-    <el-icon>
+    <el-icon size="14">
       <SuccessFilled/>
     </el-icon>
     已保存
   </el-text>
   <el-text size="small" type="warning" class="el-text" v-show="!editorState.isSaved">
-    <el-icon>
+    <el-icon size="14">
       <WarningFilled/>
     </el-icon>
     未保存

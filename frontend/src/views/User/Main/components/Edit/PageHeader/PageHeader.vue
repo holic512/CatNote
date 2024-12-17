@@ -138,6 +138,8 @@ const currentNoteInfo = useCurrentNoteInfoStore()
 <style scoped>
 .row-pageHeader{
   height: 100%;
+
+  user-select: none;
 }
 
 .el-col {

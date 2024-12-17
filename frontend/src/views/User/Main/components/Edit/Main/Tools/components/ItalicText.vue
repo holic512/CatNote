@@ -10,7 +10,6 @@ const editor:any = defineModel()
 
 <template>
   <el-tooltip
-      class="box-item"
       effect="dark"
       content=" 斜体 "
       :show-after="500"
@@ -18,7 +17,7 @@ const editor:any = defineModel()
   >
 
     <!-- 斜体 -->
-    <el-button text class="button" @click="italic(editor)">
+    <el-button text class="tool-button" @click="italic(editor)">
       <el-icon color="#000000" size="18" v-show="!isItalicActive(editor)">
         <IconItalic/>
       </el-icon>
@@ -26,8 +25,6 @@ const editor:any = defineModel()
         <IconItalic/>
       </el-icon>
     </el-button>
-
-
   </el-tooltip>
 </template>
 

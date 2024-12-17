@@ -17,7 +17,7 @@ const editor:any = defineModel()
   >
 
     <!-- 加粗 -->
-    <el-button text class="button" @click="bold(editor)">
+    <el-button text class="tool-button" @click="bold(editor)">
       <el-icon color="#000000" size="18" v-show="!isBoldActive(editor)">
         <Bold/>
       </el-icon>

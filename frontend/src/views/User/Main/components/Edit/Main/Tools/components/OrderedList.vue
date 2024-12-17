@@ -17,7 +17,7 @@ const editor:any = defineModel()
   >
 
     <!--  有序排列  -->
-    <el-button text class="button" @click="toggleOrderedList(editor)">
+    <el-button text class="tool-button" @click="toggleOrderedList(editor)">
       <el-icon color="#000000" size="18">
         <IconOList/>
       </el-icon>

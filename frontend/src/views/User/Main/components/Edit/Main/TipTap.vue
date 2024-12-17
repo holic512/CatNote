@@ -106,11 +106,11 @@ const PreferencesStore = useUserPreferencesStore()
 
         <!-- 功能 按钮部分 -->
         <div class="feature">
-<!--          <div class="feature-div">-->
-<!--            <el-text>-->
-<!--              😀 添加图标-->
-<!--            </el-text>-->
-<!--          </div>-->
+          <!--          <div class="feature-div">-->
+          <!--            <el-text>-->
+          <!--              😀 添加图标-->
+          <!--            </el-text>-->
+          <!--          </div>-->
 
           <div class="feature-div" @click="NoteCoverState.IsNoteCover()">
             <el-text>
@@ -377,6 +377,75 @@ const PreferencesStore = useUserPreferencesStore()
     }
   }
 
+  /* 表格样式 */
+  table {
+    border-collapse: collapse;
+
+    margin: 0 0 0 16px;
+    overflow: hidden;
+    table-layout: fixed;
+
+    width: 90%;
+
+
+    td,
+    th {
+      border: 1px solid #c4c4c4; /* 深灰色 */
+      box-sizing: border-box;
+      min-width: 1em;
+      padding: 4px 6px;
+      position: relative;
+      vertical-align: top;
+
+      > * {
+        margin: 4px;
+        font-size: 14px;
+      }
+
+    }
+
+    /* 首行 样式 */
+    th {
+      background-color: #f5f5f5; /* 浅灰色 */
+      font-weight: normal;
+      text-align: left;
+    }
+
+    /* 框选 样式 */
+    .selectedCell:after {
+      background-color: rgba(116, 181, 218, 0.2);
+      content: "";
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      pointer-events: none;
+      position: absolute;
+      z-index: 2;
+    }
+
+    /* 行选中 */
+    .column-resize-handle {
+      background-color: #74B5DA;
+      bottom: -20px;
+      // pointer-events: none;
+      position: absolute;
+      right: -5px;
+      top: -20px;
+      width: 2px;
+
+      cursor: grab;
+    }
+    .column-resize-handle:active{
+      cursor: grabbing;
+    }
+  }
+
+  .tableWrapper {
+    margin: 1.5rem 0;
+    overflow-x: auto;
+  }
+
 
   /* 任务选中框样式 */
   ul[data-type="taskList"] {
@@ -499,15 +568,6 @@ const PreferencesStore = useUserPreferencesStore()
     float: left;
     height: 0;
     pointer-events: none; /* 禁用鼠标事件 */
-  }
-
-  /* 新行的占位符 */
-  .is-empty::before {
-    color: #9B9A97;
-    content: attr(data-placeholder);
-    float: left;
-    height: 0;
-    pointer-events: none;
   }
 }
 </style>

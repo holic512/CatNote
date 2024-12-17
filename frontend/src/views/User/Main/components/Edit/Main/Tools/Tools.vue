@@ -12,6 +12,7 @@ import Redo from "./components/Redo.vue";
 import HighlightText from "./components/TextColor.vue";
 import EmojiPicker from "@/views/User/Main/components/Edit/Main/Tools/components/EmojiPicker.vue";
 import {useUserPreferencesStore} from "@/views/User/Main/Pinia/userPreferencesStore";
+import InsertTable from "@/views/User/Main/components/Edit/Main/Tools/components/InsertTable.vue";
 
 // 获取编辑器实例
 const editor = defineModel()
@@ -35,6 +36,9 @@ const PreferencesStore = useUserPreferencesStore()
 
     <!--   插入   -->
     <PlusMore v-model="editor"/>
+
+    <!--  表格  -->
+    <InsertTable v-model="editor"/>
 
 
     <el-divider direction="vertical"/>
@@ -70,8 +74,11 @@ const PreferencesStore = useUserPreferencesStore()
 
     <div style="flex: 1"/>
 
-    <el-button text class="button" ref="buttonRef" style="margin-right: 8px" @click="PreferencesStore.toggleEditorToolbar()">
-      <el-icon><BottomLeft /></el-icon>
+    <el-button text class="button" ref="buttonRef" style="margin-right: 8px"
+               @click="PreferencesStore.toggleEditorToolbar()">
+      <el-icon>
+        <BottomLeft/>
+      </el-icon>
     </el-button>
 
   </div>
